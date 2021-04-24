@@ -1,0 +1,6 @@
+name: DeltaCraftTeams
+version: ${project.version}
+main: eu.deltacraft.deltacraftteams.DeltaCraftTeams
+api-version: 1.16
+authors: [ kkoudelka ]
+website: https://deltacraft.eu
