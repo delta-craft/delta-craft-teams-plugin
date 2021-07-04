@@ -10,6 +10,10 @@ class DeltaCraftTeams : JavaPlugin() {
 
         val logger = server.consoleSender
 
+        val res = DbConn(this).getUsers()
+
+        logger.sendMessage(res)
+
         logger.sendMessage("DeltaCraft Teams ready!")
     }
 
