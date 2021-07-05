@@ -1,0 +1,8 @@
+system:
+  debug: false
+  database:
+    server: ""
+    username: ""
+    password: ""
+settings:
+  todo: true
