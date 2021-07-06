@@ -2,6 +2,7 @@ system:
   debug: false
   database:
     server: ""
+    name: ""
     username: ""
     password: ""
 settings:

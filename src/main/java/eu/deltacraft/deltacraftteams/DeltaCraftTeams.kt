@@ -1,15 +1,21 @@
 package eu.deltacraft.deltacraftteams
 
 import eu.deltacraft.deltacraftteams.commands.MainCommand
+import eu.deltacraft.deltacraftteams.interfaces.IDbConnector
 import eu.deltacraft.deltacraftteams.listeners.PlayerBlockListener
 import eu.deltacraft.deltacraftteams.managers.DeltaCraftTeamsManager
+import eu.deltacraft.deltacraftteams.types.DbConnector
 import eu.deltacraft.deltacraftteams.utils.enums.Settings
 import org.bukkit.plugin.java.JavaPlugin
 
 class DeltaCraftTeams : JavaPlugin() {
 
     private var isDebug = false
-    private lateinit var manager: DeltaCraftTeamsManager
+
+    private lateinit var dbConnector: IDbConnector
+
+    lateinit var manager: DeltaCraftTeamsManager
+        private set
 
 
     override fun onEnable() {
@@ -22,6 +28,8 @@ class DeltaCraftTeams : JavaPlugin() {
             this.debugMsg("Debugging enabled")
         }
 
+        dbConnector = DbConnector(config)
+
         // Managers
         this.loadManagers()
 
@@ -33,7 +41,7 @@ class DeltaCraftTeams : JavaPlugin() {
 
         val logger = server.consoleSender
 
-        val res = DbConn(this).getUsers()
+        val res = DbConn(this, dbConnector).getUsers()
 
         this.debugMsg(res)
 

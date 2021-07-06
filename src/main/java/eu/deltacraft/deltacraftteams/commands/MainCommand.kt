@@ -14,6 +14,7 @@ import org.bukkit.command.CommandSender
 import org.bukkit.command.TabCompleter
 import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.entity.Player
+import kotlin.collections.ArrayList
 
 
 class MainCommand(private val plugin: DeltaCraftTeams) : CommandExecutor, TabCompleter {
@@ -26,7 +27,7 @@ class MainCommand(private val plugin: DeltaCraftTeams) : CommandExecutor, TabCom
     }
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<String>): Boolean {
-        if (args.isEmpty() || args[0].isEmpty()) {
+        if (args.isEmpty() || args[0].isBlank()) {
             val text = Component.text("User ")
                 .color(NamedTextColor.GREEN)
                 .append(
@@ -64,11 +65,11 @@ class MainCommand(private val plugin: DeltaCraftTeams) : CommandExecutor, TabCom
                 sender.sendMessage(TextHelper.insufficientPermissions(Permissions.CONFIGCHANGE))
                 return true
             }
-            if (args.size < 2 || args[1].isEmpty()) {
+            if (args.size < 2 || args[1].isBlank()) {
                 sender.sendMessage(TextHelper.attentionText("Key is empty"))
                 return true
             }
-            if (args.size < 3 || args[2].isEmpty()) {
+            if (args.size < 3 || args[2].isBlank()) {
                 sender.sendMessage(TextHelper.attentionText("Value is empty"))
                 return true
             }
@@ -106,7 +107,7 @@ class MainCommand(private val plugin: DeltaCraftTeams) : CommandExecutor, TabCom
         }
         val cmds = arrayOf("show", "reload", "change", "version")
         val typedIn: String = if (args.size == 1) {
-            args[0].toLowerCase()
+            args[0].lowercase()
         } else {
             return list
         }
@@ -122,40 +123,22 @@ class MainCommand(private val plugin: DeltaCraftTeams) : CommandExecutor, TabCom
         var text = Component.text("DeltaCraftTeams main commands =====================")
             .append(Component.newline())
         if (p.hasPermission(Permissions.SHOWVERSION.path)) {
-            text = text.append(
-                Component.text("/DeltaCraftTeams version ")
-                    .color(NamedTextColor.YELLOW)
-                    .clickEvent(ClickEvent.suggestCommand("/DeltaCraftTeams version"))
-            ).append(
-                Component.text("Show current version of the plugin").color(NamedTextColor.GREEN)
-            ).append(Component.newline())
+            text = text.append(TextHelper.commandInfo("/DeltaCraftTeams version", "Show current version of the plugin"))
         }
         if (p.hasPermission(Permissions.CONFIGSHOW.path)) {
-            text = text.append(
-                Component.text("/DeltaCraftTeams show ")
-                    .color(NamedTextColor.YELLOW)
-                    .clickEvent(ClickEvent.suggestCommand("/DeltaCraftTeams show"))
-            ).append(
-                Component.text("Show settings in config ").color(NamedTextColor.GREEN)
-            ).append(Component.newline())
+            text = text.append(TextHelper.commandInfo("/DeltaCraftTeams show", "Show settings in config"))
         }
         if (p.hasPermission(Permissions.CONFIGCHANGE.path)) {
             text = text.append(
-                Component.text("/DeltaCraftTeams change <key> <value> ")
-                    .color(NamedTextColor.YELLOW)
-                    .clickEvent(ClickEvent.suggestCommand("/DeltaCraftTeams change "))
-            ).append(
-                Component.text("Change setting in config").color(NamedTextColor.GREEN)
-            ).append(Component.newline())
+                TextHelper.commandInfo(
+                    "/DeltaCraftTeams change <key> <value>",
+                    "Change setting in config",
+                    "/DeltaCraftTeams change "
+                )
+            )
         }
         if (p.hasPermission(Permissions.CONFIGRELOAD.path)) {
-            text = text.append(
-                Component.text("/DeltaCraftTeams reload ")
-                    .color(NamedTextColor.YELLOW)
-                    .clickEvent(ClickEvent.suggestCommand("/DeltaCraftTeams reload"))
-            ).append(
-                Component.text("Reload plugin settings").color(NamedTextColor.GREEN)
-            ).append(Component.newline())
+            text = text.append(TextHelper.commandInfo("/DeltaCraftTeams reload", "Reload plugin settings"))
         }
         text = text.append(
             Component.text("==================================================").color(NamedTextColor.WHITE)
@@ -217,7 +200,7 @@ class MainCommand(private val plugin: DeltaCraftTeams) : CommandExecutor, TabCom
             val key: String = settings.path
             val description: String = settings.description
             var value = config.getString(key)
-            if (value == null || value.isEmpty()) {
+            if (value == null || value.isBlank()) {
                 value = "null"
             }
             var newVal = ""

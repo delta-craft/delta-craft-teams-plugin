@@ -3,6 +3,7 @@ package eu.deltacraft.deltacraftteams.utils
 import eu.deltacraft.deltacraftteams.utils.enums.Permissions
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TextComponent
+import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.event.HoverEvent
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextColor
@@ -69,6 +70,18 @@ class TextHelper {
         fun varText(text: String): TextComponent {
             return Component.text(text)
                 .color(NamedTextColor.WHITE)
+        }
+
+        @JvmStatic
+        fun commandInfo(fullCommand: String, description: String, command: String = fullCommand): TextComponent {
+            return Component.empty()
+                .append(
+                    Component.text("$fullCommand ")
+                        .color(NamedTextColor.YELLOW)
+                        .clickEvent(ClickEvent.suggestCommand(command))
+                ).append(
+                    Component.text(description).color(NamedTextColor.GREEN)
+                ).append(Component.newline())
         }
     }
 }

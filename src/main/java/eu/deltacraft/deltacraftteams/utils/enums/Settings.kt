@@ -18,6 +18,12 @@ enum class Settings(
         false,
         "STRING"
     ),
+    DATABASENAME(
+        "system.database.name",
+        "Database name",
+        false,
+        "STRING"
+    ),
     DATABASELOGIN(
         "system.database.username",
         "Database server login name ",
