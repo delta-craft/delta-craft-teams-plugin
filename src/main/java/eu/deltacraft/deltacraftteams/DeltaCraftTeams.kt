@@ -6,7 +6,10 @@ import eu.deltacraft.deltacraftteams.listeners.PlayerBlockListener
 import eu.deltacraft.deltacraftteams.listeners.PlayerJoinListener
 import eu.deltacraft.deltacraftteams.managers.DeltaCraftTeamsManager
 import eu.deltacraft.deltacraftteams.types.DbConnector
+import eu.deltacraft.deltacraftteams.types.getString
 import eu.deltacraft.deltacraftteams.utils.enums.Settings
+import io.sentry.Sentry
+import io.sentry.SentryLevel
 import org.bukkit.plugin.java.JavaPlugin
 
 class DeltaCraftTeams : JavaPlugin() {
@@ -29,6 +32,8 @@ class DeltaCraftTeams : JavaPlugin() {
             this.debugMsg("Debugging enabled")
         }
 
+        this.tryInitSentry()
+
         dbConnector = DbConnector(config)
 
         // Managers
@@ -47,6 +52,25 @@ class DeltaCraftTeams : JavaPlugin() {
         this.debugMsg(res)
 
         logger.sendMessage("DeltaCraft Teams ready!")
+    }
+
+    private fun tryInitSentry() {
+        val dsn = config.getString(Settings.SENTRY)
+        if (dsn.isNullOrEmpty()) {
+            return
+        }
+
+        try {
+            Sentry.init { x ->
+                run {
+                    x.dsn = dsn
+                    x.tracesSampleRate = 1.0
+                    x.setDebug(isDebug)
+                }
+            }
+            debugMsg("Sentry enabled")
+        } catch (e: Exception) {
+        }
     }
 
     override fun onDisable() {
