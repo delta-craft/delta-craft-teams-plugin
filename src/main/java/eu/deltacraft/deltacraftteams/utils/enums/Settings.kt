@@ -12,6 +12,12 @@ enum class Settings(
         true,
         "BOOL"
     ),
+    SENTRY(
+        "system.sentry",
+        "Sentry DSN",
+        false,
+        "STRING"
+    ),
     DATABASESERVER(
         "system.database.server",
         "Database server",
