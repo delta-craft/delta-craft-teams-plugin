@@ -4,28 +4,33 @@ import eu.deltacraft.deltacraftteams.DeltaCraftTeams
 import org.bukkit.Material
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
-import org.bukkit.event.block.BlockBreakEvent
+import org.bukkit.event.block.BlockDropItemEvent
 
 class PlayerBlockListener(private val plugin: DeltaCraftTeams) : Listener {
 
     @EventHandler
-    fun onBlockBreak(blockBreakEvent: BlockBreakEvent) {
-        val player = blockBreakEvent.player
-        val block = blockBreakEvent.block
+    fun onBlockDrop(event: BlockDropItemEvent) {
+        val player = event.player
+        var playerId = player.uniqueId
+        val items = event.items
+        val material = event.blockState.type
 
-        val a = listOf<Pair<Material, Int>>(
+        val a = listOf(
             Pair(Material.DIAMOND_BLOCK, 1),
-            Pair(Material.DIAMOND_ORE, 5)
+            Pair(Material.DIAMOND_ORE, 5),
+            Pair(Material.DEEPSLATE_DIAMOND_ORE, 5)
         )
 
-        if (a.none { x -> x.first == block.type })
+        if (a.none { x -> x.first == material })
             return
 
-        val pair = a.first {x -> x.first == block.type}
+        val pair = a.first { x -> x.first == material }
 
-        val ds = block.drops.size // TODO: FIX
+        val item = items.first()?.itemStack
 
-        player.sendMessage("Destroyed ${block.type} value ${pair.second} ($ds DS)")
+        val amount = item?.amount ?: 0
+
+        player.sendMessage("Destroyed $material value ${pair.second} ($amount DS)")
 
     }
 }

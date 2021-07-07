@@ -1,6 +1,30 @@
 name: DeltaCraftTeams
-version: ${project.version}
+version: 1.0.0
 main: eu.deltacraft.deltacraftteams.DeltaCraftTeams
 api-version: 1.17
 authors: [ kkoudelka ]
 website: https://deltacraft.eu
+commands:
+  deltacraftteams:
+    description: Main command for DeltaCraftTeams plugins
+    usage: /deltacraftteams
+    aliases: [delta, deltacraft]
+permissions:
+  delta.*:
+    default: op
+    children:
+      delta.main.*:
+        default: op
+        children:
+          delta.main.version:
+            description: Show curent version
+            default: true
+          delta.main.show:
+            description: Show config
+            default: op
+          delta.main.reload:
+            description: Reload config
+            default: op
+          delta.main.change:
+            description: Change config value
+            default: op
