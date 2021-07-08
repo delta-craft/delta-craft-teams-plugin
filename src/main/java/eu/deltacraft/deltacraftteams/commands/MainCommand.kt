@@ -1,6 +1,8 @@
 package eu.deltacraft.deltacraftteams.commands
 
 import eu.deltacraft.deltacraftteams.DeltaCraftTeams
+import eu.deltacraft.deltacraftteams.managers.PvpZoneManager
+import eu.deltacraft.deltacraftteams.managers.cache.PvpZoneCacheManager
 import eu.deltacraft.deltacraftteams.utils.TextHelper
 import eu.deltacraft.deltacraftteams.utils.enums.Permissions
 import eu.deltacraft.deltacraftteams.utils.enums.Settings

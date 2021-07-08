@@ -4,9 +4,9 @@ import eu.deltacraft.deltacraftteams.DeltaCraftTeams
 import java.lang.Exception
 
 abstract class CacheManager<TKey, T>(protected val plugin: DeltaCraftTeams, val needsLoad: Boolean) {
-    private val cache: HashMap<TKey, T> = HashMap()
 
-    private var isLoaded = false
+    private val cache: HashMap<TKey, T> = HashMap()
+    private var isLoaded: Boolean = false
 
     fun addItem(id: TKey, item: T) {
         cache[id] = item

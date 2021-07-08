@@ -10,9 +10,16 @@ abstract class CacheConfigManager<T : CacheManager<*, *>>(
 ) :
     ConfigManager(plugin, fileName) {
 
-    override fun reloadAll() {
+    init {
+        if (cacheManager.needsLoad) {
+            loadCache()
+        }
+    }
+
+    fun reload() {
         clearCache()
-        super.reloadAll()
+        reloadAll()
+
         if (!cacheManager.needsLoad) {
             return
         }
@@ -24,10 +31,4 @@ abstract class CacheConfigManager<T : CacheManager<*, *>>(
     }
 
     abstract fun loadCache()
-
-    init {
-        if (cacheManager.needsLoad) {
-            lazy { loadCache() }
-        }
-    }
 }

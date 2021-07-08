@@ -8,7 +8,11 @@ commands:
   deltacraftteams:
     description: Main command for DeltaCraftTeams plugins
     usage: /deltacraftteams
-    aliases: [delta, deltacraft]
+    aliases: [ delta, deltacraft ]
+  pvp:
+    description: Set PVP zones
+    usage: /pvp
+    aliases: [ pvpzone, pvpzones ]
 permissions:
   delta.*:
     default: op
@@ -27,4 +31,13 @@ permissions:
             default: op
           delta.main.change:
             description: Change config value
+            default: op
+      delta.pvp:
+        default: op
+        children:
+          delta.pvp.create:
+            description: Create PVP zone
+            default: op
+          delta.pvp.remove:
+            description: Remove PVP zone
             default: op

@@ -1,15 +1,16 @@
 package eu.deltacraft.deltacraftteams
 
 import eu.deltacraft.deltacraftteams.commands.MainCommand
+import eu.deltacraft.deltacraftteams.commands.PvpZoneCommand
 import eu.deltacraft.deltacraftteams.interfaces.IDbConnector
 import eu.deltacraft.deltacraftteams.listeners.PlayerBlockListener
 import eu.deltacraft.deltacraftteams.listeners.PlayerJoinListener
 import eu.deltacraft.deltacraftteams.managers.DeltaCraftTeamsManager
+import eu.deltacraft.deltacraftteams.managers.PvpZoneManager
 import eu.deltacraft.deltacraftteams.types.DbConnector
 import eu.deltacraft.deltacraftteams.types.getString
 import eu.deltacraft.deltacraftteams.utils.enums.Settings
 import io.sentry.Sentry
-import io.sentry.SentryLevel
 import org.bukkit.plugin.java.JavaPlugin
 
 class DeltaCraftTeams : JavaPlugin() {
@@ -18,8 +19,8 @@ class DeltaCraftTeams : JavaPlugin() {
 
     private lateinit var dbConnector: IDbConnector
 
-    lateinit var manager: DeltaCraftTeamsManager
-        private set
+    private lateinit var manager: DeltaCraftTeamsManager
+    private lateinit var pvpZoneManager: PvpZoneManager
 
 
     override fun onEnable() {
@@ -81,6 +82,7 @@ class DeltaCraftTeams : JavaPlugin() {
 
     private fun loadManagers() {
         manager = DeltaCraftTeamsManager(this)
+        pvpZoneManager = PvpZoneManager(this)
     }
 
     private fun loadCommands() {
@@ -88,6 +90,11 @@ class DeltaCraftTeams : JavaPlugin() {
         if (mainCmd != null) {
             mainCmd.aliases = listOf("delta", "deltacraft")
             mainCmd.setExecutor(MainCommand(this))
+        }
+        val pvpZoneCmd = this.getCommand("pvp")
+        if (pvpZoneCmd != null) {
+            pvpZoneCmd.aliases = listOf("pvpzone", "pvpzones")
+            pvpZoneCmd.setExecutor(PvpZoneCommand(this, pvpZoneManager))
         }
     }
 
