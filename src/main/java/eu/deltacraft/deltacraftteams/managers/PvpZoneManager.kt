@@ -8,9 +8,12 @@ import eu.deltacraft.deltacraftteams.types.PvpZone
 import org.bukkit.Location
 import java.util.UUID
 
+
 class PvpZoneManager(plugin: DeltaCraftTeams, cacheManager: PvpZoneCacheManager) :
     CacheConfigManager<PvpZoneCacheManager>(plugin, "pvp.yml", cacheManager) {
     constructor(plugin: DeltaCraftTeams) : this(plugin, PvpZoneCacheManager(plugin))
+
+    private val mapManager = BlueMapManager()
 
     companion object {
         const val PvpZonesPrefix = "zones"
@@ -57,7 +60,12 @@ class PvpZoneManager(plugin: DeltaCraftTeams, cacheManager: PvpZoneCacheManager)
         config[keyOne] = one
         config[keyTwo] = two
         saveConfig()
-        cacheManager.addItem(one, two, name)
+
+        val zone = PvpZone(one, two, name)
+
+        cacheManager.addItem(zone)
+
+        mapManager.addZoneToMap(zone)
     }
 
     fun removeZone(name: String) {
@@ -65,6 +73,8 @@ class PvpZoneManager(plugin: DeltaCraftTeams, cacheManager: PvpZoneCacheManager)
         config[kh.key] = null
         saveConfig()
         cacheManager.removeItem(name)
+
+        mapManager.removeZoneFromMap(name)
     }
 
     fun getTempPointOne(id: UUID): Location? {

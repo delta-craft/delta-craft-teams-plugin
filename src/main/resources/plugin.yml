@@ -2,8 +2,10 @@ name: DeltaCraftTeams
 version: 1.0.0
 main: eu.deltacraft.deltacraftteams.DeltaCraftTeams
 api-version: 1.17
-authors: [ kkoudelka ]
+authors: [ koudy008, Fjarik, Kubas445 ]
 website: https://deltacraft.eu
+description: DeltaCraft Teams plugin
+depend: [ BlueMap ]
 commands:
   deltacraftteams:
     description: Main command for DeltaCraftTeams plugins

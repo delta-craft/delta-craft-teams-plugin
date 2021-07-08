@@ -14,7 +14,13 @@ class PvpZoneCacheManager(plugin: DeltaCraftTeams) : CacheManager<String, PvpZon
         name: String
     ) {
         val region = PvpZone(one, two, name)
-        this.addItem(name, region)
+        this.addItem(region)
+    }
+
+    fun addItem(
+        zone: PvpZone
+    ) {
+        this.addItem(zone.name, zone)
     }
 
     fun getPvpZoneNames(): List<String> {
