@@ -1,12 +1,14 @@
 package eu.deltacraft.deltacraftteams.managers.cache
 
-import eu.deltacraft.deltacraftteams.DeltaCraftTeams
+import eu.deltacraft.deltacraftteams.managers.TempCache
 import eu.deltacraft.deltacraftteams.managers.templates.CacheManager
 import eu.deltacraft.deltacraftteams.types.PvpZone
+import eu.deltacraft.deltacraftteams.types.TempZone
 import org.bukkit.Location
+import java.util.UUID
 
-class PvpZoneCacheManager(plugin: DeltaCraftTeams) : CacheManager<String, PvpZone>(plugin, true) {
-    private val tempCache: HashMap<String, Location> = HashMap()
+class PvpZoneCacheManager : CacheManager<String, PvpZone>(true) {
+    private val tempCache = TempCache<UUID, TempZone>()
 
     fun addItem(
         one: Location,
@@ -20,7 +22,7 @@ class PvpZoneCacheManager(plugin: DeltaCraftTeams) : CacheManager<String, PvpZon
     fun addItem(
         zone: PvpZone
     ) {
-        this.addItem(zone.name, zone)
+        this[zone.name] = zone
     }
 
     fun getPvpZoneNames(): List<String> {
@@ -40,18 +42,36 @@ class PvpZoneCacheManager(plugin: DeltaCraftTeams) : CacheManager<String, PvpZon
         return this[l] != null
     }
 
-    fun setTempLocation(key: String, loc: Location) {
+    fun setTempLocation(playerId: UUID, first: Boolean, loc: Location) {
         loc.yaw = 0f
         loc.pitch = 0f
 
-        tempCache[key] = loc
+        val tempZone = tempCache.getOrCreate(playerId) { TempZone() }
+
+        if (first) {
+            tempZone.first = loc
+        } else {
+            tempZone.second = loc
+        }
+
+        tempCache[playerId] = tempZone
     }
 
-    fun getTempLocation(key: String): Location? {
-        if (!tempCache.containsKey(key)) {
+    fun getTempLocation(playerId: UUID, first: Boolean): Location? {
+        if (!tempCache.containsKey(playerId)) {
             return null
         }
-        return tempCache[key]
+        val tempZone = tempCache[playerId]!!
+
+        return if (first) tempZone.first else tempZone.first
+    }
+
+    fun removeTempLocation(playerId: UUID) {
+        tempCache.remove(playerId)
+    }
+
+    fun getTempZone(playerId: UUID): TempZone {
+        return tempCache.getOrCreate(playerId) { TempZone() }
     }
 
 }

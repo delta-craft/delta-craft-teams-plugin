@@ -27,7 +27,7 @@ abstract class CacheConfigManager<T : CacheManager<*, *>>(
     }
 
     private fun clearCache() {
-        cacheManager.clearCache()
+        cacheManager.clear()
     }
 
     abstract fun loadCache()

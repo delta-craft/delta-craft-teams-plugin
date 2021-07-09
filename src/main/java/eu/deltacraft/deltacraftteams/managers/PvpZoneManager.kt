@@ -5,13 +5,14 @@ import eu.deltacraft.deltacraftteams.managers.cache.PvpZoneCacheManager
 import eu.deltacraft.deltacraftteams.managers.templates.CacheConfigManager
 import eu.deltacraft.deltacraftteams.types.KeyHelper
 import eu.deltacraft.deltacraftteams.types.PvpZone
+import eu.deltacraft.deltacraftteams.types.TempZone
 import org.bukkit.Location
 import java.util.UUID
 
 
 class PvpZoneManager(plugin: DeltaCraftTeams, cacheManager: PvpZoneCacheManager) :
     CacheConfigManager<PvpZoneCacheManager>(plugin, "pvp.yml", cacheManager) {
-    constructor(plugin: DeltaCraftTeams) : this(plugin, PvpZoneCacheManager(plugin))
+    constructor(plugin: DeltaCraftTeams) : this(plugin, PvpZoneCacheManager())
 
     private val mapManager = BlueMapManager()
 
@@ -25,7 +26,7 @@ class PvpZoneManager(plugin: DeltaCraftTeams, cacheManager: PvpZoneCacheManager)
 
     override fun loadCache() {
         val regions = getZones()
-        cacheManager.loadCache(regions)
+        cacheManager.putAll(regions)
     }
 
     fun zoneExists(name: String): Boolean {
@@ -72,30 +73,29 @@ class PvpZoneManager(plugin: DeltaCraftTeams, cacheManager: PvpZoneCacheManager)
         val kh = KeyHelper(name, PvpZonesPrefix)
         config[kh.key] = null
         saveConfig()
-        cacheManager.removeItem(name)
+
+        cacheManager.remove(name)
+
+        if (cacheManager.containsKey(name)) {
+            config[PvpZonesPrefix] = null
+        }
 
         mapManager.removeZoneFromMap(name)
     }
 
-    fun getTempPointOne(id: UUID): Location? {
-        return getTempPoint(id, PointOneKey)
+    fun getTempZone(playerId: UUID): TempZone {
+        return cacheManager.getTempZone(playerId)
     }
 
-    fun getTempPointTwo(id: UUID): Location? {
-        return getTempPoint(id, PointTwoKey)
+    fun saveTempLocation(playerId: UUID, loc: Location, first: Boolean = true) {
+        cacheManager.setTempLocation(playerId, first, loc)
     }
 
-    private fun getTempPoint(id: UUID, key: String): Location? {
-        return getTempPoint(KeyHelper(id), key)
+    fun clearTempLocations(playerId: UUID) {
+        cacheManager.removeTempLocation(playerId)
     }
 
-    private fun getTempPoint(tempKeys: KeyHelper, key: String): Location? {
-        val tempKey = tempKeys[TempKey, key]
-        return cacheManager.getTempLocation(tempKey)
-    }
-
-    fun saveTempLocation(id: UUID, loc: Location, key: String) {
-        val keys = KeyHelper(id)
-        cacheManager.setTempLocation(keys[TempKey, key], loc)
+    fun pointsAreSet(playerId: UUID): Boolean {
+        return getTempZone(playerId).isSet
     }
 }

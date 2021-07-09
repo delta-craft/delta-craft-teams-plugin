@@ -13,7 +13,6 @@ import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.command.TabCompleter
 import org.bukkit.entity.Player
-import java.util.UUID
 
 class PvpZoneCommand(
     private val plugin: DeltaCraftTeams,
@@ -35,7 +34,7 @@ class PvpZoneCommand(
             p.sendMessage(ChatColor.GREEN.toString() + "Use " + ChatColor.YELLOW + "/pvp ? " + ChatColor.GREEN + "for help")
             return true
         }
-        val cmd = args[0].trim { it <= ' ' }
+        val cmd = args[0].trim()
 
         if (cmd.equals("test", true)) {
             this.isInPvpZone(p)
@@ -51,11 +50,11 @@ class PvpZoneCommand(
             return true
         }
 
-        val arg = args[1].trim { it <= ' ' }
+        val arg = args[1].trim()
         if (cmd.equals("set", true)) {
             when (arg) {
-                "1", "one", "first" -> this.setPointOne(p)
-                "2", "two", "second" -> this.setPointTwo(p)
+                "1", "one", "first" -> this.setTempLocation(p, true)
+                "2", "two", "second" -> this.setTempLocation(p, false)
                 else -> {
                     p.sendMessage(ChatColor.YELLOW.toString() + "You can only set point '1' or '2'")
                     return true
@@ -81,37 +80,27 @@ class PvpZoneCommand(
                 p.sendMessage(TextHelper.insufficientPermissions(Permissions.PVPREMOVE))
                 return true
             }
-            return this.deletePvpZone(p, arg)
+            this.deletePvpZone(p, arg)
+            return true
         }
 
         return true
     }
 
-
-    private fun setPointOne(p: Player) {
-        saveTempLoc(p, PvpZoneManager.PointOneKey, "1")
-    }
-
-    private fun setPointTwo(p: Player) {
-        saveTempLoc(p, PvpZoneManager.PointTwoKey, "2")
-    }
-
-    private fun saveTempLoc(p: Player, key: String, pointName: String) {
+    private fun setTempLocation(p: Player, first: Boolean = true) {
         val loc = p.location
         if (manager.cacheManager.isInPvpZone(loc)) {
             p.sendMessage(TextHelper.infoText("This location is already in zone"))
             return
         }
-        manager.saveTempLocation(p.uniqueId, loc, key)
+        val pointName = if (first) 1 else 2
+
+        manager.saveTempLocation(p.uniqueId, loc, first)
         p.sendMessage(ChatColor.GREEN.toString() + "Point " + ChatColor.YELLOW + pointName + ChatColor.GREEN + " saved")
     }
 
     private fun pointsAreSet(p: Player): Boolean {
-        return this.pointsAreSet(p.uniqueId)
-    }
-
-    private fun pointsAreSet(id: UUID): Boolean {
-        return manager.getTempPointOne(id) != null && manager.getTempPointTwo(id) != null
+        return manager.pointsAreSet(p.uniqueId)
     }
 
     private fun createPvpZone(p: Player, name: String) {
@@ -121,24 +110,28 @@ class PvpZoneCommand(
             p.sendMessage(TextHelper.infoText("Zone with this name already exists"))
             return
         }
-        val one = manager.getTempPointOne(playerId)
-        if (one == null) {
+        val tempZone = manager.getTempZone(playerId)
+        if (tempZone.first == null) {
             p.sendMessage(ChatColor.RED.toString() + "Point 1 is not set")
             return
         }
-        val two = manager.getTempPointTwo(playerId)
-        if (two == null) {
+        if (tempZone.second == null) {
             p.sendMessage(ChatColor.RED.toString() + "Point 2 is not set")
             return
         }
-        manager.addZone(one, two, name)
+        manager.addZone(tempZone.first!!, tempZone.second!!, name)
+        manager.clearTempLocations(playerId)
         p.sendMessage(ChatColor.GREEN.toString() + "Zone " + ChatColor.YELLOW + name + ChatColor.GREEN + " successfully created")
     }
 
-    private fun deletePvpZone(p: Player, name: String): Boolean {
+    private fun deletePvpZone(p: Player, name: String) {
+        if (!manager.zoneExists(name)) {
+            p.sendMessage(TextHelper.infoText("Zone with this name does not exists"))
+            return
+        }
         manager.removeZone(name)
         p.sendMessage(ChatColor.GREEN.toString() + "Zone " + ChatColor.YELLOW + name + ChatColor.GREEN + " successfully deleted")
-        return true
+        return
     }
 
     private fun sendHelp(p: Player) {

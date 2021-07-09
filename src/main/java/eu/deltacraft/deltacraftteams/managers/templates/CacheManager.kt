@@ -1,42 +1,61 @@
 package eu.deltacraft.deltacraftteams.managers.templates
 
-import eu.deltacraft.deltacraftteams.DeltaCraftTeams
-import java.lang.Exception
+abstract class CacheManager<K, V>(val needsLoad: Boolean) : MutableMap<K, V> {
 
-abstract class CacheManager<TKey, T>(protected val plugin: DeltaCraftTeams, val needsLoad: Boolean) {
-
-    private val cache: HashMap<TKey, T> = HashMap()
+    private val cache: HashMap<K, V> = HashMap()
     private var isLoaded: Boolean = false
 
-    fun addItem(id: TKey, item: T) {
-        cache[id] = item
-    }
-
-    fun removeItem(id: TKey) {
-        cache.remove(id)
-    }
-
-    fun getCache(): HashMap<TKey, T> {
+    override fun put(key: K, value: V): V? {
         checkLoad()
-        return cache
+        cache[key] = value
+        return value
     }
 
-    val values: Collection<T>
-        get() = cache.values
+    override fun remove(key: K): V? {
+        checkLoad()
+        return cache.remove(key)
+    }
 
-    operator fun get(key: TKey): T? {
+    override val values: MutableCollection<V>
+        get() {
+            checkLoad()
+            return cache.values
+        }
+
+    override val entries: MutableSet<MutableMap.MutableEntry<K, V>>
+        get() {
+            checkLoad()
+            return cache.entries
+        }
+
+    override val keys: MutableSet<K>
+        get() {
+            checkLoad()
+            return cache.keys
+        }
+
+    override operator fun get(key: K): V? {
         checkLoad()
         return cache[key]
     }
 
-    val count: Int
-        get() = cache.size
+    override val size: Int
+        get() {
+            checkLoad()
+            return cache.size
+        }
 
-    operator fun contains(key: TKey): Boolean {
+    override fun containsKey(key: K): Boolean {
+        checkLoad()
         return cache.containsKey(key)
     }
 
-    fun loadCache(toLoad: HashMap<TKey, T>) {
+    override fun containsValue(value: V): Boolean {
+        checkLoad()
+        return cache.containsValue(value)
+    }
+
+    override fun putAll(from: Map<out K, V>) {
         if (!needsLoad) {
 //            throw new Exception("This manager does not need loading!");
             return
@@ -46,7 +65,7 @@ abstract class CacheManager<TKey, T>(protected val plugin: DeltaCraftTeams, val 
             return
         }
         cache.clear()
-        cache.putAll(toLoad)
+        cache.putAll(from)
         isLoaded = true
     }
 
@@ -59,7 +78,14 @@ abstract class CacheManager<TKey, T>(protected val plugin: DeltaCraftTeams, val 
         }
     }
 
-    fun clearCache() {
+    override fun clear() {
+        checkLoad()
         cache.clear()
     }
+
+    override fun isEmpty(): Boolean {
+        checkLoad()
+        return cache.isEmpty()
+    }
+
 }
