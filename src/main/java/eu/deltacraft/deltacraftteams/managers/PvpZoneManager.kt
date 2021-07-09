@@ -12,7 +12,6 @@ import java.util.UUID
 
 class PvpZoneManager(plugin: DeltaCraftTeams, cacheManager: PvpZoneCacheManager) :
     CacheConfigManager<PvpZoneCacheManager>(plugin, "pvp.yml", cacheManager) {
-    constructor(plugin: DeltaCraftTeams) : this(plugin, PvpZoneCacheManager())
 
     private val mapManager = BlueMapManager()
 
@@ -26,7 +25,7 @@ class PvpZoneManager(plugin: DeltaCraftTeams, cacheManager: PvpZoneCacheManager)
 
     override fun loadCache() {
         val regions = getZones()
-        cacheManager.putAll(regions)
+        cacheManager.load(regions)
     }
 
     fun zoneExists(name: String): Boolean {

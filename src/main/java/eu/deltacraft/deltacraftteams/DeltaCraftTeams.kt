@@ -4,7 +4,9 @@ import eu.deltacraft.deltacraftteams.commands.MainCommand
 import eu.deltacraft.deltacraftteams.commands.PvpZoneCommand
 import eu.deltacraft.deltacraftteams.interfaces.IDbConnector
 import eu.deltacraft.deltacraftteams.listeners.PlayerBlockListener
+import eu.deltacraft.deltacraftteams.listeners.PlayerDeathEventListener
 import eu.deltacraft.deltacraftteams.listeners.PlayerJoinListener
+import eu.deltacraft.deltacraftteams.listeners.PvpZoneKillListener
 import eu.deltacraft.deltacraftteams.managers.DeltaCraftTeamsManager
 import eu.deltacraft.deltacraftteams.managers.PvpZoneManager
 import eu.deltacraft.deltacraftteams.types.DbConnector
@@ -82,7 +84,7 @@ class DeltaCraftTeams : JavaPlugin() {
 
     private fun loadManagers() {
         manager = DeltaCraftTeamsManager(this)
-        pvpZoneManager = PvpZoneManager(this)
+        pvpZoneManager = PvpZoneManager(this, manager.pvpZoneCacheManager)
     }
 
     private fun loadCommands() {
@@ -103,6 +105,8 @@ class DeltaCraftTeams : JavaPlugin() {
 
         pluginManager.registerEvents(PlayerBlockListener(this), this)
         pluginManager.registerEvents(PlayerJoinListener(this, dbConnector), this)
+        pluginManager.registerEvents(PlayerDeathEventListener(manager), this)
+        pluginManager.registerEvents(PvpZoneKillListener(), this)
         this.debugMsg("PlayerBlockListener loaded")
     }
 

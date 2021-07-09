@@ -55,6 +55,10 @@ abstract class CacheManager<K, V>(val needsLoad: Boolean) : MutableMap<K, V> {
         return cache.containsValue(value)
     }
 
+    fun load(from: Map<out K, V>) {
+        putAll(from)
+    }
+
     override fun putAll(from: Map<out K, V>) {
         if (!needsLoad) {
 //            throw new Exception("This manager does not need loading!");

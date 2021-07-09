@@ -138,31 +138,31 @@ class PvpZoneCommand(
         val text = Component.text("PVP zones =========================")
             .append(Component.newline())
             .append(
-                Component.text("/pvp set <1 or 2>").color(NamedTextColor.YELLOW)
+                Component.text("/pvp set <1 or 2>", NamedTextColor.YELLOW)
             )
             .append(
-                Component.text(" Set first and second point of a pvp zone").color(NamedTextColor.GREEN)
-            )
-            .append(Component.newline())
-            .append(
-                Component.text("/pvp create <name>").color(NamedTextColor.YELLOW)
-            )
-            .append(
-                Component.text(" Create pvp zone").color(NamedTextColor.GREEN)
+                Component.text(" Set first and second point of a pvp zone", NamedTextColor.GREEN)
             )
             .append(Component.newline())
             .append(
-                Component.text("/pvp remove <name>").color(NamedTextColor.YELLOW)
+                Component.text("/pvp create <name>", NamedTextColor.YELLOW)
             )
             .append(
-                Component.text(" Remove pvp zone").color(NamedTextColor.GREEN)
+                Component.text(" Create pvp zone", NamedTextColor.GREEN)
             )
             .append(Component.newline())
             .append(
-                Component.text("/pvp test").color(NamedTextColor.YELLOW)
+                Component.text("/pvp remove <name>", NamedTextColor.YELLOW)
             )
             .append(
-                Component.text(" Check if you are standing in a pvp zone").color(NamedTextColor.GREEN)
+                Component.text(" Remove pvp zone", NamedTextColor.GREEN)
+            )
+            .append(Component.newline())
+            .append(
+                Component.text("/pvp test", NamedTextColor.YELLOW)
+            )
+            .append(
+                Component.text(" Check if you are standing in a pvp zone", NamedTextColor.GREEN)
             )
             .append(Component.newline())
             .append(Component.text("===================================="))
@@ -175,15 +175,15 @@ class PvpZoneCommand(
         var text = Component.text("You ")
 
         text = if (reg == null) {
-            text.append(Component.text("are not ").color(NamedTextColor.RED))
+            text.append(Component.text("are not ", NamedTextColor.RED))
         } else {
-            text.append(Component.text("are ").color(NamedTextColor.GREEN))
+            text.append(Component.text("are ", NamedTextColor.GREEN))
         }
 
-        text = text.append(Component.text("in a PVP zone ").color(NamedTextColor.WHITE))
+        text = text.append(Component.text("in a PVP zone ", NamedTextColor.WHITE))
 
         if (reg != null) {
-            text = text.append(Component.text(reg.name).color(NamedTextColor.YELLOW))
+            text = text.append(Component.text(reg.name, NamedTextColor.YELLOW))
         }
 
         p.sendMessage(text)

@@ -30,10 +30,9 @@ class MainCommand(private val plugin: DeltaCraftTeams) : CommandExecutor, TabCom
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<String>): Boolean {
         if (args.isEmpty() || args[0].isBlank()) {
-            val text = Component.text("User ")
-                .color(NamedTextColor.GREEN)
+            val text = Component.text("Use ", NamedTextColor.GREEN)
                 .append(
-                    Component.text("/DeltaCraftTeams ? ").color(NamedTextColor.YELLOW)
+                    Component.text("/DeltaCraftTeams ? ", NamedTextColor.YELLOW)
                 ).append(
                     Component.text("for help")
                 )
@@ -143,7 +142,7 @@ class MainCommand(private val plugin: DeltaCraftTeams) : CommandExecutor, TabCom
             text = text.append(TextHelper.commandInfo("/DeltaCraftTeams reload", "Reload plugin settings"))
         }
         text = text.append(
-            Component.text("==================================================").color(NamedTextColor.WHITE)
+            Component.text("==================================================")
         )
         p.sendMessage(text)
     }
@@ -227,8 +226,7 @@ class MainCommand(private val plugin: DeltaCraftTeams) : CommandExecutor, TabCom
                 )
                 .append(Component.text(" - "))
                 .append(
-                    Component.text(description)
-                        .color(NamedTextColor.YELLOW)
+                    Component.text(description, NamedTextColor.YELLOW)
                         .hoverEvent(
                             HoverEvent.showText(
                                 Component.text(key.replace("settings.", ""))

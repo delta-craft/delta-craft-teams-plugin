@@ -1,19 +1,12 @@
 package eu.deltacraft.deltacraftteams.managers
 
 import eu.deltacraft.deltacraftteams.DeltaCraftTeams
+import eu.deltacraft.deltacraftteams.managers.cache.PvpZoneCacheManager
+import eu.deltacraft.deltacraftteams.managers.cache.TeamCacheManager
 
-class DeltaCraftTeamsManager(val plugin: DeltaCraftTeams) {
-    // TODO
-/*
-    private val spectateCacheManager: SpectateCacheManager
+class DeltaCraftTeamsManager(private val plugin: DeltaCraftTeams) {
 
-    fun getSpectateCacheManager(): SpectateCacheManager {
-        return spectateCacheManager
-    }
+    val pvpZoneCacheManager = PvpZoneCacheManager()
+    val teamCacheManager = TeamCacheManager()
 
-
-    init {
-        spectateCacheManager = SpectateCacheManager(plugin)
-    }
-    */
 }
