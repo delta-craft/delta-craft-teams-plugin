@@ -126,7 +126,7 @@ class PvpZoneCommand(
 
     private fun deletePvpZone(p: Player, name: String) {
         if (!manager.zoneExists(name)) {
-            p.sendMessage(TextHelper.infoText("Zone with this name does not exists"))
+            p.sendMessage(TextHelper.infoText("Zone with this name does not exists", NamedTextColor.RED))
             return
         }
         manager.removeZone(name)
