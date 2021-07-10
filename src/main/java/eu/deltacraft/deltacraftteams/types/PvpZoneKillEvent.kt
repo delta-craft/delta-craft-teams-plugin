@@ -5,10 +5,18 @@ import org.bukkit.event.HandlerList
 
 class PvpZoneKillEvent(val killed: TeamPlayer, val killer: TeamPlayer, val pvpZone: PvpZone) : Event() {
 
-    private val handlers = HandlerList()
-
     override fun getHandlers(): HandlerList {
-        return handlers
+        return HANDLERS
+    }
+
+    companion object {
+
+        private val HANDLERS = HandlerList()
+
+        @JvmStatic
+        fun getHandlerList(): HandlerList {
+            return HANDLERS
+        }
     }
 
 }
