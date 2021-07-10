@@ -15,7 +15,7 @@ class TextHelper {
         fun getDivider(): TextComponent {
             val divider = "===================================="
             return Component.newline()
-                .append(Component.text(divider).color(NamedTextColor.GRAY))
+                .append(Component.text(divider, NamedTextColor.GRAY))
                 .append(Component.newline())
         }
 
@@ -24,9 +24,9 @@ class TextHelper {
             button: Component,
             color: TextColor = NamedTextColor.DARK_AQUA
         ): Component {
-            return Component.text("[ ").color(NamedTextColor.WHITE).decorate(TextDecoration.BOLD)
+            return Component.text("[ ", NamedTextColor.WHITE, TextDecoration.BOLD)
                 .append(button).color(color).decorate(TextDecoration.BOLD)
-                .append(Component.text(" ]").color(NamedTextColor.WHITE).decorate(TextDecoration.BOLD))
+                .append(Component.text(" ]", NamedTextColor.WHITE, TextDecoration.BOLD))
         }
 
         @JvmStatic
@@ -40,8 +40,7 @@ class TextHelper {
             permission: String = "¯\\_(ツ)_/¯"
         ): TextComponent {
             return Component
-                .text(customMsg)
-                .color(NamedTextColor.DARK_RED)
+                .text(customMsg, NamedTextColor.DARK_RED)
                 .hoverEvent(
                     HoverEvent.showText(
                         Component.text("Missing permission: '$permission'")
@@ -56,31 +55,27 @@ class TextHelper {
 
         @JvmStatic
         fun infoText(text: String, color: TextColor? = NamedTextColor.YELLOW): TextComponent {
-            return Component.text(text)
-                .color(color)
+            return Component.text(text, color)
         }
 
         @JvmStatic
         fun attentionText(text: String): Component {
-            return infoText(text)
-                .decorate(TextDecoration.BOLD)
+            return infoText(text).decorate(TextDecoration.BOLD)
         }
 
         @JvmStatic
         fun varText(text: String): TextComponent {
-            return Component.text(text)
-                .color(NamedTextColor.WHITE)
+            return Component.text(text, NamedTextColor.WHITE)
         }
 
         @JvmStatic
         fun commandInfo(fullCommand: String, description: String, command: String = fullCommand): TextComponent {
             return Component.empty()
                 .append(
-                    Component.text("$fullCommand ")
-                        .color(NamedTextColor.YELLOW)
+                    Component.text("$fullCommand ", NamedTextColor.YELLOW)
                         .clickEvent(ClickEvent.suggestCommand(command))
                 ).append(
-                    Component.text(description).color(NamedTextColor.GREEN)
+                    Component.text(description, NamedTextColor.GREEN)
                 ).append(Component.newline())
         }
     }

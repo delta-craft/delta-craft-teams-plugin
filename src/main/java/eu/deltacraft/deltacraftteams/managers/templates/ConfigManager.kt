@@ -12,18 +12,20 @@ import java.util.logging.Level
 
 
 abstract class ConfigManager(protected val plugin: DeltaCraftTeams, private val fileName: String) {
-    protected lateinit var config: YamlConfiguration
+
     private val configFile: File = File(plugin.dataFolder, fileName)
+
+    protected lateinit var config: YamlConfiguration
 
     init {
         if (!configFile.exists()) {
             plugin.saveResource(fileName, false)
         }
-        lazy { reloadAll() }
+
+        reloadAll()
     }
 
-
-    open fun reloadAll() {
+    protected fun reloadAll() {
         config = YamlConfiguration.loadConfiguration(configFile)
 
         // Look for defaults in the jar
@@ -43,11 +45,4 @@ abstract class ConfigManager(protected val plugin: DeltaCraftTeams, private val 
         }
     }
 
-    fun setLocation(path: String, l: Location) {
-        config[path] = l
-    }
-
-    fun getLocation(path: String): Location? {
-        return if (!config.contains(path)) null else config[path] as Location?
-    }
 }

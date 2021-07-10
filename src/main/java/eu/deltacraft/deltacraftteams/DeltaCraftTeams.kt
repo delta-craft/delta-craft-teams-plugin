@@ -1,10 +1,13 @@
 package eu.deltacraft.deltacraftteams
 
 import eu.deltacraft.deltacraftteams.commands.MainCommand
+import eu.deltacraft.deltacraftteams.commands.PvpZoneCommand
 import eu.deltacraft.deltacraftteams.listeners.PlayerBlockListener
+import eu.deltacraft.deltacraftteams.listeners.PlayerDeathEventListener
 import eu.deltacraft.deltacraftteams.listeners.PlayerJoinAttemptListener
-import eu.deltacraft.deltacraftteams.listeners.PlayerJoinListener
+import eu.deltacraft.deltacraftteams.listeners.PvpZoneKillListener
 import eu.deltacraft.deltacraftteams.managers.DeltaCraftTeamsManager
+import eu.deltacraft.deltacraftteams.managers.PvpZoneManager
 import eu.deltacraft.deltacraftteams.types.getString
 import eu.deltacraft.deltacraftteams.utils.enums.Settings
 import io.sentry.Sentry
@@ -14,8 +17,8 @@ class DeltaCraftTeams : JavaPlugin() {
 
     private var isDebug = false
 
-    lateinit var manager: DeltaCraftTeamsManager
-        private set
+    private lateinit var manager: DeltaCraftTeamsManager
+    private lateinit var pvpZoneManager: PvpZoneManager
 
     override fun onEnable() {
         // Plugin startup logic
@@ -70,6 +73,7 @@ class DeltaCraftTeams : JavaPlugin() {
 
     private fun loadManagers() {
         manager = DeltaCraftTeamsManager(this)
+        pvpZoneManager = PvpZoneManager(this, manager.pvpZoneCacheManager)
     }
 
     private fun loadCommands() {
@@ -78,14 +82,21 @@ class DeltaCraftTeams : JavaPlugin() {
             mainCmd.aliases = listOf("delta", "deltacraft")
             mainCmd.setExecutor(MainCommand(this))
         }
+        val pvpZoneCmd = this.getCommand("pvp")
+        if (pvpZoneCmd != null) {
+            pvpZoneCmd.aliases = listOf("pvpzone", "pvpzones")
+            pvpZoneCmd.setExecutor(PvpZoneCommand(this, pvpZoneManager))
+        }
     }
 
     private fun loadListeners() {
         val pluginManager = this.server.pluginManager
 
         pluginManager.registerEvents(PlayerBlockListener(this), this)
+        pluginManager.registerEvents(PlayerDeathEventListener(manager), this)
+        pluginManager.registerEvents(PvpZoneKillListener(), this)
         //pluginManager.registerEvents(PlayerJoinListener(this), this)
-        pluginManager.registerEvents(PlayerJoinAttemptListener(this),this)
+        pluginManager.registerEvents(PlayerJoinAttemptListener(this), this)
         this.debugMsg("PlayerBlockListener loaded")
     }
 
