@@ -64,24 +64,20 @@ class PlayerJoinAttemptListener(private val plugin: DeltaCraftTeams) : Listener 
         val json = JSONObject(responseBody);
         if(!json.getBoolean("success")) {
             val errorsString = (json.getJSONArray("errors")).map { x -> x.toString() }
-
             val errors = errorsString.map { x -> ValidateError.from(x) }
-            //val errors = emptyList<ValidateError>().toMutableList()
-            /*for (e in errorsString) {
-                if(ValidateError.values().any { it.name == e }) {
-                    errors.add(ValidateError.values().first { it.name == e })
-                }
-            }*/
 
+            var message = ""
             for (e in errors) {
-                when(e) {
-                    ValidateError.NotRegistered -> {
-                        plugin.logger.info("Player: ${playerJoinEvent.name} tried to join, but he does not accepted the rules.")
-                        playerJoinEvent.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Component.text(""))
-                        return
-                    }
+                message = when(e) {
+                    ValidateError.NotRegistered -> "You have to be registered!"
+                    ValidateError.MissingConsent -> "You have to accept our consent!"
+                    else -> "Server error"
                 }
+                break;
             }
+
+            plugin.logger.info("Player ${playerJoinEvent.name} tried to join, but error occurred: \"$message\"")
+            playerJoinEvent.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Component.text(message))
         }
     }
 }
