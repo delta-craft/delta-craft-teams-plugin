@@ -1,26 +1,20 @@
 package eu.deltacraft.deltacraftteams
 
 import eu.deltacraft.deltacraftteams.commands.MainCommand
-import eu.deltacraft.deltacraftteams.interfaces.IDbConnector
 import eu.deltacraft.deltacraftteams.listeners.PlayerBlockListener
 import eu.deltacraft.deltacraftteams.listeners.PlayerJoinListener
 import eu.deltacraft.deltacraftteams.managers.DeltaCraftTeamsManager
-import eu.deltacraft.deltacraftteams.types.DbConnector
 import eu.deltacraft.deltacraftteams.types.getString
 import eu.deltacraft.deltacraftteams.utils.enums.Settings
 import io.sentry.Sentry
-import io.sentry.SentryLevel
 import org.bukkit.plugin.java.JavaPlugin
 
 class DeltaCraftTeams : JavaPlugin() {
 
     private var isDebug = false
 
-    private lateinit var dbConnector: IDbConnector
-
     lateinit var manager: DeltaCraftTeamsManager
         private set
-
 
     override fun onEnable() {
         // Plugin startup logic
@@ -34,8 +28,6 @@ class DeltaCraftTeams : JavaPlugin() {
 
         this.tryInitSentry()
 
-        dbConnector = DbConnector(config)
-
         // Managers
         this.loadManagers()
 
@@ -46,10 +38,6 @@ class DeltaCraftTeams : JavaPlugin() {
         this.loadListeners()
 
         val logger = server.consoleSender
-
-        val res = DbConn(this, dbConnector).getUsers()
-
-        this.debugMsg(res)
 
         logger.sendMessage("DeltaCraft Teams ready!")
     }
@@ -95,7 +83,7 @@ class DeltaCraftTeams : JavaPlugin() {
         val pluginManager = this.server.pluginManager
 
         pluginManager.registerEvents(PlayerBlockListener(this), this)
-        pluginManager.registerEvents(PlayerJoinListener(this, dbConnector), this)
+        pluginManager.registerEvents(PlayerJoinListener(this), this)
         this.debugMsg("PlayerBlockListener loaded")
     }
 
