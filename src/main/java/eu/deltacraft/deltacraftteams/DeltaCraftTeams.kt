@@ -5,8 +5,6 @@ import eu.deltacraft.deltacraftteams.commands.PvpZoneCommand
 import eu.deltacraft.deltacraftteams.listeners.PlayerBlockListener
 import eu.deltacraft.deltacraftteams.listeners.PlayerDeathEventListener
 import eu.deltacraft.deltacraftteams.listeners.PlayerJoinAttemptListener
-import eu.deltacraft.deltacraftteams.listeners.PlayerJoinAttemptListener
-import eu.deltacraft.deltacraftteams.listeners.PlayerJoinListener
 import eu.deltacraft.deltacraftteams.listeners.PvpZoneKillListener
 import eu.deltacraft.deltacraftteams.managers.DeltaCraftTeamsManager
 import eu.deltacraft.deltacraftteams.managers.PvpZoneManager
@@ -98,7 +96,7 @@ class DeltaCraftTeams : JavaPlugin() {
         pluginManager.registerEvents(PlayerDeathEventListener(manager), this)
         pluginManager.registerEvents(PvpZoneKillListener(), this)
         //pluginManager.registerEvents(PlayerJoinListener(this), this)
-        pluginManager.registerEvents(PlayerJoinAttemptListener(this),this)
+        pluginManager.registerEvents(PlayerJoinAttemptListener(this), this)
         this.debugMsg("PlayerBlockListener loaded")
     }
 
