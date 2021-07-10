@@ -17,6 +17,12 @@ enum class Settings(
         "Sentry DSN",
         false,
         "STRING"
+    ),
+    APIKEY(
+        "system.apikey",
+        "API key",
+        false,
+        "STRING"
     );
     /*,
     SPECTATEMAXDISTANCE(

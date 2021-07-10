@@ -1,5 +1,6 @@
 system:
   debug: false
   sentry: ""
+  apikey: ""
 settings:
   todo: true
