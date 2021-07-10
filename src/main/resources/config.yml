@@ -1,10 +1,5 @@
 system:
   debug: false
   sentry: ""
-  database:
-    server: ""
-    name: ""
-    username: ""
-    password: ""
 settings:
   todo: true

@@ -17,30 +17,6 @@ enum class Settings(
         "Sentry DSN",
         false,
         "STRING"
-    ),
-    DATABASESERVER(
-        "system.database.server",
-        "Database server",
-        false,
-        "STRING"
-    ),
-    DATABASENAME(
-        "system.database.name",
-        "Database name",
-        false,
-        "STRING"
-    ),
-    DATABASELOGIN(
-        "system.database.username",
-        "Database server login name ",
-        false,
-        "STRING"
-    ),
-    DATABASEPASSWORD(
-        "system.database.password",
-        "Database server password",
-        false,
-        "STRING"
     );
     /*,
     SPECTATEMAXDISTANCE(
