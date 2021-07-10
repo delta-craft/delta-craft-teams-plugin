@@ -5,6 +5,7 @@ import eu.deltacraft.deltacraftteams.commands.PvpZoneCommand
 import eu.deltacraft.deltacraftteams.listeners.PlayerBlockListener
 import eu.deltacraft.deltacraftteams.listeners.PlayerDeathEventListener
 import eu.deltacraft.deltacraftteams.listeners.PlayerJoinAttemptListener
+import eu.deltacraft.deltacraftteams.listeners.PlayerJoinAttemptListener
 import eu.deltacraft.deltacraftteams.listeners.PlayerJoinListener
 import eu.deltacraft.deltacraftteams.listeners.PvpZoneKillListener
 import eu.deltacraft.deltacraftteams.managers.DeltaCraftTeamsManager
