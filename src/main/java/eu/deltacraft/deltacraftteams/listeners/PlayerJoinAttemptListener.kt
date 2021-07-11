@@ -1,70 +1,62 @@
 package eu.deltacraft.deltacraftteams.listeners
 
 import eu.deltacraft.deltacraftteams.DeltaCraftTeams
+import eu.deltacraft.deltacraftteams.managers.ClientManager
+import eu.deltacraft.deltacraftteams.types.ConnectionResponse
 import eu.deltacraft.deltacraftteams.utils.enums.ValidateError
+import io.ktor.client.call.receive
+import io.ktor.client.request.get
+import io.ktor.client.request.parameter
+import io.ktor.client.statement.HttpResponse
+import io.ktor.http.HttpStatusCode
+import kotlinx.coroutines.runBlocking
 import net.kyori.adventure.text.Component
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent
-import java.net.HttpURLConnection
-import java.net.URL
-import java.net.URLEncoder
-import java.util.StringJoiner
-import java.util.HashMap
-import org.json.JSONObject
-import java.io.InputStreamReader
-import java.io.BufferedReader
-import java.util.stream.Collectors
 
-class PlayerJoinAttemptListener(private val plugin: DeltaCraftTeams) : Listener {
+class PlayerJoinAttemptListener(
+    private val plugin: DeltaCraftTeams,
+    private val clientManager: ClientManager
+) : Listener {
 
     @EventHandler
-    fun onPlayerAttemptJoin(playerJoinEvent: AsyncPlayerPreLoginEvent) {
-        val arguments = HashMap<String, String>()
-        arguments["name"] = playerJoinEvent.name
-        arguments["uuid"] = playerJoinEvent.uniqueId.toString()
-        val sj = StringJoiner("&")
-        for ((key, value) in arguments)
-            sj.add(
-                URLEncoder.encode(key, "UTF-8") + "="
-                        + URLEncoder.encode(value, "UTF-8")
-            )
-        val out = sj.toString()
+    fun onPlayerAttemptJoinAsync(playerJoinEvent: AsyncPlayerPreLoginEvent) {
+        runBlocking {
+            val client = clientManager.getClient()
 
-        val url = URL("https://portal.deltacraft.eu/api/validate?$out")
-        val con = url.openConnection()
-        val http = con as HttpURLConnection
-        http.requestMethod = "GET"
-        http.doOutput = true
+            val httpRes =
+                client.get<HttpResponse>("https://portal.deltacraft.eu/api/plugin/validate") {
+                    parameter("nick", playerJoinEvent.name)
+                    parameter("uuid", playerJoinEvent.uniqueId)
+                }
 
-        http.setRequestProperty("Content-Type", "application/json; charset=UTF-8")
-        http.setRequestProperty("Authorization", "so@P8&Q67h@oENEaxryb&nhBb!47HrR?7J&FYDnm")
-        http.connect()
+            client.close()
 
-        val br = if (http.responseCode in 100..399) {
-            BufferedReader(InputStreamReader(http.inputStream))
-        } else {
-            BufferedReader(InputStreamReader(http.errorStream))
-        }
+            val status = httpRes.status
 
-        val responseBody = br.lines().collect(Collectors.joining())
-        val json = JSONObject(responseBody)
-        if (!json.getBoolean("success")) {
-            val errorsString = (json.getJSONArray("errors")).map { x -> x.toString() }
-            val errors = errorsString.map { x -> ValidateError.from(x) }
+            if (status != HttpStatusCode.OK && status != HttpStatusCode.BadRequest) {
+                return@runBlocking
+            }
 
-            var message = "Unkown error"
-            for (e in errors) {
-                message = when (e) {
+            val response = httpRes.receive<ConnectionResponse>()
+
+            if (!response.sucess) {
+
+                val message = when (response.getErrorEnum()) {
                     ValidateError.NotRegistered -> "You have to be registered!"
                     ValidateError.MissingConsent -> "You have to accept our consent!"
                     else -> "Server error"
                 }
-                break
-            }
 
-            plugin.logger.info("Player ${playerJoinEvent.name} tried to join, but error occurred: \"$message\"")
-            playerJoinEvent.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Component.text(message))
+                plugin.logger.info("Player ${playerJoinEvent.name} tried to join, but error occurred: \"$message\"")
+                playerJoinEvent.disallow(
+                    AsyncPlayerPreLoginEvent.Result.KICK_WHITELIST,
+                    Component.text(message)
+                )
+            }
         }
     }
+
+
 }

@@ -6,6 +6,7 @@ import eu.deltacraft.deltacraftteams.listeners.PlayerBlockListener
 import eu.deltacraft.deltacraftteams.listeners.PlayerDeathEventListener
 import eu.deltacraft.deltacraftteams.listeners.PlayerJoinAttemptListener
 import eu.deltacraft.deltacraftteams.listeners.PvpZoneKillListener
+import eu.deltacraft.deltacraftteams.managers.ClientManager
 import eu.deltacraft.deltacraftteams.managers.DeltaCraftTeamsManager
 import eu.deltacraft.deltacraftteams.managers.PvpZoneManager
 import eu.deltacraft.deltacraftteams.managers.SentryManager
@@ -19,6 +20,7 @@ class DeltaCraftTeams : JavaPlugin() {
     private lateinit var manager: DeltaCraftTeamsManager
     private lateinit var sentryManager: SentryManager
     private lateinit var pvpZoneManager: PvpZoneManager
+    private lateinit var clientManager: ClientManager
 
     override fun onEnable() {
         // Plugin startup logic
@@ -54,8 +56,10 @@ class DeltaCraftTeams : JavaPlugin() {
 
     private fun loadManagers() {
         manager = DeltaCraftTeamsManager(this)
-        pvpZoneManager = PvpZoneManager(this, manager.pvpZoneCacheManager)
         sentryManager = SentryManager(this)
+        clientManager = ClientManager(this)
+
+        pvpZoneManager = PvpZoneManager(this, manager.pvpZoneCacheManager)
     }
 
     private fun loadCommands() {
@@ -74,7 +78,7 @@ class DeltaCraftTeams : JavaPlugin() {
     private fun loadListeners() {
         val pluginManager = this.server.pluginManager
 
-        pluginManager.registerEvents(PlayerJoinAttemptListener(this), this)
+        pluginManager.registerEvents(PlayerJoinAttemptListener(this, clientManager), this)
         this.debugMsg("PlayerJoinAttemptListener loaded")
 
         pluginManager.registerEvents(PlayerBlockListener(this), this)
