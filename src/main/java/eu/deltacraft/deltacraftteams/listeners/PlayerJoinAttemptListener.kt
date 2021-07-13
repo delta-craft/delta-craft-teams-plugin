@@ -46,7 +46,8 @@ class PlayerJoinAttemptListener(
                 val message = when (response.getErrorEnum()) {
                     ValidateError.NotRegistered -> "You have to be registered!"
                     ValidateError.MissingConsent -> "You have to accept our consent!"
-                    else -> "Server error"
+                    ValidateError.NotInTeam -> "You have to join a team!"
+                    else -> "Server error :-("
                 }
 
                 plugin.logger.info("Player ${playerJoinEvent.name} tried to join, but error occurred: \"$message\"")

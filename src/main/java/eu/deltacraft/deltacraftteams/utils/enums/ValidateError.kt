@@ -8,6 +8,7 @@ enum class ValidateError constructor(val value: String) {
     UuidNotValid("uuid_not_valid"),
     NotRegistered("not_registered"),
     Unauthorized("unauthorized"),
+    NotInTeam("not_in_team"),
     Unknown("unknown");
 
     companion object {
