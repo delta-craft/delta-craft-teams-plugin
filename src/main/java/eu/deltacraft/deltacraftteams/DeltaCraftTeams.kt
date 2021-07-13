@@ -6,11 +6,11 @@ import eu.deltacraft.deltacraftteams.listeners.PlayerBlockListener
 import eu.deltacraft.deltacraftteams.listeners.PlayerDeathEventListener
 import eu.deltacraft.deltacraftteams.listeners.PlayerJoinAttemptListener
 import eu.deltacraft.deltacraftteams.listeners.PvpZoneKillListener
+import eu.deltacraft.deltacraftteams.managers.ClientManager
 import eu.deltacraft.deltacraftteams.managers.DeltaCraftTeamsManager
 import eu.deltacraft.deltacraftteams.managers.PvpZoneManager
-import eu.deltacraft.deltacraftteams.types.getString
+import eu.deltacraft.deltacraftteams.managers.SentryManager
 import eu.deltacraft.deltacraftteams.utils.enums.Settings
-import io.sentry.Sentry
 import org.bukkit.plugin.java.JavaPlugin
 
 class DeltaCraftTeams : JavaPlugin() {
@@ -18,7 +18,9 @@ class DeltaCraftTeams : JavaPlugin() {
     private var isDebug = false
 
     private lateinit var manager: DeltaCraftTeamsManager
+    private lateinit var sentryManager: SentryManager
     private lateinit var pvpZoneManager: PvpZoneManager
+    private lateinit var clientManager: ClientManager
 
     override fun onEnable() {
         // Plugin startup logic
@@ -30,10 +32,10 @@ class DeltaCraftTeams : JavaPlugin() {
             this.debugMsg("Debugging enabled")
         }
 
-        this.tryInitSentry()
-
         // Managers
         this.loadManagers()
+
+        sentryManager.tryInitSentry()
 
         // Commands
         this.loadCommands()
@@ -46,25 +48,6 @@ class DeltaCraftTeams : JavaPlugin() {
         logger.sendMessage("DeltaCraft Teams ready!")
     }
 
-    private fun tryInitSentry() {
-        val dsn = config.getString(Settings.SENTRY)
-        if (dsn.isNullOrEmpty()) {
-            return
-        }
-
-        try {
-            Sentry.init { x ->
-                run {
-                    x.dsn = dsn
-                    x.tracesSampleRate = 1.0
-                    x.setDebug(isDebug)
-                }
-            }
-            debugMsg("Sentry enabled")
-        } catch (e: Exception) {
-        }
-    }
-
     override fun onDisable() {
         // Plugin shutdown logic
         val logger = server.consoleSender
@@ -73,6 +56,9 @@ class DeltaCraftTeams : JavaPlugin() {
 
     private fun loadManagers() {
         manager = DeltaCraftTeamsManager(this)
+        sentryManager = SentryManager(this)
+        clientManager = ClientManager(this)
+
         pvpZoneManager = PvpZoneManager(this, manager.pvpZoneCacheManager)
     }
 
@@ -92,12 +78,17 @@ class DeltaCraftTeams : JavaPlugin() {
     private fun loadListeners() {
         val pluginManager = this.server.pluginManager
 
+        pluginManager.registerEvents(PlayerJoinAttemptListener(this, clientManager), this)
+        this.debugMsg("PlayerJoinAttemptListener loaded")
+
         pluginManager.registerEvents(PlayerBlockListener(this), this)
-        pluginManager.registerEvents(PlayerDeathEventListener(manager), this)
-        pluginManager.registerEvents(PvpZoneKillListener(), this)
-        //pluginManager.registerEvents(PlayerJoinListener(this), this)
-        pluginManager.registerEvents(PlayerJoinAttemptListener(this), this)
         this.debugMsg("PlayerBlockListener loaded")
+
+        pluginManager.registerEvents(PlayerDeathEventListener(manager), this)
+        this.debugMsg("PlayerDeathEventListener loaded")
+
+        pluginManager.registerEvents(PvpZoneKillListener(), this)
+        this.debugMsg("PvpZoneKillListener loaded")
     }
 
     private fun loadConfig() {
@@ -121,7 +112,7 @@ class DeltaCraftTeams : JavaPlugin() {
         return isDebug
     }
 
-    private fun debugMsg(message: String) {
+    fun debugMsg(message: String) {
         if (isDebug) {
             logger.info("[Debug]: $message")
         }

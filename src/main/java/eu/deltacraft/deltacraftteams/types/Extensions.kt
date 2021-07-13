@@ -10,6 +10,9 @@ fun FileConfiguration.getString(setting: Settings): String? {
     return this.getString(setting.path)
 }
 
+fun FileConfiguration.getBoolean(setting: Settings): Boolean {
+    return this.getBoolean(setting.path)
+}
 
 fun Permissible.hasPermission(perm: Permissions): Boolean {
     return this.hasPermission(perm.path)
