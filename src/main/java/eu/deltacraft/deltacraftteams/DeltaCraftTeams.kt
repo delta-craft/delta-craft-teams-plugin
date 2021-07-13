@@ -2,14 +2,14 @@ package eu.deltacraft.deltacraftteams
 
 import eu.deltacraft.deltacraftteams.commands.MainCommand
 import eu.deltacraft.deltacraftteams.commands.PvpZoneCommand
+import eu.deltacraft.deltacraftteams.commands.home.DelHomeCommand
+import eu.deltacraft.deltacraftteams.commands.home.HomeCommand
+import eu.deltacraft.deltacraftteams.commands.home.SetHomeCommand
 import eu.deltacraft.deltacraftteams.listeners.PlayerBlockListener
 import eu.deltacraft.deltacraftteams.listeners.PlayerDeathEventListener
 import eu.deltacraft.deltacraftteams.listeners.PlayerJoinAttemptListener
 import eu.deltacraft.deltacraftteams.listeners.PvpZoneKillListener
-import eu.deltacraft.deltacraftteams.managers.ClientManager
-import eu.deltacraft.deltacraftteams.managers.DeltaCraftTeamsManager
-import eu.deltacraft.deltacraftteams.managers.PvpZoneManager
-import eu.deltacraft.deltacraftteams.managers.SentryManager
+import eu.deltacraft.deltacraftteams.managers.*
 import eu.deltacraft.deltacraftteams.utils.enums.Settings
 import org.bukkit.plugin.java.JavaPlugin
 
@@ -21,6 +21,7 @@ class DeltaCraftTeams : JavaPlugin() {
     private lateinit var sentryManager: SentryManager
     private lateinit var pvpZoneManager: PvpZoneManager
     private lateinit var clientManager: ClientManager
+    private lateinit var homesManager: HomesManager
 
     override fun onEnable() {
         // Plugin startup logic
@@ -60,6 +61,7 @@ class DeltaCraftTeams : JavaPlugin() {
         clientManager = ClientManager(this)
 
         pvpZoneManager = PvpZoneManager(this, manager.pvpZoneCacheManager)
+        homesManager = HomesManager(this)
     }
 
     private fun loadCommands() {
@@ -67,12 +69,24 @@ class DeltaCraftTeams : JavaPlugin() {
         if (mainCmd != null) {
             mainCmd.aliases = listOf("delta", "deltacraft")
             mainCmd.setExecutor(MainCommand(this))
+            debugMsg("Main command loaded")
         }
         val pvpZoneCmd = this.getCommand("pvp")
         if (pvpZoneCmd != null) {
             pvpZoneCmd.aliases = listOf("pvpzone", "pvpzones")
             pvpZoneCmd.setExecutor(PvpZoneCommand(this, pvpZoneManager))
+            debugMsg("PvpZone command loaded")
         }
+        loadHomeCommands()
+    }
+
+    private fun loadHomeCommands() {
+        getCommand("sethome")!!.setExecutor(SetHomeCommand(homesManager))
+        debugMsg("SetHome command loaded")
+        getCommand("home")!!.setExecutor(HomeCommand(homesManager))
+        debugMsg("Home command loaded")
+        getCommand("delhome")!!.setExecutor(DelHomeCommand(homesManager))
+        debugMsg("DelHome command loaded")
     }
 
     private fun loadListeners() {
