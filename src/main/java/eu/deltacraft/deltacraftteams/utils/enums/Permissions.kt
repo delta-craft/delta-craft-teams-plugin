@@ -8,7 +8,7 @@ enum class Permissions(var path: String) {
     PVPCREATE("pvp.create"),
     PVPREMOVE("pvp.remove"),
 
-    HOMEUSE("home.use");
+    HOME("home");
 
     override fun toString(): String {
         return path

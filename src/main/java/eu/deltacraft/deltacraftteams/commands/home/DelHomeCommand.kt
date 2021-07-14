@@ -23,8 +23,8 @@ class DelHomeCommand(private val homeConfigManager: HomesManager) : CommandExecu
         }
         val player: Player = sender
 
-        if (!player.hasPermission(Permissions.HOMEUSE)) {
-            player.sendMessage(TextHelper.insufficientPermissions(Permissions.HOMEUSE))
+        if (!player.hasPermission(Permissions.HOME)) {
+            player.sendMessage(TextHelper.insufficientPermissions(Permissions.HOME))
             return true
         }
 

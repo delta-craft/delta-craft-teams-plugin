@@ -22,8 +22,8 @@ class SetHomeCommand(private val configManager: HomesManager) : CommandExecutor 
 
         val player: Player = commandSender
 
-        if (!player.hasPermission(Permissions.HOMEUSE)) {
-            player.sendMessage(TextHelper.insufficientPermissions(Permissions.HOMEUSE))
+        if (!player.hasPermission(Permissions.HOME)) {
+            player.sendMessage(TextHelper.insufficientPermissions(Permissions.HOME))
             return true
         }
 
