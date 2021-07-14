@@ -16,6 +16,10 @@ fun FileConfiguration.getBoolean(setting: Settings): Boolean {
     return this.getBoolean(setting.path)
 }
 
+fun FileConfiguration.getInt(setting: Settings): Int {
+    return this.getInt(setting.path)
+}
+
 fun Permissible.hasPermission(perm: Permissions): Boolean {
     return this.hasPermission(perm.path)
 }

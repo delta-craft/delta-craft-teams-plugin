@@ -11,7 +11,7 @@ class PlayerHomeCache : CacheManager<UUID, TeleportBar>(false) {
         return isTeleportPending(player.uniqueId)
     }
 
-    fun isTeleportPending(uid: UUID): Boolean {
+    private fun isTeleportPending(uid: UUID): Boolean {
         return containsKey(uid)
     }
 

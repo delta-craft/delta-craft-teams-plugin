@@ -3,4 +3,6 @@ system:
   sentry: ""
   apikey: ""
 settings:
+  home:
+    delay: 5
   todo: true

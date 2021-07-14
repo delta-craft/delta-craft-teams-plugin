@@ -5,7 +5,10 @@ import eu.deltacraft.deltacraftteams.managers.cache.PlayerHomeCache
 import eu.deltacraft.deltacraftteams.managers.templates.ConfigManager
 import eu.deltacraft.deltacraftteams.types.KeyHelper
 import eu.deltacraft.deltacraftteams.types.PlayerHome
+import eu.deltacraft.deltacraftteams.types.getInt
+import eu.deltacraft.deltacraftteams.types.getString
 import eu.deltacraft.deltacraftteams.utils.TextHelper
+import eu.deltacraft.deltacraftteams.utils.enums.Settings
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.HoverEvent
 import org.bukkit.Location
@@ -20,7 +23,7 @@ class HomesManager(plugin: DeltaCraftTeams) : ConfigManager(plugin, "home.yml") 
     val homesCache = PlayerHomeCache()
 
     companion object {
-        const val HomesPrefix = "zones"
+        const val HomesPrefix = "homes"
     }
 
     private fun getKeyHelper(uid: UUID): KeyHelper {

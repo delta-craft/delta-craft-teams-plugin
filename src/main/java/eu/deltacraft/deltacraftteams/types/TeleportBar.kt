@@ -20,11 +20,11 @@ class TeleportBar(private val plugin: JavaPlugin) {
     var mainTaskId: Int = -1
 
 
-    fun showBar(player: Player, length: Int) {
+    fun showBar(player: Player, delay: Int) {
         audience = player
         audience!!.showBossBar(bossBar)
 
-        val time = 1.0 / (length * 20)
+        val time = 1.0 / (delay * 20)
 
         barTaskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, {
             if (bossBar.progress() - time <= 0.0) {

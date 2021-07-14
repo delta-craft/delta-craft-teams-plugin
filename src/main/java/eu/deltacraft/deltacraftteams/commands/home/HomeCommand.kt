@@ -2,9 +2,11 @@ package eu.deltacraft.deltacraftteams.commands.home
 
 import eu.deltacraft.deltacraftteams.managers.HomesManager
 import eu.deltacraft.deltacraftteams.types.TeleportBar
+import eu.deltacraft.deltacraftteams.types.getInt
 import eu.deltacraft.deltacraftteams.types.hasPermission
 import eu.deltacraft.deltacraftteams.utils.TextHelper
 import eu.deltacraft.deltacraftteams.utils.enums.Permissions
+import eu.deltacraft.deltacraftteams.utils.enums.Settings
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.event.HoverEvent
@@ -21,10 +23,10 @@ import org.bukkit.plugin.java.JavaPlugin
 
 class HomeCommand(
     private val plugin: JavaPlugin,
-    private val configManager: HomesManager
+    private val manager: HomesManager
 ) : CommandExecutor {
 
-    private val cache = configManager.homesCache
+    private val cache = manager.homesCache
     private val overrideString: String = "::override::"
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<String>): Boolean {
@@ -46,7 +48,7 @@ class HomeCommand(
 
         val overrideTp = args.isNotEmpty() && args[0].lowercase() == overrideString
 
-        val home = configManager.getHome(player)
+        val home = manager.getHome(player)
 
         if (home == null) {
             val output = Component.text("Home not found", NamedTextColor.YELLOW)
@@ -56,7 +58,7 @@ class HomeCommand(
 
         val homeLocation = home.location
 
-        val isObstructed = configManager.isObstructed(homeLocation)
+        val isObstructed = manager.isObstructed(homeLocation)
 
         if (isObstructed.first && !overrideTp) {
             val text =
@@ -80,19 +82,19 @@ class HomeCommand(
             return true
         }
 
-        if (cache.isTeleportPending(player.uniqueId)) {
+        if (cache.isTeleportPending(player)) {
             player.sendMessage(Component.text("You already have home teleportation pending"))
             return true
         }
 
-        val length = 5
+        val delay = getDelay()
 
         val bossBar = TeleportBar(plugin)
         cache[player.uniqueId] = bossBar
-        bossBar.showBar(player, length)
+        bossBar.showBar(player, delay)
 
         val taskId = Bukkit.getScheduler().runTaskLater(plugin, Runnable {
-            if (cache.isTeleportPending(player.uniqueId)) {
+            if (cache.isTeleportPending(player)) {
                 cache.cancelTeleport(player)
 
                 player.teleport(homeLocation)
@@ -104,10 +106,16 @@ class HomeCommand(
                 world.spawnParticle(Particle.EXPLOSION_NORMAL, player.location.add(0.0, 0.1, 0.0), 10)
                 world.playSound(player.location, Sound.UI_TOAST_IN, SoundCategory.MASTER, 10f, 1f)
             }
-        }, length * 20L).taskId
+        }, delay * 20L).taskId
 
         bossBar.mainTaskId = taskId
 
         return true
     }
+
+
+    private fun getDelay(): Int {
+        return plugin.config.getInt(Settings.HOMEDELAY)
+    }
+
 }
