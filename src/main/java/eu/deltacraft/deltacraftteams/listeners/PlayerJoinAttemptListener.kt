@@ -41,7 +41,7 @@ class PlayerJoinAttemptListener(
 
             val response = httpRes.receive<ConnectionResponse>()
 
-            if (!response.sucess) {
+            if (!response.content) {
 
                 val message = when (response.getErrorEnum()) {
                     ValidateError.NotRegistered -> "You have to be registered!"
