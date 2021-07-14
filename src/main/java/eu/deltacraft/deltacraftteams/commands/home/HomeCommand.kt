@@ -88,10 +88,13 @@ class HomeCommand(
         val length = 5
 
         val bossBar = TeleportBar(plugin)
+        cache[player.uniqueId] = bossBar
         bossBar.showBar(player, length)
 
-        val taskId = Bukkit.getScheduler().runTaskLater(plugin, {
+        val taskId = Bukkit.getScheduler().runTaskLater(plugin, Runnable {
             if (cache.isTeleportPending(player.uniqueId)) {
+                cache.cancelTeleport(player)
+
                 player.teleport(homeLocation)
                 player.sendMessage("Welcome home!")
 
@@ -101,8 +104,7 @@ class HomeCommand(
                 world.spawnParticle(Particle.EXPLOSION_NORMAL, player.location.add(0.0, 0.1, 0.0), 10)
                 world.playSound(player.location, Sound.UI_TOAST_IN, SoundCategory.MASTER, 10f, 1f)
             }
-
-        } as Runnable, length * 20L).taskId
+        }, length * 20L).taskId
 
         bossBar.mainTaskId = taskId
 

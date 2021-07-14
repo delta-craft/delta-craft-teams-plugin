@@ -21,9 +21,9 @@ fun Permissible.hasPermission(perm: Permissions): Boolean {
 }
 
 fun Location.hasMoved(to: Location): Boolean {
-    return this.blockX == to.blockX &&
-            this.blockY == to.blockY &&
-            this.blockZ == to.blockZ
+    return this.blockX != to.blockX ||
+            this.blockY != to.blockY ||
+            this.blockZ != to.blockZ
 }
 
 fun PlayerMoveEvent.hasMoved(): Boolean {
