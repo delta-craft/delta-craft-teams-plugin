@@ -1,5 +1,6 @@
 package eu.deltacraft.deltacraftteams.types
 
+import com.flowpowered.math.vector.Vector3d
 import eu.deltacraft.deltacraftteams.utils.enums.Permissions
 import eu.deltacraft.deltacraftteams.utils.enums.Settings
 import org.bukkit.Location
@@ -32,4 +33,8 @@ fun Location.hasMoved(to: Location): Boolean {
 
 fun PlayerMoveEvent.hasMoved(): Boolean {
     return this.from.hasMoved(this.to)
+}
+
+fun Location.toVector3d(): Vector3d {
+    return Vector3d(this.x, this.y, this.z)
 }

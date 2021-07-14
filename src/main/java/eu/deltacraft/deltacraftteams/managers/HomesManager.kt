@@ -5,10 +5,7 @@ import eu.deltacraft.deltacraftteams.managers.cache.PlayerHomeCache
 import eu.deltacraft.deltacraftteams.managers.templates.ConfigManager
 import eu.deltacraft.deltacraftteams.types.KeyHelper
 import eu.deltacraft.deltacraftteams.types.PlayerHome
-import eu.deltacraft.deltacraftteams.types.getInt
-import eu.deltacraft.deltacraftteams.types.getString
 import eu.deltacraft.deltacraftteams.utils.TextHelper
-import eu.deltacraft.deltacraftteams.utils.enums.Settings
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.HoverEvent
 import org.bukkit.Location
@@ -21,6 +18,7 @@ import kotlin.math.floor
 
 class HomesManager(plugin: DeltaCraftTeams) : ConfigManager(plugin, "home.yml") {
     val homesCache = PlayerHomeCache()
+    private val mapManager = BlueMapManager()
 
     companion object {
         const val HomesPrefix = "homes"
@@ -48,6 +46,7 @@ class HomesManager(plugin: DeltaCraftTeams) : ConfigManager(plugin, "home.yml") 
 
     fun setHome(p: Player) {
         this.setHome(p.uniqueId, p.location)
+        mapManager.addHome(p, p.location)
     }
 
     private fun setHome(playerId: UUID, location: Location) {
@@ -73,6 +72,7 @@ class HomesManager(plugin: DeltaCraftTeams) : ConfigManager(plugin, "home.yml") 
         config[kh.key] = null
         saveConfig()
 
+        mapManager.removeHome(p)
         return Pair(true, location)
     }
 
