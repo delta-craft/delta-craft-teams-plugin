@@ -5,10 +5,7 @@ import eu.deltacraft.deltacraftteams.commands.PvpZoneCommand
 import eu.deltacraft.deltacraftteams.commands.home.DelHomeCommand
 import eu.deltacraft.deltacraftteams.commands.home.HomeCommand
 import eu.deltacraft.deltacraftteams.commands.home.SetHomeCommand
-import eu.deltacraft.deltacraftteams.listeners.PlayerBlockListener
-import eu.deltacraft.deltacraftteams.listeners.PlayerDeathEventListener
-import eu.deltacraft.deltacraftteams.listeners.PlayerJoinAttemptListener
-import eu.deltacraft.deltacraftteams.listeners.PvpZoneKillListener
+import eu.deltacraft.deltacraftteams.listeners.*
 import eu.deltacraft.deltacraftteams.managers.*
 import eu.deltacraft.deltacraftteams.utils.enums.Settings
 import org.bukkit.plugin.java.JavaPlugin
@@ -83,7 +80,7 @@ class DeltaCraftTeams : JavaPlugin() {
     private fun loadHomeCommands() {
         getCommand("sethome")!!.setExecutor(SetHomeCommand(homesManager))
         debugMsg("SetHome command loaded")
-        getCommand("home")!!.setExecutor(HomeCommand(homesManager))
+        getCommand("home")!!.setExecutor(HomeCommand(this, homesManager))
         debugMsg("Home command loaded")
         getCommand("delhome")!!.setExecutor(DelHomeCommand(homesManager))
         debugMsg("DelHome command loaded")
@@ -103,6 +100,9 @@ class DeltaCraftTeams : JavaPlugin() {
 
         pluginManager.registerEvents(PvpZoneKillListener(), this)
         this.debugMsg("PvpZoneKillListener loaded")
+
+        pluginManager.registerEvents(PlayerHomeMoveListener(homesManager.homesCache), this)
+        this.debugMsg("PlayerHomeMoveListener loaded")
     }
 
     private fun loadConfig() {

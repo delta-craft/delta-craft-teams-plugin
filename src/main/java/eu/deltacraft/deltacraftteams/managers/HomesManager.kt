@@ -1,6 +1,7 @@
 package eu.deltacraft.deltacraftteams.managers
 
 import eu.deltacraft.deltacraftteams.DeltaCraftTeams
+import eu.deltacraft.deltacraftteams.managers.cache.PlayerHomeCache
 import eu.deltacraft.deltacraftteams.managers.templates.ConfigManager
 import eu.deltacraft.deltacraftteams.types.KeyHelper
 import eu.deltacraft.deltacraftteams.types.PlayerHome
@@ -16,6 +17,7 @@ import java.util.UUID
 import kotlin.math.floor
 
 class HomesManager(plugin: DeltaCraftTeams) : ConfigManager(plugin, "home.yml") {
+    val homesCache = PlayerHomeCache()
 
     companion object {
         const val HomesPrefix = "zones"
