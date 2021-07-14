@@ -6,7 +6,9 @@ enum class Permissions(var path: String) {
     CONFIGRELOAD("main.reload"),
     CONFIGCHANGE("main.change"),
     PVPCREATE("pvp.create"),
-    PVPREMOVE("pvp.remove");
+    PVPREMOVE("pvp.remove"),
+
+    HOME("home");
 
     override fun toString(): String {
         return path

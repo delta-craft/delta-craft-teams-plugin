@@ -23,14 +23,13 @@ enum class Settings(
         "API key",
         false,
         "STRING"
-    );
-    /*,
-    SPECTATEMAXDISTANCE(
-        "settings.spectate.maxdistance",
-        "Maximum distance can player travel in spectator mode from starting point",
-        false,
+    ),
+    HOMEDELAY(
+        "settings.home.delay",
+        "Home teleport delay in seconds",
+        true,
         "INT"
-    );*/
+    );
 
     fun getType(): String {
         return "[$type]"
