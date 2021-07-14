@@ -2,10 +2,7 @@ package eu.deltacraft.deltacraftteams
 
 import eu.deltacraft.deltacraftteams.commands.MainCommand
 import eu.deltacraft.deltacraftteams.commands.PvpZoneCommand
-import eu.deltacraft.deltacraftteams.listeners.PlayerBlockListener
-import eu.deltacraft.deltacraftteams.listeners.PlayerDeathEventListener
-import eu.deltacraft.deltacraftteams.listeners.PlayerJoinAttemptListener
-import eu.deltacraft.deltacraftteams.listeners.PvpZoneKillListener
+import eu.deltacraft.deltacraftteams.listeners.*
 import eu.deltacraft.deltacraftteams.managers.ClientManager
 import eu.deltacraft.deltacraftteams.managers.DeltaCraftTeamsManager
 import eu.deltacraft.deltacraftteams.managers.PvpZoneManager
@@ -89,6 +86,9 @@ class DeltaCraftTeams : JavaPlugin() {
 
         pluginManager.registerEvents(PvpZoneKillListener(), this)
         this.debugMsg("PvpZoneKillListener loaded")
+
+        pluginManager.registerEvents(LoginListener(this, clientManager, manager.loginCacheManager), this)
+        this.debugMsg("LoginListener loaded")
     }
 
     private fun loadConfig() {
