@@ -75,9 +75,10 @@ class LoginListener(
 
             client.close()
 
-            if (newLoginResponse.content) {
+            if (!newLoginResponse.content) {
                 loginCacheManager.loginPlayer(uuid)
-                plugin.logger.info("Player ${playerJoinEvent.name} logged in because of an active session")
+                plugin.logger.info("Player ${playerJoinEvent.name} login request gone wrong")
+                playerJoinEvent.disallow(AsyncPlayerPreLoginEvent.Result.KICK_WHITELIST, Component.text("Nastala chyba :("))
                 return@runBlocking;
             }
 
@@ -112,10 +113,6 @@ class LoginListener(
 
             val client = clientManager.getClient()
 
-            val httpRes =
-                client.get<HttpResponse>("https://portal.deltacraft.eu/api/plugin/validate-session") {
-                    parameter("uuid", uuid)
-                }
 
 
         }
