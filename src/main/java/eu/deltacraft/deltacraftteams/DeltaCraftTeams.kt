@@ -133,8 +133,7 @@ class DeltaCraftTeams : JavaPlugin() {
         runBlocking {
             val client = clientManager.getClient()
 
-            val httpRes =
-                client.post<HttpResponse>("https://portal.deltacraft.eu/api/plugin/logout-all")
+            client.post<HttpResponse>("https://portal.deltacraft.eu/api/plugin/logout-all")
         }
     }
 

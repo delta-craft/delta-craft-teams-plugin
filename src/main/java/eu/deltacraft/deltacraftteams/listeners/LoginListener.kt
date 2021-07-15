@@ -5,7 +5,6 @@ import eu.deltacraft.deltacraftteams.managers.ClientManager
 import eu.deltacraft.deltacraftteams.managers.cache.LoginCacheManager
 import eu.deltacraft.deltacraftteams.types.NewLoginData
 import eu.deltacraft.deltacraftteams.types.SessionResponse
-import eu.deltacraft.deltacraftteams.utils.enums.ValidateError
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
@@ -45,6 +44,7 @@ class LoginListener(
             val status1 = httpRes1.status
 
             if (status1 != HttpStatusCode.OK && status1 != HttpStatusCode.BadRequest) {
+                client.close()
                 return@runBlocking
             }
 
@@ -54,7 +54,7 @@ class LoginListener(
                 loginCacheManager.loginPlayer(uuid)
                 client.close()
                 plugin.logger.info("Player ${playerJoinEvent.name} joined because of an active session")
-                return@runBlocking;
+                return@runBlocking
             }
 
             // Request login attempt
@@ -67,6 +67,7 @@ class LoginListener(
             val status2 = httpRes2.status
 
             if (status2 != HttpStatusCode.OK && status2 != HttpStatusCode.BadRequest) {
+                client.close()
                 return@runBlocking
             }
 
@@ -77,8 +78,11 @@ class LoginListener(
             if (!newLoginResponse.content) {
                 loginCacheManager.loginPlayer(uuid)
                 plugin.logger.info("Player ${playerJoinEvent.name} login request gone wrong")
-                playerJoinEvent.disallow(AsyncPlayerPreLoginEvent.Result.KICK_WHITELIST, Component.text("Nastala chyba :("))
-                return@runBlocking;
+                playerJoinEvent.disallow(
+                    AsyncPlayerPreLoginEvent.Result.KICK_WHITELIST,
+                    Component.text("Nastala chyba :(")
+                )
+                return@runBlocking
             }
 
             plugin.logger.info("Player ${playerJoinEvent.name} tried to join, but does not have an active session")
@@ -96,7 +100,6 @@ class LoginListener(
                         )
                     )
             )
-            return@runBlocking;
         }
     }
 
@@ -120,16 +123,14 @@ class LoginListener(
 
             val status = httpRes.status
 
+            client.close()
+
             if (status != HttpStatusCode.OK && status != HttpStatusCode.BadRequest) {
                 return@runBlocking
             }
 
             // Není potřeba logika, prostě se to pokusilo updatnout session :))
             // val newLoginResponse = httpRes.receive<SessionResponse>()
-
-            client.close()
-
-            return@runBlocking
         }
     }
 }
