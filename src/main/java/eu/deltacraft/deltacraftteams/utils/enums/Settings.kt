@@ -12,12 +12,6 @@ enum class Settings(
         true,
         "BOOL"
     ),
-    SENTRY(
-        "system.sentry",
-        "Sentry DSN",
-        false,
-        "STRING"
-    ),
     APIKEY(
         "system.apikey",
         "API key",

@@ -1,9 +1,6 @@
 package eu.deltacraft.deltacraftteams.managers.templates
 
 import eu.deltacraft.deltacraftteams.DeltaCraftTeams
-import io.sentry.Sentry
-import org.bukkit.Bukkit
-import org.bukkit.Location
 import org.bukkit.configuration.file.YamlConfiguration
 import java.io.File
 import java.io.IOException
@@ -40,8 +37,7 @@ abstract class ConfigManager(protected val plugin: DeltaCraftTeams, private val 
         try {
             config.save(configFile)
         } catch (ex: IOException) {
-            Bukkit.getLogger().log(Level.SEVERE, "Could not save config to $configFile", ex)
-            Sentry.captureException(ex)
+            plugin.logger.log(Level.SEVERE, "Could not save config to $configFile", ex)
         }
     }
 

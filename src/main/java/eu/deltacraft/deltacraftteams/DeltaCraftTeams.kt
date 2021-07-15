@@ -19,7 +19,6 @@ class DeltaCraftTeams : JavaPlugin() {
     private var isDebug = false
 
     private lateinit var manager: DeltaCraftTeamsManager
-    private lateinit var sentryManager: SentryManager
     private lateinit var pvpZoneManager: PvpZoneManager
     private lateinit var clientManager: ClientManager
     private lateinit var homesManager: HomesManager
@@ -36,8 +35,6 @@ class DeltaCraftTeams : JavaPlugin() {
 
         // Managers
         this.loadManagers()
-
-        sentryManager.tryInitSentry()
 
         // Commands
         this.loadCommands()
@@ -62,7 +59,6 @@ class DeltaCraftTeams : JavaPlugin() {
 
     private fun loadManagers() {
         manager = DeltaCraftTeamsManager(this)
-        sentryManager = SentryManager(this)
         clientManager = ClientManager(this)
 
         pvpZoneManager = PvpZoneManager(this, manager.pvpZoneCacheManager)
