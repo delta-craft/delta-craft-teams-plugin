@@ -15,10 +15,22 @@ commands:
     description: Set PVP zones
     usage: /pvp
     aliases: [ pvpzone, pvpzones ]
+  sethome:
+    description: Set new home
+    usage: /sethome
+  home:
+    description: Teleport home
+    usage: /home
+  delhome:
+    description: Delete home
+    usage: /delhome
 permissions:
   delta.*:
     default: op
     children:
+      delta.home:
+        description: Use home command
+        default: true
       delta.main.*:
         default: op
         children:
