@@ -10,6 +10,7 @@ import eu.deltacraft.deltacraftteams.managers.*
 import eu.deltacraft.deltacraftteams.utils.enums.Settings
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
+import io.ktor.http.*
 import kotlinx.coroutines.runBlocking
 import org.bukkit.plugin.java.JavaPlugin
 
@@ -130,11 +131,19 @@ class DeltaCraftTeams : JavaPlugin() {
     }
 
     private fun logoutAll() {
-        runBlocking {
-            val client = clientManager.getClient()
+        val client = clientManager.getClient()
 
-            client.post<HttpResponse>("https://portal.deltacraft.eu/api/plugin/logout-all")
+        runBlocking {
+            val res = client.post<HttpResponse>(path = "api/plugin/logout-all")
+
+            val status = res.status
+
+            if (status != HttpStatusCode.OK) {
+                logger.warning("Logout-All request returned HTTP ${status.value}")
+            }
         }
+
+        client.close()
     }
 
     fun setDebug(debug: Boolean): Boolean {

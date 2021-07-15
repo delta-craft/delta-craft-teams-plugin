@@ -19,6 +19,7 @@ class PlayerJoinAttemptListener(
     private val plugin: DeltaCraftTeams,
     private val clientManager: ClientManager
 ) : Listener {
+    private val logger = plugin.logger
 
     @EventHandler
     fun onPlayerAttemptJoinAsync(playerJoinEvent: AsyncPlayerPreLoginEvent) {
@@ -26,7 +27,7 @@ class PlayerJoinAttemptListener(
             val client = clientManager.getClient()
 
             val httpRes =
-                client.get<HttpResponse>("https://portal.deltacraft.eu/api/plugin/validate") {
+                client.get<HttpResponse>(path = "api/plugin/validate") {
                     parameter("nick", playerJoinEvent.name)
                     parameter("uuid", playerJoinEvent.uniqueId)
                 }
@@ -36,6 +37,7 @@ class PlayerJoinAttemptListener(
             val status = httpRes.status
 
             if (status != HttpStatusCode.OK && status != HttpStatusCode.BadRequest) {
+                logger.warning("Validate request for player ${playerJoinEvent.name} returned HTTP ${status.value}")
                 return@runBlocking
             }
 
@@ -50,7 +52,7 @@ class PlayerJoinAttemptListener(
                     else -> "Server error :-("
                 }
 
-                plugin.logger.info("Player ${playerJoinEvent.name} tried to join, but error occurred: \"$message\"")
+                plugin.logger.warning("Player ${playerJoinEvent.name} tried to join, but error occurred: \"$message\"")
                 playerJoinEvent.disallow(
                     AsyncPlayerPreLoginEvent.Result.KICK_WHITELIST,
                     Component.text(message)
