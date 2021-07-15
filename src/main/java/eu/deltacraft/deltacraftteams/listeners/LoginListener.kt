@@ -34,9 +34,7 @@ class LoginListener(
 
             loginCacheManager.logoutPlayer(uuid)
 
-
             val client = clientManager.getClient()
-
 
             val httpRes1 =
                 client.get<HttpResponse>("https://portal.deltacraft.eu/api/plugin/validate-session") {
@@ -55,6 +53,7 @@ class LoginListener(
             if (sessionResponse.content) {
                 loginCacheManager.loginPlayer(uuid)
                 client.close()
+                plugin.logger.info("Player ${playerJoinEvent.name} joined because of an active session")
                 return@runBlocking;
             }
 
@@ -113,8 +112,24 @@ class LoginListener(
 
             val client = clientManager.getClient()
 
+            val httpRes =
+                client.post<HttpResponse>("https://portal.deltacraft.eu/api/plugin/update-session") {
+                    body = NewLoginData(uuid.toString(), ip)
+                    contentType(ContentType.Application.Json)
+                }
 
+            val status = httpRes.status
 
+            if (status != HttpStatusCode.OK && status != HttpStatusCode.BadRequest) {
+                return@runBlocking
+            }
+
+            // Není potřeba logika, prostě se to pokusilo updatnout session :))
+            // val newLoginResponse = httpRes.receive<SessionResponse>()
+
+            client.close()
+
+            return@runBlocking
         }
     }
 }

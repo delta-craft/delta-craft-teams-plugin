@@ -6,6 +6,7 @@ enum class SessionError(val value: String) {
     SessionExpired ("session_expired"),
     InvalidIP ("invalid_ip"),
     Unknown("unknown"),
+    IPMismatch("ip_mismatch"),
     UuidNotValid ("uuid_not_valid");
 
 
