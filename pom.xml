@@ -141,6 +141,11 @@
             <artifactId>kotlin-stdlib</artifactId>
             <version>${kotlin.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlinx</groupId>
+            <artifactId>kotlinx-serialization-json</artifactId>
+            <version>1.2.2</version>
+        </dependency>
 
         <dependency>
             <groupId>io.papermc.paper</groupId>

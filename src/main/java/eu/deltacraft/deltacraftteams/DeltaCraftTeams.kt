@@ -8,6 +8,9 @@ import eu.deltacraft.deltacraftteams.commands.home.SetHomeCommand
 import eu.deltacraft.deltacraftteams.listeners.*
 import eu.deltacraft.deltacraftteams.managers.*
 import eu.deltacraft.deltacraftteams.utils.enums.Settings
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
+import kotlinx.coroutines.runBlocking
 import org.bukkit.plugin.java.JavaPlugin
 
 class DeltaCraftTeams : JavaPlugin() {
@@ -48,6 +51,10 @@ class DeltaCraftTeams : JavaPlugin() {
 
     override fun onDisable() {
         // Plugin shutdown logic
+
+        // Invalidate sessions of all players on plugin shutdown
+        logoutAll()
+
         val logger = server.consoleSender
         logger.sendMessage("DeltaCraft Teams shutdown complete!")
     }
@@ -101,6 +108,9 @@ class DeltaCraftTeams : JavaPlugin() {
         pluginManager.registerEvents(PvpZoneKillListener(), this)
         this.debugMsg("PvpZoneKillListener loaded")
 
+        pluginManager.registerEvents(LoginListener(this, clientManager, manager.loginCacheManager), this)
+        this.debugMsg("LoginListener loaded")
+
         pluginManager.registerEvents(PlayerHomeMoveListener(homesManager.homesCache), this)
         this.debugMsg("PlayerHomeMoveListener loaded")
     }
@@ -117,6 +127,14 @@ class DeltaCraftTeams : JavaPlugin() {
         return ("###################" + sep
                 + "DeltaCraftTeams v." + description.version + sep
                 + "###################")
+    }
+
+    private fun logoutAll() {
+        runBlocking {
+            val client = clientManager.getClient()
+
+            client.post<HttpResponse>("https://portal.deltacraft.eu/api/plugin/logout-all")
+        }
     }
 
     fun setDebug(debug: Boolean): Boolean {
