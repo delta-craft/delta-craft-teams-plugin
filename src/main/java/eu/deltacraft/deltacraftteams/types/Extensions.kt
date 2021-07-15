@@ -38,3 +38,7 @@ fun PlayerMoveEvent.hasMoved(): Boolean {
 fun Location.toVector3d(): Vector3d {
     return Vector3d(this.x, this.y, this.z)
 }
+
+fun Location.toWorldLocation(): Location {
+    return this.clone().set(this.x * 8, this.y * 8, this.z * 8)
+}

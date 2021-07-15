@@ -6,7 +6,10 @@ import eu.deltacraft.deltacraftteams.commands.home.DelHomeCommand
 import eu.deltacraft.deltacraftteams.commands.home.HomeCommand
 import eu.deltacraft.deltacraftteams.commands.home.SetHomeCommand
 import eu.deltacraft.deltacraftteams.listeners.*
-import eu.deltacraft.deltacraftteams.managers.*
+import eu.deltacraft.deltacraftteams.managers.ClientManager
+import eu.deltacraft.deltacraftteams.managers.DeltaCraftTeamsManager
+import eu.deltacraft.deltacraftteams.managers.HomesManager
+import eu.deltacraft.deltacraftteams.managers.PvpZoneManager
 import eu.deltacraft.deltacraftteams.utils.enums.Settings
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
@@ -110,6 +113,9 @@ class DeltaCraftTeams : JavaPlugin() {
 
         pluginManager.registerEvents(PlayerHomeMoveListener(homesManager.homesCache), this)
         this.debugMsg("PlayerHomeMoveListener loaded")
+
+        pluginManager.registerEvents(PortalListener(this), this)
+        this.debugMsg("PortalListener loaded")
     }
 
     private fun loadConfig() {
