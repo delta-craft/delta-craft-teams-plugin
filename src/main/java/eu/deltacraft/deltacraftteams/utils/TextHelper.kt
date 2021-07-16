@@ -1,5 +1,6 @@
 package eu.deltacraft.deltacraftteams.utils
 
+import eu.deltacraft.deltacraftteams.types.Constants
 import eu.deltacraft.deltacraftteams.utils.enums.Permissions
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TextComponent
@@ -77,6 +78,22 @@ class TextHelper {
                 ).append(
                     Component.text(description, NamedTextColor.GREEN)
                 ).append(Component.newline())
+        }
+
+        @JvmStatic
+        fun visitUrl(what: String, urlPath: String): TextComponent {
+            return Component.text("Visit ")
+                .append(Component.text("DeltaCraft Portal ", NamedTextColor.DARK_AQUA))
+                .append(Component.text("and ${what}."))
+                .append(Component.newline())
+                .append(Component.newline())
+                .append(
+                    Component
+                        .text("${Constants.FULL_URL}/${urlPath}", NamedTextColor.DARK_AQUA)
+                        .clickEvent(
+                            ClickEvent.openUrl("${Constants.FULL_URL}/${urlPath}")
+                        )
+                )
         }
     }
 }

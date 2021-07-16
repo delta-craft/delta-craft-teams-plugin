@@ -3,18 +3,15 @@ package eu.deltacraft.deltacraftteams.listeners
 import eu.deltacraft.deltacraftteams.DeltaCraftTeams
 import eu.deltacraft.deltacraftteams.managers.ClientManager
 import eu.deltacraft.deltacraftteams.managers.cache.LoginCacheManager
-import eu.deltacraft.deltacraftteams.types.Constants
 import eu.deltacraft.deltacraftteams.types.NewLoginData
 import eu.deltacraft.deltacraftteams.types.SessionResponse
-import io.ktor.client.call.receive
-import io.ktor.client.request.get
+import eu.deltacraft.deltacraftteams.utils.TextHelper
+import io.ktor.client.call.*
 import io.ktor.client.request.*
-import io.ktor.client.statement.HttpResponse
+import io.ktor.client.statement.*
 import io.ktor.http.*
 import kotlinx.coroutines.runBlocking
 import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.event.ClickEvent
-import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
@@ -32,6 +29,10 @@ class LoginListener(
 
     @EventHandler(priority = EventPriority.HIGHEST)
     fun onPlayerAttemptJoinAsync(playerJoinEvent: AsyncPlayerPreLoginEvent) {
+        if (playerJoinEvent.loginResult != AsyncPlayerPreLoginEvent.Result.ALLOWED) {
+            return
+        }
+
         val ip = playerJoinEvent.address.hostAddress
         val uuid = playerJoinEvent.uniqueId
 
@@ -94,21 +95,9 @@ class LoginListener(
 
             playerJoinEvent.disallow(
                 AsyncPlayerPreLoginEvent.Result.KICK_WHITELIST,
-                Component.text("Visit ")
-                    .append(Component.text("DeltaCraft Portal ", NamedTextColor.DARK_AQUA))
-                    .append(Component.text("and confirm your login."))
-                    .append(Component.newline())
-                    .append(Component.newline())
-                    .append(
-                        Component
-                            .text("${Constants.FULL_URL}/login", NamedTextColor.DARK_AQUA)
-                            .clickEvent(
-                                ClickEvent.openUrl("${Constants.FULL_URL}/login")
-                            )
-                    )
+                TextHelper.visitUrl("confirm your login", "login")
             )
         }
-
     }
 
     @EventHandler
