@@ -3,12 +3,12 @@ package eu.deltacraft.deltacraftteams.listeners
 import eu.deltacraft.deltacraftteams.DeltaCraftTeams
 import eu.deltacraft.deltacraftteams.managers.ClientManager
 import eu.deltacraft.deltacraftteams.types.ConnectionResponse
+import eu.deltacraft.deltacraftteams.utils.TextHelper
 import eu.deltacraft.deltacraftteams.utils.enums.ValidateError
-import io.ktor.client.call.receive
-import io.ktor.client.request.get
-import io.ktor.client.request.parameter
-import io.ktor.client.statement.HttpResponse
-import io.ktor.http.HttpStatusCode
+import io.ktor.client.call.*
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
+import io.ktor.http.*
 import kotlinx.coroutines.runBlocking
 import net.kyori.adventure.text.Component
 import org.bukkit.event.EventHandler
@@ -44,18 +44,29 @@ class PlayerJoinAttemptListener(
             val response = httpRes.receive<ConnectionResponse>()
 
             if (!response.content) {
+                plugin.logger.warning("Player ${playerJoinEvent.name} tried to join, but error occurred: \"${response.error}\"")
 
                 val message = when (response.getErrorEnum()) {
-                    ValidateError.NotRegistered -> "You have to be registered!"
-                    ValidateError.MissingConsent -> "You have to accept our consent!"
-                    ValidateError.NotInTeam -> "You have to join a team!"
-                    else -> "Server error :-("
+                    ValidateError.NotRegistered ->
+                        Component.text("You have to be registered!")
+                            .append(Component.newline())
+                            .append(TextHelper.visitUrl("register", ""))
+                    ValidateError.MissingConsent ->
+                        Component.text("You have to accept our consent!")
+                            .append(Component.newline())
+                            .append(TextHelper.visitUrl("accept our consent", "consents"))
+                    ValidateError.NotInTeam ->
+                        Component.text("You have to join a team!")
+                            .append(Component.newline())
+                            .append(TextHelper.visitUrl("join a team", "teams"))
+                    else -> {
+                        Component.text("Server error :-(")
+                    }
                 }
 
-                plugin.logger.warning("Player ${playerJoinEvent.name} tried to join, but error occurred: \"$message\"")
                 playerJoinEvent.disallow(
                     AsyncPlayerPreLoginEvent.Result.KICK_WHITELIST,
-                    Component.text(message)
+                    message
                 )
             }
         }
