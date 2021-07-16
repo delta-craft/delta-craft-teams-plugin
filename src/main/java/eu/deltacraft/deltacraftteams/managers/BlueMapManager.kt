@@ -3,11 +3,12 @@ package eu.deltacraft.deltacraftteams.managers
 import de.bluecolored.bluemap.api.BlueMapAPI
 import de.bluecolored.bluemap.api.marker.DistanceRangedMarker
 import de.bluecolored.bluemap.api.marker.Shape
+import eu.deltacraft.deltacraftteams.types.Constants
 import eu.deltacraft.deltacraftteams.types.PvpZone
 import eu.deltacraft.deltacraftteams.types.toVector3d
 import org.bukkit.Location
 import org.bukkit.entity.Player
-import java.util.UUID
+import java.util.*
 
 class BlueMapManager {
     companion object {
@@ -114,8 +115,10 @@ class BlueMapManager {
 
         val marker = markers.createPOIMarker(player.name, map, location.toVector3d())
         marker.label = homeName
-        marker.setIcon("https://minotar.net/helm/${player.name}/30.png", 15, 15)
-        (marker as DistanceRangedMarker).maxDistance = 200.0
+        marker.setIcon("${Constants.FULL_URL}/api/embed/home/${player.name}", 16, 16)
+        if (marker is DistanceRangedMarker) {
+            (marker as DistanceRangedMarker).maxDistance = 200.0
+        }
 
         markerApi.save()
     }
