@@ -102,6 +102,9 @@ class DeltaCraftTeams : JavaPlugin() {
         pluginManager.registerEvents(PlayerBlockListener(this), this)
         this.debugMsg("PlayerBlockListener loaded")
 
+        pluginManager.registerEvents(PlayerChatListener(this), this)
+        this.debugMsg("PlayerChatListener loaded")
+
         pluginManager.registerEvents(PlayerDeathEventListener(manager), this)
         this.debugMsg("PlayerDeathEventListener loaded")
 
