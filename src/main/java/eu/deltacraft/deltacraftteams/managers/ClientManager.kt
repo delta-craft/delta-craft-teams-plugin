@@ -20,6 +20,7 @@ import org.bukkit.configuration.file.FileConfiguration
 
 class ClientManager(plugin: DeltaCraftTeams) : IConfigConsumer {
 
+    private val logged = plugin.logger
     override val config: FileConfiguration = plugin.config
 
     private var apiKey: String? = null
@@ -53,7 +54,6 @@ class ClientManager(plugin: DeltaCraftTeams) : IConfigConsumer {
         }
 
         client.close()
-
 
         val status = httpRes.status
 
