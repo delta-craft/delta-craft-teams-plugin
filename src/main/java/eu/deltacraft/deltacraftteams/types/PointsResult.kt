@@ -7,4 +7,5 @@ data class PointsResult(val content: Boolean, val error: String, val message: St
     fun getErrorEnum(): PointsError? {
         return PointsError.from(error)
     }
+
 }

@@ -45,7 +45,7 @@ class ClientManager(plugin: DeltaCraftTeams) : IConfigConsumer {
         }
     }
 
-    suspend fun uploadPoints(points: List<Point>): PointsResult {
+    suspend fun uploadPoints(points: Collection<Point>): PointsResult {
         val client = this.getClient()
 
         val httpRes = client.post<HttpResponse>(path = "api/plugin/addpoints") {
