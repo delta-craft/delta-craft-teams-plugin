@@ -6,10 +6,7 @@ import eu.deltacraft.deltacraftteams.commands.home.DelHomeCommand
 import eu.deltacraft.deltacraftteams.commands.home.HomeCommand
 import eu.deltacraft.deltacraftteams.commands.home.SetHomeCommand
 import eu.deltacraft.deltacraftteams.listeners.*
-import eu.deltacraft.deltacraftteams.managers.ClientManager
-import eu.deltacraft.deltacraftteams.managers.DeltaCraftTeamsManager
-import eu.deltacraft.deltacraftteams.managers.HomesManager
-import eu.deltacraft.deltacraftteams.managers.PvpZoneManager
+import eu.deltacraft.deltacraftteams.managers.*
 import eu.deltacraft.deltacraftteams.utils.enums.Settings
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
@@ -25,6 +22,7 @@ class DeltaCraftTeams : JavaPlugin() {
     private lateinit var pvpZoneManager: PvpZoneManager
     private lateinit var clientManager: ClientManager
     private lateinit var homesManager: HomesManager
+    private lateinit var pointsQueue: PointsQueue
 
     override fun onEnable() {
         // Plugin startup logic
@@ -45,6 +43,8 @@ class DeltaCraftTeams : JavaPlugin() {
         // Listeners
         this.loadListeners()
 
+        pointsQueue.startTimer()
+
         val logger = server.consoleSender
 
         logger.sendMessage("DeltaCraft Teams ready!")
@@ -56,6 +56,8 @@ class DeltaCraftTeams : JavaPlugin() {
         // Invalidate sessions of all players on plugin shutdown
         logoutAll()
 
+        sendAllPoints()
+
         val logger = server.consoleSender
         logger.sendMessage("DeltaCraft Teams shutdown complete!")
     }
@@ -66,6 +68,7 @@ class DeltaCraftTeams : JavaPlugin() {
 
         pvpZoneManager = PvpZoneManager(this, manager.pvpZoneCacheManager)
         homesManager = HomesManager(this)
+        pointsQueue = PointsQueue(this, clientManager)
     }
 
     private fun loadCommands() {
@@ -133,6 +136,13 @@ class DeltaCraftTeams : JavaPlugin() {
         return ("###################" + sep
                 + "DeltaCraftTeams v." + description.version + sep
                 + "###################")
+    }
+
+    private fun sendAllPoints() {
+
+        runBlocking {
+            pointsQueue.sendAllPointsAsync()
+        }
     }
 
     private fun logoutAll() {
