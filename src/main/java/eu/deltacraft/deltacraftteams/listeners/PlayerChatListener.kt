@@ -11,7 +11,7 @@ import net.kyori.adventure.text.TextComponent
 class PlayerChatListener(private val plugin: DeltaCraftTeams) : Listener {
     @EventHandler
     fun onPlayerChat(event: AsyncChatEvent) {
-        val message: String = TranslateTextCodes().translate((event.message() as TextComponent).content())
-        event.message(Component.text(message))
+        val message: TextComponent = TranslateTextCodes().translate((event.message() as TextComponent).content())
+        event.message(message)
     }
 }
