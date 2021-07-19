@@ -102,6 +102,9 @@ class DeltaCraftTeams : JavaPlugin() {
         pluginManager.registerEvents(PlayerJoinAttemptListener(this, clientManager), this)
         this.debugMsg("PlayerJoinAttemptListener loaded")
 
+        pluginManager.registerEvents(PlayerAdvancementDoneListener(this, pointsQueue),this)
+        this.debugMsg("PlayerAdvancementDoneListener loaded")
+
         pluginManager.registerEvents(PlayerBlockListener(this), this)
         this.debugMsg("PlayerBlockListener loaded")
 
