@@ -69,7 +69,12 @@ class PointsQueue(private val plugin: DeltaCraftTeams, private val clientManager
     private fun sendPoints(toSend: Collection<Point>): Boolean {
         val task = Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
             runBlocking {
-                sendPointsAsync(toSend)
+
+                val chunked = toSend.chunked(Constants.POINTS_PAYLOAD_SIZE)
+
+                for (points in chunked) {
+                    sendPointsAsync(points)
+                }
 
                 taskId = 0
             }
