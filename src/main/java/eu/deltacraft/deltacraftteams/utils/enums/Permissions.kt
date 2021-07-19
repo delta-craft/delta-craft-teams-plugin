@@ -1,10 +1,7 @@
 package eu.deltacraft.deltacraftteams.utils.enums
 
 enum class Permissions(var path: String) {
-    SHOWVERSION("main.version"),
-    CONFIGSHOW("main.show"),
-    CONFIGRELOAD("main.reload"),
-    CONFIGCHANGE("main.change"),
+    USEMAIN("main"),
     PVPCREATE("pvp.create"),
     PVPREMOVE("pvp.remove"),
 

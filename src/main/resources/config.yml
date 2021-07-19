@@ -4,4 +4,3 @@ system:
 settings:
   home:
     delay: 5
-  todo: true

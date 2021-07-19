@@ -13,6 +13,7 @@ import io.ktor.client.call.*
 import io.ktor.client.engine.java.*
 import io.ktor.client.features.*
 import io.ktor.client.features.json.*
+import io.ktor.client.features.json.serializer.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
@@ -29,7 +30,7 @@ class ClientManager(plugin: DeltaCraftTeams) : IConfigConsumer {
         return HttpClient(Java) {
             install(JsonFeature) {
                 accept(ContentType.Application.Json)
-                serializer = GsonSerializer()
+                serializer = KotlinxSerializer()
             }
             install(UserAgent) {
                 agent = "DeltaCraftTeams plugin"

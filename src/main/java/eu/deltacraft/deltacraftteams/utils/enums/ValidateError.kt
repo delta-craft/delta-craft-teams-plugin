@@ -1,6 +1,6 @@
 package eu.deltacraft.deltacraftteams.utils.enums
 
-enum class ValidateError (val value: String) {
+enum class ValidateError(val value: String) {
     ArgumentsError("arguments_error"),
     MethodNotValid("method_not_valid"),
     MissingConsent("missing_consent"),
