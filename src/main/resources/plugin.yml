@@ -35,21 +35,9 @@ permissions:
       delta.home:
         description: Use home command
         default: true
-      delta.main.*:
+      delta.main:
+        description: Main command
         default: op
-        children:
-          delta.main.version:
-            description: Show curent version
-            default: true
-          delta.main.show:
-            description: Show config
-            default: op
-          delta.main.reload:
-            description: Reload config
-            default: op
-          delta.main.change:
-            description: Change config value
-            default: op
       delta.pvp:
         default: op
         children:

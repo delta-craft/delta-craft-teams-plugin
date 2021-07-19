@@ -1,8 +1,8 @@
 package eu.deltacraft.deltacraftteams.commands
 
 import eu.deltacraft.deltacraftteams.DeltaCraftTeams
-import eu.deltacraft.deltacraftteams.managers.PvpZoneManager
-import eu.deltacraft.deltacraftteams.managers.cache.PvpZoneCacheManager
+import eu.deltacraft.deltacraftteams.managers.PointsQueue
+import eu.deltacraft.deltacraftteams.types.hasPermission
 import eu.deltacraft.deltacraftteams.utils.TextHelper
 import eu.deltacraft.deltacraftteams.utils.enums.Permissions
 import eu.deltacraft.deltacraftteams.utils.enums.Settings
@@ -16,10 +16,12 @@ import org.bukkit.command.CommandSender
 import org.bukkit.command.TabCompleter
 import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.entity.Player
-import kotlin.collections.ArrayList
 
 
-class MainCommand(private val plugin: DeltaCraftTeams) : CommandExecutor, TabCompleter {
+class MainCommand(
+    private val plugin: DeltaCraftTeams,
+    private val pointsQueue: PointsQueue
+) : CommandExecutor, TabCompleter {
     private fun getAllSettings(): List<Settings> {
         return Settings.values().filter { x -> x.visible }
     }
@@ -29,6 +31,10 @@ class MainCommand(private val plugin: DeltaCraftTeams) : CommandExecutor, TabCom
     }
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<String>): Boolean {
+        if (!sender.hasPermission(Permissions.USEMAIN)) {
+            sender.sendMessage(TextHelper.insufficientPermissions(Permissions.USEMAIN))
+            return true
+        }
         if (args.isEmpty() || args[0].isBlank()) {
             val text = Component.text("Use ", NamedTextColor.GREEN)
                 .append(
@@ -42,18 +48,22 @@ class MainCommand(private val plugin: DeltaCraftTeams) : CommandExecutor, TabCom
         }
         val cmd = args[0]
         if (cmd.equals("reload", ignoreCase = true)) {
-            if (!sender.hasPermission(Permissions.CONFIGRELOAD.path)) {
-                sender.sendMessage(TextHelper.insufficientPermissions(Permissions.CONFIGRELOAD))
-                return true
-            }
+
             reloadConfig(sender)
             return true
         }
-        if (cmd.equals("version", ignoreCase = true)) {
-            if (!sender.hasPermission(Permissions.SHOWVERSION.path)) {
-                sender.sendMessage(TextHelper.insufficientPermissions(Permissions.SHOWVERSION))
-                return true
+        if (cmd.equals("send", ignoreCase = true) ||
+            cmd.equals("sendpoints", ignoreCase = true)
+        ) {
+            val res = pointsQueue.sendAllPoints()
+            if (res) {
+                sender.sendMessage(TextHelper.infoText("Prepared successfully"))
+            } else {
+                sender.sendMessage(TextHelper.attentionText("Send is already pending"))
             }
+            return true
+        }
+        if (cmd.equals("version", ignoreCase = true)) {
             versionCommand(sender)
             return true
         }
@@ -62,10 +72,6 @@ class MainCommand(private val plugin: DeltaCraftTeams) : CommandExecutor, TabCom
             return true
         }
         if (cmd.equals("change", ignoreCase = true) || cmd.equals("set", ignoreCase = true)) {
-            if (!sender.hasPermission(Permissions.CONFIGCHANGE.path)) {
-                sender.sendMessage(TextHelper.insufficientPermissions(Permissions.CONFIGCHANGE))
-                return true
-            }
             if (args.size < 2 || args[1].isBlank()) {
                 sender.sendMessage(TextHelper.attentionText("Key is empty"))
                 return true
@@ -80,10 +86,6 @@ class MainCommand(private val plugin: DeltaCraftTeams) : CommandExecutor, TabCom
             return true
         }
         if (cmd.equals("show", ignoreCase = true)) {
-            if (!sender.hasPermission(Permissions.CONFIGSHOW.path)) {
-                sender.sendMessage(TextHelper.insufficientPermissions(Permissions.CONFIGSHOW))
-                return true
-            }
             showCurrentSettings(sender)
             return true
         }
@@ -106,7 +108,11 @@ class MainCommand(private val plugin: DeltaCraftTeams) : CommandExecutor, TabCom
         if (sender !is Player) {
             return list
         }
-        val cmds = arrayOf("show", "reload", "change", "version")
+        if (!sender.hasPermission(Permissions.USEMAIN)) {
+            sender.sendMessage(TextHelper.insufficientPermissions(Permissions.USEMAIN))
+            return list
+        }
+        val cmds = arrayOf("show", "reload", "change", "version", "send")
         val typedIn: String = if (args.size == 1) {
             args[0].lowercase()
         } else {
@@ -121,29 +127,22 @@ class MainCommand(private val plugin: DeltaCraftTeams) : CommandExecutor, TabCom
     }
 
     private fun sendHelp(p: CommandSender) {
-        var text = Component.text("DeltaCraftTeams main commands =====================")
+        val text = Component.text("DeltaCraftTeams main commands =====================")
             .append(Component.newline())
-        if (p.hasPermission(Permissions.SHOWVERSION.path)) {
-            text = text.append(TextHelper.commandInfo("/DeltaCraftTeams version", "Show current version of the plugin"))
-        }
-        if (p.hasPermission(Permissions.CONFIGSHOW.path)) {
-            text = text.append(TextHelper.commandInfo("/DeltaCraftTeams show", "Show settings in config"))
-        }
-        if (p.hasPermission(Permissions.CONFIGCHANGE.path)) {
-            text = text.append(
+            .append(TextHelper.commandInfo("/DeltaCraftTeams version", "Show current version of the plugin"))
+            .append(TextHelper.commandInfo("/DeltaCraftTeams send", "Upload all points to database"))
+            .append(TextHelper.commandInfo("/DeltaCraftTeams show", "Show settings in config"))
+            .append(
                 TextHelper.commandInfo(
                     "/DeltaCraftTeams change <key> <value>",
                     "Change setting in config",
                     "/DeltaCraftTeams change "
                 )
             )
-        }
-        if (p.hasPermission(Permissions.CONFIGRELOAD.path)) {
-            text = text.append(TextHelper.commandInfo("/DeltaCraftTeams reload", "Reload plugin settings"))
-        }
-        text = text.append(
-            Component.text("==================================================")
-        )
+            .append(TextHelper.commandInfo("/DeltaCraftTeams reload", "Reload plugin settings"))
+            .append(
+                Component.text("==================================================")
+            )
         p.sendMessage(text)
     }
 

@@ -76,7 +76,7 @@ class DeltaCraftTeams : JavaPlugin() {
         val mainCmd = this.getCommand("deltacraftteams")
         if (mainCmd != null) {
             mainCmd.aliases = listOf("delta", "deltacraft")
-            mainCmd.setExecutor(MainCommand(this))
+            mainCmd.setExecutor(MainCommand(this, pointsQueue))
             debugMsg("Main command loaded")
         }
         val pvpZoneCmd = this.getCommand("pvp")
@@ -111,7 +111,7 @@ class DeltaCraftTeams : JavaPlugin() {
         pluginManager.registerEvents(PlayerJoinAttemptListener(this, clientManager), this)
         this.debugMsg("PlayerJoinAttemptListener loaded")
 
-        pluginManager.registerEvents(PlayerAdvancementDoneListener(this, pointsQueue),this)
+        pluginManager.registerEvents(PlayerAdvancementDoneListener(this, pointsQueue), this)
         this.debugMsg("PlayerAdvancementDoneListener loaded")
 
         pluginManager.registerEvents(PlayerBlockListener(this), this)
