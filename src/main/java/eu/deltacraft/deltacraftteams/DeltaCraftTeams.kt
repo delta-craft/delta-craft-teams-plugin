@@ -1,5 +1,6 @@
 package eu.deltacraft.deltacraftteams
 
+import eu.deltacraft.deltacraftteams.commands.DonationCommand
 import eu.deltacraft.deltacraftteams.commands.MainCommand
 import eu.deltacraft.deltacraftteams.commands.PvpZoneCommand
 import eu.deltacraft.deltacraftteams.commands.home.DelHomeCommand
@@ -84,6 +85,14 @@ class DeltaCraftTeams : JavaPlugin() {
             pvpZoneCmd.setExecutor(PvpZoneCommand(this, pvpZoneManager))
             debugMsg("PvpZone command loaded")
         }
+
+        val donationCmd = this.getCommand("donate")
+        if (donationCmd != null) {
+            donationCmd.aliases = listOf("donation")
+            donationCmd.setExecutor(DonationCommand())
+            debugMsg("Donation command loaded")
+        }
+
         loadHomeCommands()
     }
 

@@ -13,10 +13,10 @@ data class Point(
     val playerUid: UUID,
     val type: PointType,
     val description: String = "",
-    @Serializable(with = DateSerializer::class)
-    val created: Date = Date(),
     val tags: MutableList<PointTag> = mutableListOf()
 ) {
+    @Serializable(with = DateSerializer::class)
+    val created = Date()
 
     fun addTag(key: String, value: String) {
         addTag(PointTag(key, value, this))

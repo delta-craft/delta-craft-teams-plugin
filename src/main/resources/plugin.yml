@@ -24,6 +24,10 @@ commands:
   delhome:
     description: Delete home
     usage: /delhome
+  donate:
+    description: Get link to donations
+    usage: /donate
+    aliases: [ donation ]
 permissions:
   delta.*:
     default: op

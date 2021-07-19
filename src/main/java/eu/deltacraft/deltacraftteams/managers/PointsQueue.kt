@@ -37,6 +37,9 @@ class PointsQueue(private val plugin: DeltaCraftTeams, private val clientManager
         if (isSending) {
             return false
         }
+        if (!points.any()) {
+            return true
+        }
         val toSend = points.toList()
         points.clear()
         return sendPoints(toSend)
@@ -67,6 +70,8 @@ class PointsQueue(private val plugin: DeltaCraftTeams, private val clientManager
         val task = Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
             runBlocking {
                 sendPointsAsync(toSend)
+
+                taskId = 0
             }
         })
         taskId = task.taskId
