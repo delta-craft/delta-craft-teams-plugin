@@ -79,7 +79,7 @@ class PointsQueue(private val plugin: DeltaCraftTeams, private val clientManager
     }
 
     private suspend fun sendPointsAsync(toSend: Collection<Point>): Boolean {
-        if (toSend.isNotEmpty()) {
+        if (toSend.isEmpty()) {
             return true
         }
 
