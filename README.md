@@ -1,6 +1,6 @@
 # DeltaCraftTeams
 
-[![Build Status](https://kkoudelka.semaphoreci.com/badges/DeltaCraftTeams/branches/master.svg)](https://kkoudelka.semaphoreci.com/projects/DeltaCraftTeams)
+[![Build Status](https://kkoudelka.semaphoreci.com/badges/DeltaCraftTeams/branches/dev.svg)](https://kkoudelka.semaphoreci.com/projects/DeltaCraftTeams)
 
 ### Commands:
 
