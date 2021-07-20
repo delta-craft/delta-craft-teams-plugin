@@ -4,7 +4,7 @@ import eu.deltacraft.deltacraftteams.DeltaCraftTeams
 import eu.deltacraft.deltacraftteams.managers.ClientManager
 import eu.deltacraft.deltacraftteams.managers.cache.LoginCacheManager
 import eu.deltacraft.deltacraftteams.types.NewLoginData
-import eu.deltacraft.deltacraftteams.types.SessionResponse
+import eu.deltacraft.deltacraftteams.types.responses.SessionResponse
 import eu.deltacraft.deltacraftteams.utils.TextHelper
 import io.ktor.client.call.*
 import io.ktor.client.request.*

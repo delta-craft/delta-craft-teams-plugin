@@ -2,10 +2,8 @@ package eu.deltacraft.deltacraftteams.listeners
 
 import eu.deltacraft.deltacraftteams.DeltaCraftTeams
 import eu.deltacraft.deltacraftteams.managers.ClientManager
-import eu.deltacraft.deltacraftteams.types.CheckChatResult
-import eu.deltacraft.deltacraftteams.types.PointsResult
+import eu.deltacraft.deltacraftteams.types.responses.CheckChatResponse
 import eu.deltacraft.deltacraftteams.utils.TextHelper
-import eu.deltacraft.deltacraftteams.utils.enums.PointsError
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
@@ -53,7 +51,7 @@ class ChatListener(private val plugin: DeltaCraftTeams, private val clientManage
                 return@runBlocking
             }
 
-            val res = httpRes.receive<CheckChatResult>()
+            val res = httpRes.receive<CheckChatResponse>()
 
             if (res.content) return@runBlocking
 

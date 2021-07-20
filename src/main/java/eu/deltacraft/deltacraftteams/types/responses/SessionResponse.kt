@@ -1,4 +1,4 @@
-package eu.deltacraft.deltacraftteams.types
+package eu.deltacraft.deltacraftteams.types.responses
 
 import eu.deltacraft.deltacraftteams.utils.enums.SessionError
 import kotlinx.serialization.Serializable

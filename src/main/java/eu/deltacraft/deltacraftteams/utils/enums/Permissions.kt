@@ -12,6 +12,6 @@ enum class Permissions(var path: String) {
     }
 
     init {
-        path = "deltateams.$path";
+        path = "deltateams.$path"
     }
 }

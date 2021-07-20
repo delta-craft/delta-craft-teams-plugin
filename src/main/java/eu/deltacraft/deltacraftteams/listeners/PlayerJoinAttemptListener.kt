@@ -2,7 +2,7 @@ package eu.deltacraft.deltacraftteams.listeners
 
 import eu.deltacraft.deltacraftteams.DeltaCraftTeams
 import eu.deltacraft.deltacraftteams.managers.ClientManager
-import eu.deltacraft.deltacraftteams.types.ConnectionResponse
+import eu.deltacraft.deltacraftteams.types.responses.ConnectionResponse
 import eu.deltacraft.deltacraftteams.utils.TextHelper
 import eu.deltacraft.deltacraftteams.utils.enums.ValidateError
 import io.ktor.client.call.*

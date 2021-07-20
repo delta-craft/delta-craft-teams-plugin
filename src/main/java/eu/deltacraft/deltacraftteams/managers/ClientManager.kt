@@ -4,7 +4,7 @@ import eu.deltacraft.deltacraftteams.DeltaCraftTeams
 import eu.deltacraft.deltacraftteams.interfaces.IConfigConsumer
 import eu.deltacraft.deltacraftteams.types.Constants
 import eu.deltacraft.deltacraftteams.types.Point
-import eu.deltacraft.deltacraftteams.types.PointsResult
+import eu.deltacraft.deltacraftteams.types.responses.PointsResult
 import eu.deltacraft.deltacraftteams.types.getString
 import eu.deltacraft.deltacraftteams.utils.enums.PointsError
 import eu.deltacraft.deltacraftteams.utils.enums.Settings
