@@ -59,6 +59,8 @@ class ChatListener(private val plugin: DeltaCraftTeams, private val clientManage
 
             event.isCancelled = true
 
+            plugin.logger.info("${p.name} se neumí chovat v chatu (${res.message})")
+
             p.sendMessage(
                 TextHelper.infoText("Snažíme se udržovat family-friendly chat.")
                     .append(Component.newline())
