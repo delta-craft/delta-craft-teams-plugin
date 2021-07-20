@@ -28,6 +28,9 @@ commands:
     description: Get link to donations
     usage: /donate
     aliases: [ donation ]
+  ping:
+    description: Get ping
+    usage: /ping
 permissions:
   delta.*:
     default: op
