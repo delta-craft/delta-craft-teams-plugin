@@ -127,7 +127,14 @@ class DeltaCraftTeams : JavaPlugin() {
         pluginManager.registerEvents(PvpZoneKillListener(), this)
         this.infoMsg("PvpZoneKillListener loaded")
 
-        pluginManager.registerEvents(LoginListener(this, clientManager, manager.loginCacheManager), this)
+        pluginManager.registerEvents(
+            LoginListener(
+                this,
+                clientManager,
+                manager.loginCacheManager,
+                manager.teamCacheManager
+            ), this
+        )
         this.infoMsg("LoginListener loaded")
 
         pluginManager.registerEvents(PlayerHomeMoveListener(homesManager.homesCache), this)
