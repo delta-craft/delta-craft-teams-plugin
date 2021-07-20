@@ -134,6 +134,9 @@ class DeltaCraftTeams : JavaPlugin() {
 
         pluginManager.registerEvents(PortalListener(this), this)
         this.debugMsg("PortalListener loaded")
+
+        pluginManager.registerEvents(ChatListener(this, clientManager), this)
+        this.debugMsg("ChatListener loaded")
     }
 
     private fun loadConfig() {
