@@ -9,7 +9,6 @@ import eu.deltacraft.deltacraftteams.commands.home.HomeCommand
 import eu.deltacraft.deltacraftteams.commands.home.SetHomeCommand
 import eu.deltacraft.deltacraftteams.listeners.*
 import eu.deltacraft.deltacraftteams.managers.*
-import eu.deltacraft.deltacraftteams.utils.enums.Settings
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
@@ -17,8 +16,6 @@ import kotlinx.coroutines.runBlocking
 import org.bukkit.plugin.java.JavaPlugin
 
 class DeltaCraftTeams : JavaPlugin() {
-
-    private var isDebug = false
 
     private lateinit var manager: DeltaCraftTeamsManager
     private lateinit var pvpZoneManager: PvpZoneManager
@@ -31,10 +28,6 @@ class DeltaCraftTeams : JavaPlugin() {
 
         // Config
         this.loadConfig()
-        isDebug = config.getBoolean(Settings.DEBUG.path)
-        if (isDebug) {
-            this.debugMsg("Debugging enabled")
-        }
 
         // Managers
         this.loadManagers()
@@ -78,26 +71,26 @@ class DeltaCraftTeams : JavaPlugin() {
         if (mainCmd != null) {
             mainCmd.aliases = listOf("delta", "deltacraft")
             mainCmd.setExecutor(MainCommand(this, pointsQueue))
-            debugMsg("Main command loaded")
+            infoMsg("Main command loaded")
         }
         val pvpZoneCmd = this.getCommand("pvp")
         if (pvpZoneCmd != null) {
             pvpZoneCmd.aliases = listOf("pvpzone", "pvpzones")
             pvpZoneCmd.setExecutor(PvpZoneCommand(this, pvpZoneManager))
-            debugMsg("PvpZone command loaded")
+            infoMsg("PvpZone command loaded")
         }
 
         val donationCmd = this.getCommand("donate")
         if (donationCmd != null) {
             donationCmd.aliases = listOf("donation")
             donationCmd.setExecutor(DonationCommand())
-            debugMsg("Donation command loaded")
+            infoMsg("Donation command loaded")
         }
 
         val pingCommand = this.getCommand("ping")
         if (pingCommand != null) {
             pingCommand.setExecutor(PingCommand())
-            debugMsg("Ping command loaded")
+            infoMsg("Ping command loaded")
         }
 
 
@@ -106,45 +99,45 @@ class DeltaCraftTeams : JavaPlugin() {
 
     private fun loadHomeCommands() {
         getCommand("sethome")!!.setExecutor(SetHomeCommand(homesManager))
-        debugMsg("SetHome command loaded")
+        infoMsg("SetHome command loaded")
         getCommand("home")!!.setExecutor(HomeCommand(this, homesManager))
-        debugMsg("Home command loaded")
+        infoMsg("Home command loaded")
         getCommand("delhome")!!.setExecutor(DelHomeCommand(homesManager))
-        debugMsg("DelHome command loaded")
+        infoMsg("DelHome command loaded")
     }
 
     private fun loadListeners() {
         val pluginManager = this.server.pluginManager
 
         pluginManager.registerEvents(PlayerJoinAttemptListener(this, clientManager), this)
-        this.debugMsg("PlayerJoinAttemptListener loaded")
+        this.infoMsg("PlayerJoinAttemptListener loaded")
 
         pluginManager.registerEvents(PlayerAdvancementDoneListener(this, pointsQueue), this)
-        this.debugMsg("PlayerAdvancementDoneListener loaded")
+        this.infoMsg("PlayerAdvancementDoneListener loaded")
 
         pluginManager.registerEvents(PlayerBlockListener(this), this)
-        this.debugMsg("PlayerBlockListener loaded")
+        this.infoMsg("PlayerBlockListener loaded")
 
         pluginManager.registerEvents(PlayerChatListener(this), this)
-        this.debugMsg("PlayerChatListener loaded")
+        this.infoMsg("PlayerChatListener loaded")
 
         pluginManager.registerEvents(PlayerDeathEventListener(manager), this)
-        this.debugMsg("PlayerDeathEventListener loaded")
+        this.infoMsg("PlayerDeathEventListener loaded")
 
         pluginManager.registerEvents(PvpZoneKillListener(), this)
-        this.debugMsg("PvpZoneKillListener loaded")
+        this.infoMsg("PvpZoneKillListener loaded")
 
         pluginManager.registerEvents(LoginListener(this, clientManager, manager.loginCacheManager), this)
-        this.debugMsg("LoginListener loaded")
+        this.infoMsg("LoginListener loaded")
 
         pluginManager.registerEvents(PlayerHomeMoveListener(homesManager.homesCache), this)
-        this.debugMsg("PlayerHomeMoveListener loaded")
+        this.infoMsg("PlayerHomeMoveListener loaded")
 
         pluginManager.registerEvents(PortalListener(this), this)
-        this.debugMsg("PortalListener loaded")
+        this.infoMsg("PortalListener loaded")
 
         pluginManager.registerEvents(ChatListener(this, clientManager), this)
-        this.debugMsg("ChatListener loaded")
+        this.infoMsg("ChatListener loaded")
     }
 
     private fun loadConfig() {
@@ -184,16 +177,7 @@ class DeltaCraftTeams : JavaPlugin() {
         client.close()
     }
 
-    fun setDebug(debug: Boolean): Boolean {
-        isDebug = debug
-        config[Settings.DEBUG.path] = isDebug
-        saveConfig()
-        return isDebug
-    }
-
-    fun debugMsg(message: String) {
-        if (isDebug) {
-            logger.info("[Debug]: $message")
-        }
+    private fun infoMsg(message: String) {
+        logger.info("[DELTACRAFT]: $message")
     }
 }

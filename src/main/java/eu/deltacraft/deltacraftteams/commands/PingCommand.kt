@@ -8,7 +8,8 @@ import org.bukkit.command.CommandSender
 import org.bukkit.command.TabCompleter
 import org.bukkit.entity.Player
 
-class PingCommand: CommandExecutor, TabCompleter {
+class PingCommand : CommandExecutor, TabCompleter {
+
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         if (sender !is Player) {
             if (args.size != 1) {
@@ -28,7 +29,7 @@ class PingCommand: CommandExecutor, TabCompleter {
 
         }
 
-        val p = sender as Player
+        val p: Player = sender
 
         if (args.size == 1) {
             val playerName = args.first()
@@ -51,8 +52,7 @@ class PingCommand: CommandExecutor, TabCompleter {
         command: Command,
         alias: String,
         args: Array<out String>
-    ): MutableList<String>? {
-        val playerNames = Bukkit.getOnlinePlayers().map { it.name }.toMutableList()
-        return playerNames
+    ): MutableList<String> {
+        return Bukkit.getOnlinePlayers().map { it.name }.toMutableList()
     }
 }
