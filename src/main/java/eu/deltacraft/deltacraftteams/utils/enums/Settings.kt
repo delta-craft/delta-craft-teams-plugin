@@ -6,12 +6,6 @@ enum class Settings(
     val visible: Boolean,
     private val type: String
 ) {
-    DEBUG(
-        "system.debug",
-        "Use debug mode",
-        true,
-        "BOOL"
-    ),
     APIKEY(
         "system.apikey",
         "API key",

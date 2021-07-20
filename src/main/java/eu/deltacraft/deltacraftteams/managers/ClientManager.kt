@@ -1,11 +1,10 @@
 package eu.deltacraft.deltacraftteams.managers
 
 import eu.deltacraft.deltacraftteams.DeltaCraftTeams
-import eu.deltacraft.deltacraftteams.interfaces.IConfigConsumer
 import eu.deltacraft.deltacraftteams.types.Constants
 import eu.deltacraft.deltacraftteams.types.Point
-import eu.deltacraft.deltacraftteams.types.responses.PointsResult
 import eu.deltacraft.deltacraftteams.types.getString
+import eu.deltacraft.deltacraftteams.types.responses.PointsResult
 import eu.deltacraft.deltacraftteams.utils.enums.PointsError
 import eu.deltacraft.deltacraftteams.utils.enums.Settings
 import io.ktor.client.*
@@ -17,14 +16,12 @@ import io.ktor.client.features.json.serializer.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
-import org.bukkit.configuration.file.FileConfiguration
 
-class ClientManager(plugin: DeltaCraftTeams) : IConfigConsumer {
+class ClientManager(plugin: DeltaCraftTeams) {
 
     private val logged = plugin.logger
-    override val config: FileConfiguration = plugin.config
 
-    private var apiKey: String? = null
+    private val apiKey: String = plugin.config.getString(Settings.APIKEY) ?: ""
 
     fun getClient(): HttpClient {
         return HttpClient(Java) {
@@ -65,19 +62,4 @@ class ClientManager(plugin: DeltaCraftTeams) : IConfigConsumer {
         return httpRes.receive()
     }
 
-    override fun onConfigReload() {
-        reloadApiKey()
-    }
-
-    private fun reloadApiKey() {
-        apiKey = internalGetApiKey()
-    }
-
-    private fun internalGetApiKey(): String? {
-        return config.getString(Settings.APIKEY)
-    }
-
-    init {
-        reloadApiKey()
-    }
 }
