@@ -3,9 +3,9 @@ package eu.deltacraft.deltacraftteams.managers.cache
 import eu.deltacraft.deltacraftteams.managers.templates.CacheManager
 import eu.deltacraft.deltacraftteams.types.TeleportBar
 import org.bukkit.entity.Player
-import java.util.UUID
+import java.util.*
 
-class PlayerHomeCache : CacheManager<UUID, TeleportBar>(false) {
+class PlayerHomeCache : CacheManager<UUID, TeleportBar>() {
 
     fun isTeleportPending(player: Player): Boolean {
         return isTeleportPending(player.uniqueId)

@@ -3,8 +3,8 @@ package eu.deltacraft.deltacraftteams.managers.cache
 import eu.deltacraft.deltacraftteams.managers.templates.CacheManager
 import java.util.*
 
-class LoginCacheManager : CacheManager<UUID, Boolean>(false) {
-    fun loginPlayer(playerUuid: UUID)  {
+class LoginCacheManager : CacheManager<UUID, Boolean>() {
+    fun loginPlayer(playerUuid: UUID) {
         this[playerUuid] = true
     }
 

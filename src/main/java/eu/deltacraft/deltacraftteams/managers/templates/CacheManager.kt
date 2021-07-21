@@ -1,6 +1,6 @@
 package eu.deltacraft.deltacraftteams.managers.templates
 
-abstract class CacheManager<K, V>(val needsLoad: Boolean) : MutableMap<K, V> {
+abstract class CacheManager<K, V>(val needsLoad: Boolean = false) : MutableMap<K, V> {
 
     private val cache: HashMap<K, V> = HashMap()
     private var isLoaded: Boolean = false

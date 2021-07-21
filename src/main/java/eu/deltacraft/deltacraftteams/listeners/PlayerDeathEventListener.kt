@@ -1,8 +1,8 @@
 package eu.deltacraft.deltacraftteams.listeners
 
 import eu.deltacraft.deltacraftteams.managers.DeltaCraftTeamsManager
-import eu.deltacraft.deltacraftteams.managers.cache.TeamCacheManager
 import eu.deltacraft.deltacraftteams.managers.cache.PvpZoneCacheManager
+import eu.deltacraft.deltacraftteams.managers.cache.TeamCacheManager
 import eu.deltacraft.deltacraftteams.types.PvpZone
 import eu.deltacraft.deltacraftteams.types.PvpZoneKillEvent
 import eu.deltacraft.deltacraftteams.types.TeamPlayer
@@ -26,7 +26,7 @@ class PlayerDeathEventListener(
         val killedPlayerTeam = teamManager[killed.uniqueId] ?: return
         val killerPlayerTeam = teamManager[killer.uniqueId] ?: return
 
-        // TODO: if same team → return
+        // TODO: Check if same team → return
         if (killedPlayerTeam == killerPlayerTeam) {
             return
         }
