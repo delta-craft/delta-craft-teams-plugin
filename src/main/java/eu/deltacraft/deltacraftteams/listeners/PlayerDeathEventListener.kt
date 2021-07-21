@@ -25,8 +25,7 @@ class PlayerDeathEventListener(
         val killedPlayerTeam = teamManager[killed] ?: return
         val killerPlayerTeam = teamManager[killer] ?: return
 
-        // TODO: Check if same team → return
-        if (killedPlayerTeam == killerPlayerTeam) {
+        if (killedPlayerTeam.majorTeamEnum == killerPlayerTeam.majorTeamEnum) {
             return
         }
 
