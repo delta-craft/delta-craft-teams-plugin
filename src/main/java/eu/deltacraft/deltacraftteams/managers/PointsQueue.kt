@@ -26,14 +26,21 @@ class PointsQueue(private val plugin: DeltaCraftTeams, private val clientManager
     private val dateReached: Boolean
         get() = lastSend > DateUtils.addHours(Date(), Constants.POINTS_SEND_TIME)
 
-    val shouldSend: Boolean
+    private val shouldSend: Boolean
         get() = !isSending && (dateReached || sizeReached)
 
     fun registerPoint(point: Point) {
         points.add(point)
+        if (shouldSend) {
+            trySendDefaultPoints()
+        }
     }
 
-    fun sendAllPoints(): Boolean {
+    fun add(point: Point) {
+        registerPoint(point)
+    }
+
+    fun trySendAllPoints(): Boolean {
         if (isSending) {
             return false
         }
@@ -42,10 +49,10 @@ class PointsQueue(private val plugin: DeltaCraftTeams, private val clientManager
         }
         val toSend = points.toList()
         points.clear()
-        return sendPoints(toSend)
+        return sendDefaultPoints(toSend)
     }
 
-    suspend fun sendAllPointsAsync(): Boolean {
+    suspend fun trySendAllPointsAsync(): Boolean {
         if (isSending) {
             return false
         }
@@ -54,19 +61,22 @@ class PointsQueue(private val plugin: DeltaCraftTeams, private val clientManager
         return sendPointsAsync(toSend)
     }
 
-    fun sendPoints(count: Int): Boolean {
+    private fun trySendDefaultPoints(): Boolean {
         if (isSending) {
             return false
         }
+        if (!points.any()) {
+            return true
+        }
         val toSend = mutableListOf<Point>()
-        for (i in 1..count) {
+        for (i in 1..Constants.POINTS_PAYLOAD_SIZE) {
             val point = points.poll() ?: break
             toSend.add(point)
         }
-        return sendPoints(toSend)
+        return sendDefaultPoints(toSend)
     }
 
-    private fun sendPoints(toSend: Collection<Point>): Boolean {
+    private fun sendDefaultPoints(toSend: Collection<Point>): Boolean {
         val task = Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
             runBlocking {
 
@@ -107,7 +117,7 @@ class PointsQueue(private val plugin: DeltaCraftTeams, private val clientManager
         val task = Bukkit.getScheduler().runTaskTimer(
             plugin,
             Runnable {
-                sendAllPoints()
+                trySendAllPoints()
             },
             0L,
             Constants.POINTS_SEND_TIME * 60 * 60 * 20L

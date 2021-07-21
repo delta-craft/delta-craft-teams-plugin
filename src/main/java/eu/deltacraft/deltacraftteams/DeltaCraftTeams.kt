@@ -164,7 +164,7 @@ class DeltaCraftTeams : JavaPlugin() {
     private fun sendAllPoints() {
 
         runBlocking {
-            pointsQueue.sendAllPointsAsync()
+            pointsQueue.trySendAllPointsAsync()
         }
     }
 
