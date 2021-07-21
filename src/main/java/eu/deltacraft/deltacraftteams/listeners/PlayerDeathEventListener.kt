@@ -23,8 +23,8 @@ class PlayerDeathEventListener(
         val killed = event.entity
         val killer = killed.killer ?: return
 
-        val killedPlayerTeam = teamManager[killed.uniqueId] ?: return
-        val killerPlayerTeam = teamManager[killer.uniqueId] ?: return
+        val killedPlayerTeam = teamManager[killed] ?: return
+        val killerPlayerTeam = teamManager[killer] ?: return
 
         // TODO: Check if same team → return
         if (killedPlayerTeam == killerPlayerTeam) {
@@ -34,7 +34,7 @@ class PlayerDeathEventListener(
         val loc = killed.location
         val zone = pvpManager[loc]
         if (zone == null) {
-            hadleNonPvpZoneKill(killed, killer)
+            hadleNonPvpZoneKill(event, killed, killer)
             return
         }
         // Kill in PVP area
@@ -42,14 +42,19 @@ class PlayerDeathEventListener(
         val killedTeamPlayer = TeamPlayer(killed, killedPlayerTeam)
         val killerTeamPlayer = TeamPlayer(killer, killerPlayerTeam)
 
-        handlePvpZoneKill(killedTeamPlayer, killerTeamPlayer, zone)
+        handlePvpZoneKill(event, killedTeamPlayer, killerTeamPlayer, zone)
     }
 
-    private fun hadleNonPvpZoneKill(killed: Player, killer: Player) {
+    private fun hadleNonPvpZoneKill(originalEvent: PlayerDeathEvent, killed: Player, killer: Player) {
         // TODO: Implement
     }
 
-    private fun handlePvpZoneKill(killed: TeamPlayer, killer: TeamPlayer, pvpZone: PvpZone) {
+    private fun handlePvpZoneKill(
+        originalEvent: PlayerDeathEvent,
+        killed: TeamPlayer,
+        killer: TeamPlayer,
+        pvpZone: PvpZone
+    ) {
         // TODO: Implement
 
 
