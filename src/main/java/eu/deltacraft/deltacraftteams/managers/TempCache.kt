@@ -2,7 +2,7 @@ package eu.deltacraft.deltacraftteams.managers
 
 import eu.deltacraft.deltacraftteams.managers.templates.CacheManager
 
-class TempCache<K, V> : CacheManager<K, V>(false) {
+class TempCache<K, V> : CacheManager<K, V>() {
 
     fun getOrCreate(key: K, init: () -> V): V {
         if (containsKey(key)) {

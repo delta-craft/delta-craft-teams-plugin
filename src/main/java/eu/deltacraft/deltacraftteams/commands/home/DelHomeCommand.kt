@@ -19,7 +19,7 @@ class DelHomeCommand(private val homeConfigManager: HomesManager) : CommandExecu
     override fun onCommand(sender: CommandSender, command: Command, p2: String, args: Array<out String>): Boolean {
         if (sender !is Player) {
             sender.sendMessage("Only players can use this command")
-            return true;
+            return true
         }
         val player: Player = sender
 

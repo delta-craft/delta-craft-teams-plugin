@@ -39,7 +39,7 @@ class MainCommand(
         if (cmd.equals("send", ignoreCase = true) ||
             cmd.equals("sendpoints", ignoreCase = true)
         ) {
-            val res = pointsQueue.sendAllPoints()
+            val res = pointsQueue.trySendAllPoints()
             if (res) {
                 sender.sendMessage(TextHelper.infoText("Prepared successfully"))
             } else {

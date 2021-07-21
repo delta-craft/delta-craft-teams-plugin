@@ -64,6 +64,8 @@ class LoginListener(
 
             val sessionContent = sessionResponse.content
             if (sessionContent.success) {
+                client.close()
+
                 if (sessionContent.team == null) {
                     playerJoinEvent.disallow(
                         AsyncPlayerPreLoginEvent.Result.KICK_WHITELIST,
@@ -75,7 +77,6 @@ class LoginListener(
                 loginCacheManager.loginPlayer(uuid)
                 teamsCacheManager[uuid] = sessionContent.team
                 logger.info("Player ${playerJoinEvent.name} joined because of an active session")
-                client.close()
                 return@runBlocking
             }
 

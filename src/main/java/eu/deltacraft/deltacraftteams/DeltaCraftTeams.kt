@@ -124,7 +124,7 @@ class DeltaCraftTeams : JavaPlugin() {
         pluginManager.registerEvents(PlayerDeathEventListener(manager), this)
         logger.info("PlayerDeathEventListener loaded")
 
-        pluginManager.registerEvents(PvpZoneKillListener(), this)
+        pluginManager.registerEvents(PvpZoneKillListener(pointsQueue), this)
         logger.info("PvpZoneKillListener loaded")
 
         pluginManager.registerEvents(
@@ -164,7 +164,7 @@ class DeltaCraftTeams : JavaPlugin() {
     private fun sendAllPoints() {
 
         runBlocking {
-            pointsQueue.sendAllPointsAsync()
+            pointsQueue.trySendAllPointsAsync()
         }
     }
 
