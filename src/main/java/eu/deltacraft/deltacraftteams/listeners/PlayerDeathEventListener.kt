@@ -7,7 +7,6 @@ import eu.deltacraft.deltacraftteams.types.PvpZone
 import eu.deltacraft.deltacraftteams.types.PvpZoneKillEvent
 import eu.deltacraft.deltacraftteams.types.TeamPlayer
 import org.bukkit.Bukkit
-import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.PlayerDeathEvent
@@ -31,33 +30,24 @@ class PlayerDeathEventListener(
             return
         }
 
+        val killerLoc = killer.location
+        if (!pvpManager.isInPvpZone(killerLoc)) return
+
         val loc = killed.location
-        val zone = pvpManager[loc]
-        if (zone == null) {
-            hadleNonPvpZoneKill(event, killed, killer)
-            return
-        }
+        val zone = pvpManager[loc] ?: return
         // Kill in PVP area
 
         val killedTeamPlayer = TeamPlayer(killed, killedPlayerTeam)
         val killerTeamPlayer = TeamPlayer(killer, killerPlayerTeam)
 
-        handlePvpZoneKill(event, killedTeamPlayer, killerTeamPlayer, zone)
-    }
-
-    private fun hadleNonPvpZoneKill(originalEvent: PlayerDeathEvent, killed: Player, killer: Player) {
-        // TODO: Implement
+        handlePvpZoneKill(killedTeamPlayer, killerTeamPlayer, zone)
     }
 
     private fun handlePvpZoneKill(
-        originalEvent: PlayerDeathEvent,
         killed: TeamPlayer,
         killer: TeamPlayer,
         pvpZone: PvpZone
     ) {
-        // TODO: Implement
-
-
         val event = PvpZoneKillEvent(killed, killer, pvpZone)
         Bukkit.getPluginManager().callEvent(event)
     }

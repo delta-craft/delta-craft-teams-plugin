@@ -19,12 +19,13 @@ class PvpZoneKillListener(private val pointsQueue: PointsQueue) : Listener {
         val killedTeam = killed.killedPlayerTeam
         val killerPlayer = killer.player
         val killerTeam = killer.killedPlayerTeam
-        val weapon = killerPlayer.itemInUse?.type?.name ?: "Hand"
+        val weapon = event.weapon?.type?.name ?: "Hand"
 
         val description =
             "Killed ${killedPlayer.name} (${killedTeam.majorTeam} Team: ${killedTeam.name})"
 
         val point = Point(300, killerPlayer.uniqueId, PointType.Warfare, description)
+        point.addTag("Type", "PVP")
         point.addTag("Zone", zone.name)
         point.addTag("Killer", killerPlayer.name)
         point.addTag("Killed", killedPlayer.name)
