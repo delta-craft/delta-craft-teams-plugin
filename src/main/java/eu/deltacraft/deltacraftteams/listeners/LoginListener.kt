@@ -3,7 +3,10 @@ package eu.deltacraft.deltacraftteams.listeners
 import eu.deltacraft.deltacraftteams.DeltaCraftTeams
 import eu.deltacraft.deltacraftteams.managers.ClientManager
 import eu.deltacraft.deltacraftteams.managers.cache.LoginCacheManager
+import eu.deltacraft.deltacraftteams.managers.cache.TeamCacheManager
 import eu.deltacraft.deltacraftteams.types.NewLoginData
+import eu.deltacraft.deltacraftteams.types.disallow
+import eu.deltacraft.deltacraftteams.types.responses.LoginResponse
 import eu.deltacraft.deltacraftteams.types.responses.SessionResponse
 import eu.deltacraft.deltacraftteams.utils.TextHelper
 import io.ktor.client.call.*
@@ -22,7 +25,8 @@ import org.bukkit.event.player.PlayerQuitEvent
 class LoginListener(
     private val plugin: DeltaCraftTeams,
     private val clientManager: ClientManager,
-    private val loginCacheManager: LoginCacheManager
+    private val loginCacheManager: LoginCacheManager,
+    private val teamsCacheManager: TeamCacheManager
 ) : Listener {
 
     private val logger = plugin.logger
@@ -52,13 +56,24 @@ class LoginListener(
             if (validateStatus != HttpStatusCode.OK && validateStatus != HttpStatusCode.BadRequest) {
                 client.close()
                 logger.warning("Validate session request for player ${playerJoinEvent.name} returned HTTP ${validateStatus.value}")
+                playerJoinEvent.disallow(validateStatus)
                 return@runBlocking
             }
 
             val sessionResponse = validateResult.receive<SessionResponse>()
 
-            if (sessionResponse.content) {
+            val sessionContent = sessionResponse.content
+            if (sessionContent.success) {
+                if (sessionContent.team == null) {
+                    playerJoinEvent.disallow(
+                        AsyncPlayerPreLoginEvent.Result.KICK_WHITELIST,
+                        Component.text("Nebyl vrácen tým. :-(")
+                    )
+                    logger.warning("Player ${playerJoinEvent.name} joined but no team was returned")
+                    return@runBlocking
+                }
                 loginCacheManager.loginPlayer(uuid)
+                teamsCacheManager[uuid] = sessionContent.team
                 logger.info("Player ${playerJoinEvent.name} joined because of an active session")
                 client.close()
                 return@runBlocking
@@ -77,13 +92,14 @@ class LoginListener(
 
             if (loginStatus != HttpStatusCode.OK && loginStatus != HttpStatusCode.BadRequest) {
                 logger.warning("Player ${playerJoinEvent.name} login request returned HTTP ${loginStatus.value}")
+                playerJoinEvent.disallow(loginStatus)
                 return@runBlocking
             }
 
-            val newLoginResponse = loginResult.receive<SessionResponse>()
+            val newLoginResponse = loginResult.receive<LoginResponse>()
 
             if (!newLoginResponse.content) {
-                logger.warning("Player ${playerJoinEvent.name} login request gone wrong")
+                logger.warning("Player ${playerJoinEvent.name} login request gone wrong. Error: ${newLoginResponse.error}")
                 playerJoinEvent.disallow(
                     AsyncPlayerPreLoginEvent.Result.KICK_WHITELIST,
                     Component.text("Nastala chyba :(")

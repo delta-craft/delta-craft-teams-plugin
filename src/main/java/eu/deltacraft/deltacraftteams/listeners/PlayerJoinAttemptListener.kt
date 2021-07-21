@@ -2,6 +2,7 @@ package eu.deltacraft.deltacraftteams.listeners
 
 import eu.deltacraft.deltacraftteams.DeltaCraftTeams
 import eu.deltacraft.deltacraftteams.managers.ClientManager
+import eu.deltacraft.deltacraftteams.types.disallow
 import eu.deltacraft.deltacraftteams.types.responses.ConnectionResponse
 import eu.deltacraft.deltacraftteams.utils.TextHelper
 import eu.deltacraft.deltacraftteams.utils.enums.ValidateError
@@ -38,6 +39,7 @@ class PlayerJoinAttemptListener(
 
             if (status != HttpStatusCode.OK && status != HttpStatusCode.BadRequest) {
                 logger.warning("Validate request for player ${playerJoinEvent.name} returned HTTP ${status.value}")
+                playerJoinEvent.disallow(status)
                 return@runBlocking
             }
 
