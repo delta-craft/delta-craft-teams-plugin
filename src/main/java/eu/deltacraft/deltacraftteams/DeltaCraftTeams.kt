@@ -71,26 +71,26 @@ class DeltaCraftTeams : JavaPlugin() {
         if (mainCmd != null) {
             mainCmd.aliases = listOf("delta", "deltacraft")
             mainCmd.setExecutor(MainCommand(this, pointsQueue))
-            infoMsg("Main command loaded")
+            logger.info("Main command loaded")
         }
         val pvpZoneCmd = this.getCommand("pvp")
         if (pvpZoneCmd != null) {
             pvpZoneCmd.aliases = listOf("pvpzone", "pvpzones")
             pvpZoneCmd.setExecutor(PvpZoneCommand(this, pvpZoneManager))
-            infoMsg("PvpZone command loaded")
+            logger.info("PvpZone command loaded")
         }
 
         val donationCmd = this.getCommand("donate")
         if (donationCmd != null) {
             donationCmd.aliases = listOf("donation")
             donationCmd.setExecutor(DonationCommand())
-            infoMsg("Donation command loaded")
+            logger.info("Donation command loaded")
         }
 
         val pingCommand = this.getCommand("ping")
         if (pingCommand != null) {
             pingCommand.setExecutor(PingCommand())
-            infoMsg("Ping command loaded")
+            logger.info("Ping command loaded")
         }
 
 
@@ -99,33 +99,33 @@ class DeltaCraftTeams : JavaPlugin() {
 
     private fun loadHomeCommands() {
         getCommand("sethome")!!.setExecutor(SetHomeCommand(homesManager))
-        infoMsg("SetHome command loaded")
+        logger.info("SetHome command loaded")
         getCommand("home")!!.setExecutor(HomeCommand(this, homesManager))
-        infoMsg("Home command loaded")
+        logger.info("Home command loaded")
         getCommand("delhome")!!.setExecutor(DelHomeCommand(homesManager))
-        infoMsg("DelHome command loaded")
+        logger.info("DelHome command loaded")
     }
 
     private fun loadListeners() {
         val pluginManager = this.server.pluginManager
 
         pluginManager.registerEvents(PlayerJoinAttemptListener(this, clientManager), this)
-        this.infoMsg("PlayerJoinAttemptListener loaded")
+        logger.info("PlayerJoinAttemptListener loaded")
 
         pluginManager.registerEvents(PlayerAdvancementDoneListener(this, pointsQueue), this)
-        this.infoMsg("PlayerAdvancementDoneListener loaded")
+        logger.info("PlayerAdvancementDoneListener loaded")
 
         pluginManager.registerEvents(PlayerBlockListener(this), this)
-        this.infoMsg("PlayerBlockListener loaded")
+        logger.info("PlayerBlockListener loaded")
 
         pluginManager.registerEvents(PlayerChatListener(this), this)
-        this.infoMsg("PlayerChatListener loaded")
+        logger.info("PlayerChatListener loaded")
 
         pluginManager.registerEvents(PlayerDeathEventListener(manager), this)
-        this.infoMsg("PlayerDeathEventListener loaded")
+        logger.info("PlayerDeathEventListener loaded")
 
         pluginManager.registerEvents(PvpZoneKillListener(), this)
-        this.infoMsg("PvpZoneKillListener loaded")
+        logger.info("PvpZoneKillListener loaded")
 
         pluginManager.registerEvents(
             LoginListener(
@@ -135,16 +135,16 @@ class DeltaCraftTeams : JavaPlugin() {
                 manager.teamCacheManager
             ), this
         )
-        this.infoMsg("LoginListener loaded")
+        logger.info("LoginListener loaded")
 
         pluginManager.registerEvents(PlayerHomeMoveListener(homesManager.homesCache), this)
-        this.infoMsg("PlayerHomeMoveListener loaded")
+        logger.info("PlayerHomeMoveListener loaded")
 
         pluginManager.registerEvents(PortalListener(this), this)
-        this.infoMsg("PortalListener loaded")
+        logger.info("PortalListener loaded")
 
         pluginManager.registerEvents(ChatListener(this, clientManager), this)
-        this.infoMsg("ChatListener loaded")
+        logger.info("ChatListener loaded")
     }
 
     private fun loadConfig() {
@@ -184,7 +184,4 @@ class DeltaCraftTeams : JavaPlugin() {
         client.close()
     }
 
-    private fun infoMsg(message: String) {
-        logger.info("[DELTACRAFT]: $message")
-    }
 }
