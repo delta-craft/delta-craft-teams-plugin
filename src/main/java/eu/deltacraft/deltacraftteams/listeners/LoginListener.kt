@@ -3,7 +3,6 @@ package eu.deltacraft.deltacraftteams.listeners
 import eu.deltacraft.deltacraftteams.DeltaCraftTeams
 import eu.deltacraft.deltacraftteams.managers.ClientManager
 import eu.deltacraft.deltacraftteams.managers.cache.LoginCacheManager
-import eu.deltacraft.deltacraftteams.managers.cache.TeamCacheManager
 import eu.deltacraft.deltacraftteams.types.NewLoginData
 import eu.deltacraft.deltacraftteams.types.disallow
 import eu.deltacraft.deltacraftteams.types.responses.LoginResponse
@@ -26,7 +25,6 @@ class LoginListener(
     private val plugin: DeltaCraftTeams,
     private val clientManager: ClientManager,
     private val loginCacheManager: LoginCacheManager,
-    private val teamsCacheManager: TeamCacheManager
 ) : Listener {
 
     private val logger = plugin.logger
@@ -66,7 +64,8 @@ class LoginListener(
             if (sessionContent.success) {
                 client.close()
 
-                if (sessionContent.team == null) {
+                val team = sessionContent.team
+                if (team == null) {
                     playerJoinEvent.disallow(
                         AsyncPlayerPreLoginEvent.Result.KICK_WHITELIST,
                         Component.text("Nebyl vrácen tým. :-(")
@@ -74,8 +73,7 @@ class LoginListener(
                     logger.warning("Player ${playerJoinEvent.name} joined but no team was returned")
                     return@runBlocking
                 }
-                loginCacheManager.loginPlayer(uuid)
-                teamsCacheManager[uuid] = sessionContent.team
+                loginCacheManager.loginPlayer(uuid, team)
                 logger.info("Player ${playerJoinEvent.name} joined because of an active session")
                 return@runBlocking
             }
