@@ -112,7 +112,7 @@ class DeltaCraftTeams : JavaPlugin() {
         pluginManager.registerEvents(PlayerAdvancementDoneListener(this, pointsQueue), this)
         logger.info("PlayerAdvancementDoneListener loaded")
 
-        pluginManager.registerEvents(PlayerBlockListener(this), this)
+        pluginManager.registerEvents(PlayerBlockListener(pointsQueue), this)
         logger.info("PlayerBlockListener loaded")
 
         pluginManager.registerEvents(PlayerChatListener(this), this)
