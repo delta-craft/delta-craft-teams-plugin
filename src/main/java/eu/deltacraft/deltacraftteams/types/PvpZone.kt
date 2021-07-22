@@ -1,26 +1,26 @@
 package eu.deltacraft.deltacraftteams.types
 
 import org.bukkit.Location
-import java.util.UUID
-import kotlin.math.ceil
-import kotlin.math.floor
+import java.util.*
 import kotlin.math.max
 import kotlin.math.min
 
 data class PvpZone(val firstPoint: Location, val secondPoint: Location, val name: String) {
     val worldUniqueId: UUID = firstPoint.world.uid
 
-    val maxX = ceil(max(firstPoint.x, secondPoint.x))
-    val maxZ = ceil(max(firstPoint.z, secondPoint.z))
+    val maxX = max(firstPoint.blockX, secondPoint.blockX)
+    val maxZ = max(firstPoint.blockZ, secondPoint.blockZ)
 
-    val minX = floor(min(firstPoint.x, secondPoint.x))
-    val minZ = floor(min(firstPoint.z, secondPoint.z))
+    val minX = min(firstPoint.blockX, secondPoint.blockX)
+    val minZ = min(firstPoint.blockZ, secondPoint.blockZ)
 
-    private val maxY = ceil(max(firstPoint.y, secondPoint.y))
-
-    val mainY = maxY.toFloat()
+    val mainY = max(firstPoint.blockY, secondPoint.blockY)
 
     fun contains(loc: Location): Boolean {
-        return loc.world.uid == worldUniqueId && loc.x > minX && loc.x <= maxX && loc.z > minZ && loc.z <= maxZ
+        return loc.world.uid == worldUniqueId && contains(loc.blockX, loc.blockZ)
+    }
+
+    private fun contains(x: Int, z: Int): Boolean {
+        return x in minX..maxX && z in minZ..maxZ
     }
 }

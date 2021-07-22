@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 data class Team(val id: Int, val name: String, val majorTeam: String?) : Comparable<Any> {
 
     val majorTeamEnum: MajorTeam
-        get() = MajorTeam.from(majorTeam ?: "none", MajorTeam.None)
+        get() = MajorTeam.from(majorTeam, MajorTeam.None)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

@@ -29,13 +29,36 @@ class BlueMapManager {
     }
 
     private fun addZoneToMap(
-        xOne: Double,
-        zOne: Double,
-        xTwo: Double,
-        zTwo: Double,
+        maxX: Int,
+        maxZ: Int,
+        minX: Int,
+        minZ: Int,
+        mainY: Int,
+        worldUid: UUID,
+        name: String,
+    ): Boolean {
+        val newMaxX = maxX + 1
+        val newMaxZ = maxZ + 1
+
+        return addZoneToMap(
+            newMaxX.toDouble(),
+            newMaxZ.toDouble(),
+            minX.toDouble(),
+            minZ.toDouble(),
+            mainY.toFloat(),
+            worldUid,
+            name
+        )
+    }
+
+    private fun addZoneToMap(
+        maxX: Double,
+        maxZ: Double,
+        minX: Double,
+        minZ: Double,
         mainY: Float,
         worldUid: UUID,
-        name: String
+        name: String,
     ): Boolean {
         val optionalApi = BlueMapAPI.getInstance()
         if (optionalApi.isEmpty) {
@@ -57,7 +80,7 @@ class BlueMapManager {
 
         val markers = markerApi.createMarkerSet(PvpZoneMarkersId)
 
-        val shape = Shape.createRect(xOne, zOne, xTwo, zTwo)
+        val shape = Shape.createRect(maxX, maxZ, minX, minZ)
 
         val friendlyName = getZoneDetailName(name)
 

@@ -100,7 +100,7 @@ class DeltaCraftTeams : JavaPlugin() {
     private fun loadHomeCommands() {
         getCommand("sethome")!!.setExecutor(SetHomeCommand(homesManager))
         logger.info("SetHome command loaded")
-        getCommand("home")!!.setExecutor(HomeCommand(this, homesManager))
+        getCommand("home")!!.setExecutor(HomeCommand(this, homesManager, manager.pvpZoneCacheManager))
         logger.info("Home command loaded")
         getCommand("delhome")!!.setExecutor(DelHomeCommand(homesManager))
         logger.info("DelHome command loaded")
@@ -145,6 +145,9 @@ class DeltaCraftTeams : JavaPlugin() {
 
         pluginManager.registerEvents(ChatListener(this, clientManager), this)
         logger.info("ChatListener loaded")
+
+        pluginManager.registerEvents(PvpZoneEnterLeaveListener(manager), this)
+        logger.info("PvpZoneEnterLeaveListener loaded")
     }
 
     private fun loadConfig() {
