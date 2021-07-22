@@ -25,7 +25,7 @@ class PlayerAdvancementDoneListener(
             20,
             player.uniqueId,
             PointType.Journey,
-            "Odemkl advancement: ${event.advancement.key}"
+            "Odemknut advancement: ${event.advancement.key}"
         )
 
         point.addTag("AdvancementKey", event.advancement.key.value())
