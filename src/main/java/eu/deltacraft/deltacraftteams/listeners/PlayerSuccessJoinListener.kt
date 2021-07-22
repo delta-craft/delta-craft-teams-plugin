@@ -1,5 +1,6 @@
 package eu.deltacraft.deltacraftteams.listeners
 
+import eu.deltacraft.deltacraftteams.managers.ScoreboardIntegrations
 import eu.deltacraft.deltacraftteams.managers.cache.TeamCacheManager
 import eu.deltacraft.deltacraftteams.types.Constants
 import net.kyori.adventure.text.Component
@@ -38,5 +39,7 @@ class PlayerSuccessJoinListener(private val teams: TeamCacheManager) : Listener 
             .append(player.displayName())
 
         player.displayName(text)
+
+        ScoreboardIntegrations.registerPlayer(player, team)
     }
 }
