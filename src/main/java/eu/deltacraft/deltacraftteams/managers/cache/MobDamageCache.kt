@@ -52,6 +52,8 @@ class MobDamageCache : CacheManager<UUID, PlayerEntityDamages>() {
 
         val entityType = entity.type
 
+        val location = entity.location
+
         for (damage in damages) {
             val ratio = damage.value.toDouble() / maxPoints.toDouble()
 
@@ -59,6 +61,11 @@ class MobDamageCache : CacheManager<UUID, PlayerEntityDamages>() {
             point.addTag("Type", "Mob")
             point.addTag("Entity", entityType.name)
             point.addTag("Participation", "%.4f".format(ratio))
+
+            point.addTag("X", location.blockX)
+            point.addTag("Y", location.blockY)
+            point.addTag("Z", location.blockZ)
+            point.addTag("World", location.world.name)
 
             points.add(point)
         }
