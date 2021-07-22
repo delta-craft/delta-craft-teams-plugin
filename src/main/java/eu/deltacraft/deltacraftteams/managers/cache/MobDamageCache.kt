@@ -7,8 +7,6 @@ import eu.deltacraft.deltacraftteams.utils.enums.PointType
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import java.util.*
-import kotlin.math.floor
-import kotlin.math.roundToInt
 
 class MobDamageCache : CacheManager<UUID, PlayerEntityDamages>() {
 
@@ -56,11 +54,11 @@ class MobDamageCache : CacheManager<UUID, PlayerEntityDamages>() {
 
         for (damage in damages) {
             val ratio = damage.value.toDouble() / maxPoints.toDouble()
-            val percent = floor(ratio * 100).roundToInt()
 
             val point = Point(damage.value, damage.key, PointType.Warfare, "Zabití ${entity.type.name}")
+            point.addTag("Type", "Mob")
             point.addTag("Entity", entityType.name)
-            point.addTag("Participation", percent)
+            point.addTag("Participation", "%.4f".format(ratio))
 
             points.add(point)
         }
