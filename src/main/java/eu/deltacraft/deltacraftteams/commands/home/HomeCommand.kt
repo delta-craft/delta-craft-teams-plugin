@@ -1,6 +1,7 @@
 package eu.deltacraft.deltacraftteams.commands.home
 
 import eu.deltacraft.deltacraftteams.managers.HomesManager
+import eu.deltacraft.deltacraftteams.managers.cache.PvpZoneCacheManager
 import eu.deltacraft.deltacraftteams.types.TeleportBar
 import eu.deltacraft.deltacraftteams.types.getInt
 import eu.deltacraft.deltacraftteams.types.hasPermission
@@ -23,7 +24,8 @@ import org.bukkit.plugin.java.JavaPlugin
 
 class HomeCommand(
     private val plugin: JavaPlugin,
-    private val manager: HomesManager
+    private val manager: HomesManager,
+    private val zoneCacheManager: PvpZoneCacheManager,
 ) : CommandExecutor {
 
     private val cache = manager.homesCache
@@ -52,6 +54,12 @@ class HomeCommand(
 
         if (home == null) {
             val output = Component.text("Home not found", NamedTextColor.YELLOW)
+            player.sendMessage(output)
+            return true
+        }
+
+        if (zoneCacheManager.isInPvpZone(player)) {
+            val output = TextHelper.attentionText("You cannot teleport home in PVP zone")
             player.sendMessage(output)
             return true
         }

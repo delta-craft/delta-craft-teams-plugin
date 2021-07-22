@@ -5,6 +5,7 @@ import eu.deltacraft.deltacraftteams.managers.templates.CacheManager
 import eu.deltacraft.deltacraftteams.types.PvpZone
 import eu.deltacraft.deltacraftteams.types.TempZone
 import org.bukkit.Location
+import org.bukkit.entity.Player
 import java.util.*
 
 class PvpZoneCacheManager : CacheManager<String, PvpZone>(true) {
@@ -25,6 +26,10 @@ class PvpZoneCacheManager : CacheManager<String, PvpZone>(true) {
             }
         }
         return null
+    }
+
+    fun isInPvpZone(p: Player): Boolean {
+        return isInPvpZone(p.location)
     }
 
     fun isInPvpZone(l: Location): Boolean {
