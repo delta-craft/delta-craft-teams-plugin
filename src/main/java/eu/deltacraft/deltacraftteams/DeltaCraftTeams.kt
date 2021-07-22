@@ -141,6 +141,9 @@ class DeltaCraftTeams : JavaPlugin() {
 
         pluginManager.registerEvents(PlayerSuccessJoinListener(manager.teamCacheManager), this)
         logger.info("PlayerSuccessJoinListener loaded")
+
+        pluginManager.registerEvents(MobDamageListener(manager.mobDamageCache, pointsQueue), this)
+        logger.info("MobDamageListener loaded")
     }
 
     private fun loadConfig() {

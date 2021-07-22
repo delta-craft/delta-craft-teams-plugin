@@ -40,6 +40,12 @@ class PointsQueue(private val plugin: DeltaCraftTeams, private val clientManager
         registerPoint(point)
     }
 
+    fun add(points: Iterable<Point>) {
+        for (point in points) {
+            registerPoint(point)
+        }
+    }
+
     fun trySendAllPoints(): Boolean {
         if (isSending) {
             return false
