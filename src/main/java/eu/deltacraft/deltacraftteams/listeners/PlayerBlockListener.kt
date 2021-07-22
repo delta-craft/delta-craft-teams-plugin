@@ -6,6 +6,7 @@ import eu.deltacraft.deltacraftteams.types.Point
 import eu.deltacraft.deltacraftteams.utils.enums.PointType
 import org.bukkit.GameMode
 import org.bukkit.Material
+import org.bukkit.enchantments.Enchantment
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockDropItemEvent
@@ -73,6 +74,8 @@ class PlayerBlockListener(private val pointsQueue: PointsQueue) : Listener {
         val tool = player.inventory.itemInMainHand
 
         if (tool.type == Material.AIR) return
+
+        if (tool.containsEnchantment(Enchantment.SILK_TOUCH)) return
 
         val db = list.singleOrNull { it.material == material && it.minTool == tool.type }
             ?: list.lastOrNull { it.material == material }
