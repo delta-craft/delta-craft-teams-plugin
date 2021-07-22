@@ -57,7 +57,7 @@ class PlayerBlockListener(private val pointsQueue: PointsQueue) : Listener {
     }
 
     private fun pickaxeMeetsCriteria(current: Material, required: Material): Boolean {
-        if (picks.indexOf(current) < 0) return false
+        if (!picks.contains(current)) return false
 
         return picks.indexOf(current) >= picks.indexOf(required)
     }
