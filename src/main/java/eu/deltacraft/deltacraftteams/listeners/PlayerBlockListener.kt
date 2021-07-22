@@ -16,20 +16,33 @@ class PlayerBlockListener(private val pointsQueue: PointsQueue) : Listener {
         val list = listOf(
             // WOODEN PICKAXE
             DestroyedBlock(Material.COAL_ORE, 1, Material.WOODEN_PICKAXE),
-            DestroyedBlock(Material.GOLD_ORE, 3, Material.WOODEN_PICKAXE),
+            DestroyedBlock(Material.NETHER_GOLD_ORE, 3, Material.WOODEN_PICKAXE),
+            DestroyedBlock(Material.NETHER_QUARTZ_ORE, 4, Material.WOODEN_PICKAXE),
+
             // STONE PICKAXE
             DestroyedBlock(Material.COPPER_ORE, 5, Material.STONE_PICKAXE),
             DestroyedBlock(Material.LAPIS_ORE, 7, Material.STONE_PICKAXE),
             DestroyedBlock(Material.IRON_ORE, 11, Material.STONE_PICKAXE),
-            DestroyedBlock(Material.GOLD_ORE, 3, Material.WOODEN_PICKAXE),
+
+            DestroyedBlock(Material.DEEPSLATE_COPPER_ORE, 5, Material.STONE_PICKAXE),
+            DestroyedBlock(Material.DEEPSLATE_LAPIS_ORE, 7, Material.STONE_PICKAXE),
+            DestroyedBlock(Material.DEEPSLATE_IRON_ORE, 11, Material.STONE_PICKAXE),
+
             // IRON PICKAXE
             DestroyedBlock(Material.GOLD_ORE, 11, Material.IRON_PICKAXE),
             DestroyedBlock(Material.REDSTONE_ORE, 11, Material.IRON_PICKAXE),
             DestroyedBlock(Material.DIAMOND_ORE, 15, Material.IRON_PICKAXE),
             DestroyedBlock(Material.EMERALD_ORE, 30, Material.IRON_PICKAXE),
+
+            DestroyedBlock(Material.DEEPSLATE_GOLD_ORE, 11, Material.IRON_PICKAXE),
+            DestroyedBlock(Material.DEEPSLATE_REDSTONE_ORE, 11, Material.IRON_PICKAXE),
+            DestroyedBlock(Material.DEEPSLATE_DIAMOND_ORE, 15, Material.IRON_PICKAXE),
+            DestroyedBlock(Material.DEEPSLATE_EMERALD_ORE, 30, Material.IRON_PICKAXE),
+
             // DIAMOND PICKAXE
             DestroyedBlock(Material.ANCIENT_DEBRIS, 40, Material.DIAMOND_PICKAXE),
-            DestroyedBlock(Material.GOLD_ORE, 11, Material.IRON_PICKAXE),
+
+            // NETHERITE PICKAXE
         )
 
         val picks = listOf(
@@ -61,8 +74,8 @@ class PlayerBlockListener(private val pointsQueue: PointsQueue) : Listener {
 
         if (tool.type == Material.AIR) return
 
-        val db = list.firstOrNull { it.material == material && it.minTool == tool.type }
-            ?: list.firstOrNull { it.material == material }
+        val db = list.singleOrNull { it.material == material && it.minTool == tool.type }
+            ?: list.lastOrNull { it.material == material }
             ?: return
 
         if (!pickaxeMeetsCriteria(tool.type, db.minTool)) return
