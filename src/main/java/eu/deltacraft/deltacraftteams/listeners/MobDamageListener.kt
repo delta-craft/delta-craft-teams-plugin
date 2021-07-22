@@ -6,6 +6,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageByEntityEvent
+import org.bukkit.event.entity.EntityDeathEvent
 
 class MobDamageListener(private val mobDamageCache: MobDamageCache) : Listener {
 
@@ -31,4 +32,15 @@ class MobDamageListener(private val mobDamageCache: MobDamageCache) : Listener {
         mobDamageCache.addDamage(entityUid, player, damage)
     }
 
+    @EventHandler(ignoreCancelled = true)
+    fun onKill(event: EntityDeathEvent) {
+        if (!list.containsKey(event.entityType)) return
+
+        val entity = event.entity
+        val entityUid = entity.uniqueId
+
+        val records = mobDamageCache[entityUid] ?: return
+
+
+    }
 }

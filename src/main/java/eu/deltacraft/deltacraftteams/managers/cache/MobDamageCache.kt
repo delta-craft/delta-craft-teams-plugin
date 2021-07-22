@@ -1,31 +1,35 @@
 package eu.deltacraft.deltacraftteams.managers.cache
 
 import eu.deltacraft.deltacraftteams.managers.templates.CacheManager
-import eu.deltacraft.deltacraftteams.types.PlayerEntityDamage
+import eu.deltacraft.deltacraftteams.types.PlayerEntityDamages
 import org.bukkit.entity.Player
 import java.util.*
 
-class MobDamageCache : CacheManager<UUID, PlayerEntityDamage>() {
+class MobDamageCache : CacheManager<UUID, PlayerEntityDamages>() {
 
     fun addDamage(entityUid: UUID, player: Player, damage: Double) {
-        val record = this.getOrCreate(entityUid, player)
+        val playerUid = player.uniqueId
 
-        val newRecord = record.addDamage(damage)
+        val records = this[entityUid]
 
-        this[entityUid] = newRecord
+        val oldDamage = records[playerUid]
+
+        records[playerUid] = oldDamage + damage
+
+        this[entityUid] = records
     }
 
-    fun getOrCreate(entityUid: UUID, player: Player): PlayerEntityDamage {
-        return getOrCreate(entityUid, player.uniqueId)
-    }
-
-    private fun getOrCreate(entityUid: UUID, playerId: UUID): PlayerEntityDamage {
-        val record = this[entityUid]
+    override fun get(key: UUID): PlayerEntityDamages {
+        val record = super.get(key)
         if (record != null) {
             return record
         }
-        val toSave = PlayerEntityDamage(playerId)
-        return this.set(entityUid, toSave)
+        val toSave = PlayerEntityDamages()
+        return this.set(key, toSave)
+    }
+
+    operator fun get(entityUid: UUID, playerUid: UUID): Double {
+        return this[entityUid][playerUid]
     }
 
 }
