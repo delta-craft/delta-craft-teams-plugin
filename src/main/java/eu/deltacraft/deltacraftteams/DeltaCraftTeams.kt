@@ -145,6 +145,9 @@ class DeltaCraftTeams : JavaPlugin() {
 
         pluginManager.registerEvents(ChatListener(this, clientManager), this)
         logger.info("ChatListener loaded")
+
+        pluginManager.registerEvents(PvpZoneEnterLeaveListener(manager), this)
+        logger.info("PvpZoneEnterLeaveListener loaded")
     }
 
     private fun loadConfig() {

@@ -5,10 +5,8 @@ abstract class CacheManager<K, V>(val needsLoad: Boolean = false) : MutableMap<K
     private val cache: HashMap<K, V> = HashMap()
     private var isLoaded: Boolean = false
 
-    override fun put(key: K, value: V): V? {
-        checkLoad()
-        cache[key] = value
-        return value
+    override fun put(key: K, value: V): V {
+        return this.set(key, value)
     }
 
     override fun remove(key: K): V? {
@@ -37,6 +35,12 @@ abstract class CacheManager<K, V>(val needsLoad: Boolean = false) : MutableMap<K
     override operator fun get(key: K): V? {
         checkLoad()
         return cache[key]
+    }
+
+    operator fun set(key: K, value: V): V {
+        checkLoad()
+        cache[key] = value
+        return value
     }
 
     override val size: Int

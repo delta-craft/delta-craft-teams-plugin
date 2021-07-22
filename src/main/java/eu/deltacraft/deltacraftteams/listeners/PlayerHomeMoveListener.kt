@@ -1,7 +1,6 @@
 package eu.deltacraft.deltacraftteams.listeners
 
 import eu.deltacraft.deltacraftteams.managers.cache.PlayerHomeCache
-import eu.deltacraft.deltacraftteams.types.hasMoved
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.event.EventHandler
@@ -12,7 +11,7 @@ class PlayerHomeMoveListener(private val cache: PlayerHomeCache) : Listener {
 
     @EventHandler
     fun onPlayerMove(event: PlayerMoveEvent) {
-        if (!event.hasMoved()) {
+        if (!event.hasChangedBlock()) {
             return
         }
 
