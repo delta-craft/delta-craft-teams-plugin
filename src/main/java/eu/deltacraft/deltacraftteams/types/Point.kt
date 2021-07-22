@@ -19,13 +19,17 @@ data class Point(
     val type: PointType,
     val description: String = "",
     @SerialName("pointTags")
-    val tags: MutableList<PointTag> = mutableListOf()
+    val tags: MutableList<PointTag> = mutableListOf(),
 ) {
     @Serializable(with = DateSerializer::class)
     val created = Date()
 
     fun addTag(key: String, value: String) {
         addTag(PointTag(key, value))
+    }
+
+    fun addTag(key: String, value: Int) {
+        return addTag(key, value.toString())
     }
 
     private fun addTag(tag: PointTag) {

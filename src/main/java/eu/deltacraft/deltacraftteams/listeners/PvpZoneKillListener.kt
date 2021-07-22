@@ -14,6 +14,7 @@ class PvpZoneKillListener(private val pointsQueue: PointsQueue) : Listener {
         val killed = event.killed
         val killer = event.killer
         val zone = event.pvpZone
+        val loc = event.location
 
         val killedPlayer = killed.player
         val killedTeam = killed.killedPlayerTeam
@@ -29,9 +30,13 @@ class PvpZoneKillListener(private val pointsQueue: PointsQueue) : Listener {
         point.addTag("Zone", zone.name)
         point.addTag("Killer", killerPlayer.name)
         point.addTag("Killed", killedPlayer.name)
-        point.addTag("KillerTeamId", killerTeam.id.toString())
-        point.addTag("KilledTeamId", killedTeam.id.toString())
+        point.addTag("KillerTeamId", killerTeam.id)
+        point.addTag("KilledTeamId", killedTeam.id)
         point.addTag("Weapon", weapon)
+        point.addTag("World", loc.world.name)
+        point.addTag("X", loc.blockX)
+        point.addTag("Y", loc.blockY)
+        point.addTag("Z", loc.blockZ)
 
         pointsQueue.add(point)
     }
