@@ -2,7 +2,8 @@ package eu.deltacraft.deltacraftteams.utils.enums
 
 enum class MajorTeam(val value: String) {
     Blue("blue"),
-    Red("red");
+    Red("red"),
+    None("none");
 
     companion object {
         fun from(findValue: String): MajorTeam? = values().firstOrNull { it.value == findValue }
