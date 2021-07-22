@@ -1,10 +1,11 @@
 package eu.deltacraft.deltacraftteams.utils.enums
 
 import net.kyori.adventure.text.format.NamedTextColor
+import net.kyori.adventure.text.format.TextColor
 
-enum class MajorTeam(val value: String, val color: NamedTextColor) {
-    Blue("blue", NamedTextColor.BLUE),
-    Red("red", NamedTextColor.RED),
+enum class MajorTeam(val value: String, val color: TextColor) {
+    Blue("blue", TextColor.color(0x0067c4)),
+    Red("red", TextColor.color(0xbd1b1b)),
     None("none", NamedTextColor.GRAY);
 
     companion object {

@@ -40,9 +40,7 @@ class DeltaCraftTeams : JavaPlugin() {
 
         pointsQueue.startTimer()
 
-        val logger = server.consoleSender
-
-        logger.sendMessage("DeltaCraft Teams ready!")
+        logger.info("Loaded!")
     }
 
     override fun onDisable() {
@@ -53,8 +51,7 @@ class DeltaCraftTeams : JavaPlugin() {
 
         sendAllPoints()
 
-        val logger = server.consoleSender
-        logger.sendMessage("DeltaCraft Teams shutdown complete!")
+        logger.info("Disabled!")
     }
 
     private fun loadManagers() {
@@ -148,6 +145,9 @@ class DeltaCraftTeams : JavaPlugin() {
 
         pluginManager.registerEvents(PvpZoneEnterLeaveListener(manager), this)
         logger.info("PvpZoneEnterLeaveListener loaded")
+
+        pluginManager.registerEvents(PlayerSuccessJoinListener(manager.teamCacheManager), this)
+        logger.info("PlayerSuccessJoinListener loaded")
     }
 
     private fun loadConfig() {
