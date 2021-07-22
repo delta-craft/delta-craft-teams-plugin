@@ -2,8 +2,13 @@ package eu.deltacraft.deltacraftteams.managers.cache
 
 import eu.deltacraft.deltacraftteams.managers.templates.CacheManager
 import eu.deltacraft.deltacraftteams.types.PlayerEntityDamages
+import eu.deltacraft.deltacraftteams.types.Point
+import eu.deltacraft.deltacraftteams.utils.enums.PointType
+import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import java.util.*
+import kotlin.math.floor
+import kotlin.math.roundToInt
 
 class MobDamageCache : CacheManager<UUID, PlayerEntityDamages>() {
 
@@ -32,4 +37,34 @@ class MobDamageCache : CacheManager<UUID, PlayerEntityDamages>() {
         return this[entityUid][playerUid]
     }
 
+    fun getPoints(entity: Entity, maxPoints: Int): List<Point> {
+        val entityUid = entity.uniqueId
+        val records = this[entityUid]
+
+
+        val points = mutableListOf<Point>()
+
+        if (maxPoints < 1) return points
+
+        if (records.isEmpty()) return points
+
+        val damages = records.computePoints(maxPoints)
+
+        if (damages.isEmpty()) return points
+
+        val entityType = entity.type
+
+        for (damage in damages) {
+            val ratio = damage.value.toDouble() / maxPoints.toDouble()
+            val percent = floor(ratio * 100).roundToInt()
+
+            val point = Point(damage.value, damage.key, PointType.Warfare, "Zabití ${entity.type.name}")
+            point.addTag("Entity", entityType.name)
+            point.addTag("Participation", percent)
+
+            points.add(point)
+        }
+
+        return points
+    }
 }

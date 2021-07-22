@@ -1,5 +1,6 @@
 package eu.deltacraft.deltacraftteams.listeners
 
+import eu.deltacraft.deltacraftteams.managers.PointsQueue
 import eu.deltacraft.deltacraftteams.managers.cache.MobDamageCache
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
@@ -8,7 +9,10 @@ import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDeathEvent
 
-class MobDamageListener(private val mobDamageCache: MobDamageCache) : Listener {
+class MobDamageListener(
+    private val mobDamageCache: MobDamageCache,
+    private val pointsQueue: PointsQueue,
+) : Listener {
 
     companion object {
         val list = hashMapOf(
@@ -37,10 +41,13 @@ class MobDamageListener(private val mobDamageCache: MobDamageCache) : Listener {
         if (!list.containsKey(event.entityType)) return
 
         val entity = event.entity
-        val entityUid = entity.uniqueId
 
-        val records = mobDamageCache[entityUid] ?: return
+        val maxPoints = list[event.entityType] ?: 0
 
+        val points = mobDamageCache.getPoints(entity, maxPoints)
 
+        if (points.isEmpty()) return
+
+        pointsQueue.add(points)
     }
 }
