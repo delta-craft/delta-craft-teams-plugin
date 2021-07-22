@@ -5,23 +5,12 @@ import eu.deltacraft.deltacraftteams.managers.templates.CacheManager
 import eu.deltacraft.deltacraftteams.types.PvpZone
 import eu.deltacraft.deltacraftteams.types.TempZone
 import org.bukkit.Location
-import java.util.UUID
+import java.util.*
 
 class PvpZoneCacheManager : CacheManager<String, PvpZone>(true) {
     private val tempCache = TempCache<UUID, TempZone>()
 
-    fun addItem(
-        one: Location,
-        two: Location,
-        name: String
-    ) {
-        val region = PvpZone(one, two, name)
-        this.addItem(region)
-    }
-
-    fun addItem(
-        zone: PvpZone
-    ) {
+    fun addItem(zone: PvpZone) {
         this[zone.name] = zone
     }
 
