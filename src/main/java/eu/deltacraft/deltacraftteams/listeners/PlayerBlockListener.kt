@@ -24,13 +24,13 @@ class PlayerBlockListener(private val plugin: DeltaCraftTeams) : Listener {
         if (a.none { x -> x.first == material })
             return
 
-        val pair = a.first { x -> x.first == material }
+        val pair = a.firstOrNull { x -> x.first == material }
 
-        val item = items.first()?.itemStack
+        val item = items.firstOrNull()?.itemStack
 
         val amount = item?.amount ?: 0
 
-        player.sendMessage("Destroyed $material value ${pair.second} ($amount DS)")
+        player.sendMessage("Destroyed $material value ${pair?.second} ($amount DS)")
 
     }
 }
