@@ -50,13 +50,37 @@ class TextHelper {
         }
 
         @JvmStatic
-        fun infoText(text: String, color: TextColor = NamedTextColor.YELLOW): TextComponent {
-            return Component.text(text, color)
+        fun getPrefix(): TextComponent {
+            return Component.empty()
+                .append(
+                    Component.text("[DELTACRAFT]")
+                        .color(NamedTextColor.YELLOW)
+                        .clickEvent(
+                            ClickEvent.openUrl(Constants.FULL_URL)
+                        )
+                        .hoverEvent(
+                            HoverEvent.showText(
+                                Component.text("Click to open portal")
+                            )
+                        )
+                )
+        }
+
+        @JvmStatic
+        fun infoText(
+            text: String,
+            color: TextColor = NamedTextColor.YELLOW,
+            decoration: TextDecoration? = null,
+        ): TextComponent {
+            return getPrefix()
+                .append(
+                    Component.text(text, color, decoration)
+                )
         }
 
         @JvmStatic
         fun attentionText(text: String, color: TextColor = NamedTextColor.YELLOW): Component {
-            return infoText(text, color).decorate(TextDecoration.BOLD)
+            return infoText(text, color, TextDecoration.BOLD)
         }
 
         @JvmStatic
