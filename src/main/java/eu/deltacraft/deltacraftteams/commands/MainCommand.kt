@@ -16,7 +16,7 @@ import org.bukkit.entity.Player
 
 class MainCommand(
     private val plugin: DeltaCraftTeams,
-    private val pointsQueue: PointsQueue
+    private val pointsQueue: PointsQueue,
 ) : CommandExecutor, TabCompleter {
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<String>): Boolean {
@@ -39,12 +39,7 @@ class MainCommand(
         if (cmd.equals("send", ignoreCase = true) ||
             cmd.equals("sendpoints", ignoreCase = true)
         ) {
-            val res = pointsQueue.trySendAllPoints()
-            if (res) {
-                sender.sendMessage(TextHelper.infoText("Prepared successfully"))
-            } else {
-                sender.sendMessage(TextHelper.attentionText("Send is already pending"))
-            }
+            pointsQueue.trySendAllPoints(sender)
             return true
         }
         if (cmd.equals("version", ignoreCase = true)) {
@@ -68,7 +63,7 @@ class MainCommand(
         sender: CommandSender,
         command: Command,
         alias: String,
-        args: Array<String>
+        args: Array<String>,
     ): List<String> {
         val list: MutableList<String> = ArrayList()
         if (sender !is Player) {
@@ -95,8 +90,8 @@ class MainCommand(
     private fun sendHelp(p: CommandSender) {
         val text = Component.text("DeltaCraftTeams main commands =====================")
             .append(Component.newline())
-            .append(TextHelper.commandInfo("/DeltaCraftTeams version", "Show current version of the plugin"))
-            .append(TextHelper.commandInfo("/DeltaCraftTeams send", "Upload all points to database"))
+            .append(TextHelper.commandInfo("/Delta version", "Show current version of the plugin"))
+            .append(TextHelper.commandInfo("/Delta send", "Upload all points to database"))
             .append(
                 Component.text("==================================================")
             )

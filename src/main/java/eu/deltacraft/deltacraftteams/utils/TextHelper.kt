@@ -23,7 +23,7 @@ class TextHelper {
         @JvmStatic
         fun createActionButton(
             button: Component,
-            color: TextColor = NamedTextColor.DARK_AQUA
+            color: TextColor = NamedTextColor.DARK_AQUA,
         ): Component {
             return Component.text("[ ", NamedTextColor.WHITE, TextDecoration.BOLD)
                 .append(button).color(color).decorate(TextDecoration.BOLD)
@@ -38,7 +38,7 @@ class TextHelper {
         @JvmStatic
         fun insufficientPermissions(
             customMsg: String = "Insufficient permissions!",
-            permission: String = "¯\\_(ツ)_/¯"
+            permission: String = "¯\\_(ツ)_/¯",
         ): TextComponent {
             return Component
                 .text(customMsg, NamedTextColor.DARK_RED)
@@ -50,18 +50,41 @@ class TextHelper {
         }
 
         @JvmStatic
-        fun infoText(text: String): TextComponent {
-            return this.infoText(text, NamedTextColor.YELLOW)
+        fun getPrefix(): TextComponent {
+            return Component.empty()
+                .append(
+                    Component.text("[DELTACRAFT] ")
+                        .color(NamedTextColor.GOLD)
+                        .clickEvent(
+                            ClickEvent.openUrl(Constants.FULL_URL)
+                        )
+                        .hoverEvent(
+                            HoverEvent.showText(
+                                Component.text("Click to open portal")
+                            )
+                        )
+                )
         }
 
         @JvmStatic
-        fun infoText(text: String, color: TextColor? = NamedTextColor.YELLOW): TextComponent {
-            return Component.text(text, color)
+        fun infoText(
+            text: String,
+            color: TextColor = NamedTextColor.YELLOW,
+            decoration: TextDecoration? = null,
+        ): TextComponent {
+
+            val textComponent =
+                if (decoration == null) Component.text(text, color) else Component.text(text, color, decoration)
+
+            return getPrefix()
+                .append(
+                    textComponent
+                )
         }
 
         @JvmStatic
-        fun attentionText(text: String): Component {
-            return infoText(text).decorate(TextDecoration.BOLD)
+        fun attentionText(text: String, color: TextColor = NamedTextColor.YELLOW): Component {
+            return infoText(text, color, TextDecoration.BOLD)
         }
 
         @JvmStatic
