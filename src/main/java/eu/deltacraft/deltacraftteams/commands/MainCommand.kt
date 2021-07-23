@@ -90,8 +90,8 @@ class MainCommand(
     private fun sendHelp(p: CommandSender) {
         val text = Component.text("DeltaCraftTeams main commands =====================")
             .append(Component.newline())
-            .append(TextHelper.commandInfo("/DeltaCraftTeams version", "Show current version of the plugin"))
-            .append(TextHelper.commandInfo("/DeltaCraftTeams send", "Upload all points to database"))
+            .append(TextHelper.commandInfo("/Delta version", "Show current version of the plugin"))
+            .append(TextHelper.commandInfo("/Delta send", "Upload all points to database"))
             .append(
                 Component.text("==================================================")
             )

@@ -53,8 +53,8 @@ class TextHelper {
         fun getPrefix(): TextComponent {
             return Component.empty()
                 .append(
-                    Component.text("[DELTACRAFT]")
-                        .color(NamedTextColor.YELLOW)
+                    Component.text("[DELTACRAFT] ")
+                        .color(NamedTextColor.GOLD)
                         .clickEvent(
                             ClickEvent.openUrl(Constants.FULL_URL)
                         )
@@ -72,9 +72,13 @@ class TextHelper {
             color: TextColor = NamedTextColor.YELLOW,
             decoration: TextDecoration? = null,
         ): TextComponent {
+
+            val textComponent =
+                if (decoration == null) Component.text(text, color) else Component.text(text, color, decoration)
+
             return getPrefix()
                 .append(
-                    Component.text(text, color, decoration)
+                    textComponent
                 )
         }
 
