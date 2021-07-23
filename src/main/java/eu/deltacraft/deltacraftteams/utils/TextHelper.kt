@@ -23,7 +23,7 @@ class TextHelper {
         @JvmStatic
         fun createActionButton(
             button: Component,
-            color: TextColor = NamedTextColor.DARK_AQUA
+            color: TextColor = NamedTextColor.DARK_AQUA,
         ): Component {
             return Component.text("[ ", NamedTextColor.WHITE, TextDecoration.BOLD)
                 .append(button).color(color).decorate(TextDecoration.BOLD)
@@ -38,7 +38,7 @@ class TextHelper {
         @JvmStatic
         fun insufficientPermissions(
             customMsg: String = "Insufficient permissions!",
-            permission: String = "¯\\_(ツ)_/¯"
+            permission: String = "¯\\_(ツ)_/¯",
         ): TextComponent {
             return Component
                 .text(customMsg, NamedTextColor.DARK_RED)
@@ -50,18 +50,13 @@ class TextHelper {
         }
 
         @JvmStatic
-        fun infoText(text: String): TextComponent {
-            return this.infoText(text, NamedTextColor.YELLOW)
-        }
-
-        @JvmStatic
-        fun infoText(text: String, color: TextColor? = NamedTextColor.YELLOW): TextComponent {
+        fun infoText(text: String, color: TextColor = NamedTextColor.YELLOW): TextComponent {
             return Component.text(text, color)
         }
 
         @JvmStatic
-        fun attentionText(text: String): Component {
-            return infoText(text).decorate(TextDecoration.BOLD)
+        fun attentionText(text: String, color: TextColor = NamedTextColor.YELLOW): Component {
+            return infoText(text, color).decorate(TextDecoration.BOLD)
         }
 
         @JvmStatic
