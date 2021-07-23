@@ -144,6 +144,9 @@ class DeltaCraftTeams : JavaPlugin() {
 
         pluginManager.registerEvents(MobDamageListener(manager.mobDamageCache, pointsQueue), this)
         logger.info("MobDamageListener loaded")
+
+        pluginManager.registerEvents(ShulkerKillListener(), this)
+        logger.info("ShulkerKillListener loaded")
     }
 
     private fun loadConfig() {
