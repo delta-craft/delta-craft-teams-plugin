@@ -147,6 +147,9 @@ class DeltaCraftTeams : JavaPlugin() {
 
         pluginManager.registerEvents(ShulkerKillListener(), this)
         logger.info("ShulkerKillListener loaded")
+
+        pluginManager.registerEvents(CraftItemListener(pointsQueue), this)
+        logger.info("CraftItemListener loaded")
     }
 
     private fun loadConfig() {
