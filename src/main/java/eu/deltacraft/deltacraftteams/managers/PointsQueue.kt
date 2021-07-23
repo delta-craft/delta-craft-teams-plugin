@@ -3,19 +3,22 @@ package eu.deltacraft.deltacraftteams.managers
 import eu.deltacraft.deltacraftteams.DeltaCraftTeams
 import eu.deltacraft.deltacraftteams.types.Constants
 import eu.deltacraft.deltacraftteams.types.Point
+import eu.deltacraft.deltacraftteams.utils.TextHelper
 import kotlinx.coroutines.runBlocking
-import org.apache.commons.lang.time.DateUtils
+import net.kyori.adventure.audience.Audience
+import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Bukkit
 import java.util.*
 
 class PointsQueue(private val plugin: DeltaCraftTeams, private val clientManager: ClientManager) {
 
+    private val timeStep = Constants.POINTS_SEND_TIME * 60 * 60 * 1000 //ms - 1h*60min*60s*1000ms
     private val points = LinkedList<Point>()
     private val logger = plugin.logger
 
     private var taskId = 0
     private var timerId = 0
-    private var lastSend = Date(Long.MIN_VALUE)
+    private var lastSend: Long = 0
 
     private val isSending: Boolean
         get() = taskId > 0
@@ -24,7 +27,7 @@ class PointsQueue(private val plugin: DeltaCraftTeams, private val clientManager
         get() = points.size > Constants.POINTS_PAYLOAD_SIZE
 
     private val dateReached: Boolean
-        get() = lastSend > DateUtils.addHours(Date(), Constants.POINTS_SEND_TIME)
+        get() = lastSend + timeStep < System.currentTimeMillis()
 
     private val shouldSend: Boolean
         get() = !isSending && (dateReached || sizeReached)
@@ -46,16 +49,21 @@ class PointsQueue(private val plugin: DeltaCraftTeams, private val clientManager
         }
     }
 
-    fun trySendAllPoints(): Boolean {
+    fun trySendAllPoints(initiator: Audience = Audience.empty()) {
         if (isSending) {
-            return false
+            initiator.sendMessage(TextHelper.infoText("Send is already pending", NamedTextColor.RED))
+            return
         }
         if (!points.any()) {
-            return true
+            initiator.sendMessage(TextHelper.infoText("Nothing to send", NamedTextColor.YELLOW))
+            return
         }
         val toSend = points.toList()
         points.clear()
-        return sendDefaultPoints(toSend)
+        sendDefaultPoints(toSend, initiator)
+        initiator.sendMessage(
+            TextHelper.infoText("Send thread prepared. To send: ${toSend.count()} points", NamedTextColor.DARK_GREEN)
+        )
     }
 
     suspend fun trySendAllPointsAsync(): Boolean {
@@ -79,41 +87,49 @@ class PointsQueue(private val plugin: DeltaCraftTeams, private val clientManager
             val point = points.poll() ?: break
             toSend.add(point)
         }
-        return sendDefaultPoints(toSend)
+        sendDefaultPoints(toSend)
+        return true
     }
 
-    private fun sendDefaultPoints(toSend: Collection<Point>): Boolean {
+    private fun sendDefaultPoints(toSend: Collection<Point>, initiator: Audience = Audience.empty()) {
         val task = Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
             runBlocking {
 
                 val chunked = toSend.chunked(Constants.POINTS_PAYLOAD_SIZE)
 
                 for (points in chunked) {
-                    sendPointsAsync(points)
+                    sendPointsAsync(points, initiator)
                 }
 
                 taskId = 0
             }
         })
         taskId = task.taskId
-        return true
     }
 
-    private suspend fun sendPointsAsync(toSend: Collection<Point>): Boolean {
+    private suspend fun sendPointsAsync(toSend: Collection<Point>, initiator: Audience = Audience.empty()): Boolean {
         if (toSend.isEmpty()) {
             return true
         }
 
         logger.info("Uploading ${toSend.size} point records....")
+        initiator.sendMessage(TextHelper.infoText("Uploading ${toSend.size} point(s)", NamedTextColor.DARK_GREEN))
 
         val res = clientManager.uploadPoints(toSend)
         if (res.content) {
             logger.info("Points uploaded successfully")
+            initiator.sendMessage(
+                TextHelper.infoText("${toSend.size} point(s) uploaded successfully", NamedTextColor.GREEN)
+            )
         } else {
-            logger.warning(res.toString())
+            val resString = res.toString()
+            logger.warning(resString)
+            initiator.sendMessage(
+                TextHelper.attentionText("Error sending points. $resString", NamedTextColor.RED)
+            )
         }
 
-        lastSend = Date()
+        lastSend = System.currentTimeMillis()
 
         return res.content
     }

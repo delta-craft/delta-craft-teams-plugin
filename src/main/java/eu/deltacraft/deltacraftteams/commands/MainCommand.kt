@@ -39,7 +39,7 @@ class MainCommand(
         if (cmd.equals("send", ignoreCase = true) ||
             cmd.equals("sendpoints", ignoreCase = true)
         ) {
-            pointsQueue.trySendAllPoints()
+            pointsQueue.trySendAllPoints(sender)
             return true
         }
         if (cmd.equals("version", ignoreCase = true)) {
