@@ -15,7 +15,7 @@ class MobDamageListener(
 ) : Listener {
 
     companion object {
-        val list = hashMapOf(
+        val map = hashMapOf(
             EntityType.ENDER_DRAGON to 1000,
             EntityType.WITHER to 1000
         )
@@ -23,7 +23,7 @@ class MobDamageListener(
 
     @EventHandler(ignoreCancelled = true)
     fun onDamage(event: EntityDamageByEntityEvent) {
-        if (!list.containsKey(event.entityType)) return
+        if (!map.containsKey(event.entityType)) return
 
         val damager = event.damager
         if (damager !is Player) return
@@ -38,11 +38,11 @@ class MobDamageListener(
 
     @EventHandler(ignoreCancelled = true)
     fun onKill(event: EntityDeathEvent) {
-        if (!list.containsKey(event.entityType)) return
+        if (!map.containsKey(event.entityType)) return
 
         val entity = event.entity
 
-        val maxPoints = list[event.entityType] ?: 0
+        val maxPoints = map[event.entityType] ?: 0
 
         val points = mobDamageCache.getPoints(entity, maxPoints)
 
