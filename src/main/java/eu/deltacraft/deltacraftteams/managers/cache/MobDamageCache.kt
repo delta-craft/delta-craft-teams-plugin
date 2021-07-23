@@ -11,8 +11,10 @@ import java.util.*
 class MobDamageCache : CacheManager<UUID, PlayerEntityDamages>() {
 
     fun addDamage(entityUid: UUID, player: Player, damage: Double) {
-        val playerUid = player.uniqueId
+        addDamage(entityUid, player.uniqueId, damage)
+    }
 
+    private fun addDamage(entityUid: UUID, playerUid: UUID, damage: Double) {
         val records = this[entityUid]
 
         val oldDamage = records[playerUid]
@@ -36,9 +38,7 @@ class MobDamageCache : CacheManager<UUID, PlayerEntityDamages>() {
     }
 
     fun getPoints(entity: Entity, maxPoints: Int): List<Point> {
-        val entityUid = entity.uniqueId
-        val records = this[entityUid]
-
+        val records = this[entity.uniqueId]
 
         val points = mutableListOf<Point>()
 
@@ -61,11 +61,7 @@ class MobDamageCache : CacheManager<UUID, PlayerEntityDamages>() {
             point.addTag("Type", "Mob")
             point.addTag("Entity", entityType.name)
             point.addTag("Participation", "%.4f".format(ratio))
-
-            point.addTag("X", location.blockX)
-            point.addTag("Y", location.blockY)
-            point.addTag("Z", location.blockZ)
-            point.addTag("World", location.world.name)
+            point.addTag(location)
 
             points.add(point)
         }

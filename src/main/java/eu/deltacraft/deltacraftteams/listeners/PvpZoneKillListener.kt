@@ -33,10 +33,7 @@ class PvpZoneKillListener(private val pointsQueue: PointsQueue) : Listener {
         point.addTag("KillerTeamId", killerTeam.id)
         point.addTag("KilledTeamId", killedTeam.id)
         point.addTag("Weapon", weapon)
-        point.addTag("World", loc.world.name)
-        point.addTag("X", loc.blockX)
-        point.addTag("Y", loc.blockY)
-        point.addTag("Z", loc.blockZ)
+        point.addTag(loc)
 
         pointsQueue.add(point)
     }

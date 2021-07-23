@@ -6,6 +6,7 @@ import eu.deltacraft.deltacraftteams.types.serializers.UuidSerializer
 import eu.deltacraft.deltacraftteams.utils.enums.PointType
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.bukkit.Location
 import java.util.*
 
 @Serializable
@@ -30,6 +31,13 @@ data class Point(
 
     fun addTag(key: String, value: Int) {
         return addTag(key, value.toString())
+    }
+
+    fun addTag(location: Location) {
+        addTag("X", location.blockX)
+        addTag("Y", location.blockY)
+        addTag("Z", location.blockZ)
+        addTag("World", location.world.name)
     }
 
     private fun addTag(tag: PointTag) {
