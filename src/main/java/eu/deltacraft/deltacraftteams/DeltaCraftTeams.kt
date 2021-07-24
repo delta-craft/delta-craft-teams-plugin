@@ -1,9 +1,6 @@
 package eu.deltacraft.deltacraftteams
 
-import eu.deltacraft.deltacraftteams.commands.DonationCommand
-import eu.deltacraft.deltacraftteams.commands.MainCommand
-import eu.deltacraft.deltacraftteams.commands.PingCommand
-import eu.deltacraft.deltacraftteams.commands.PvpZoneCommand
+import eu.deltacraft.deltacraftteams.commands.*
 import eu.deltacraft.deltacraftteams.commands.home.DelHomeCommand
 import eu.deltacraft.deltacraftteams.commands.home.HomeCommand
 import eu.deltacraft.deltacraftteams.commands.home.SetHomeCommand
@@ -90,6 +87,11 @@ class DeltaCraftTeams : JavaPlugin() {
             logger.info("Ping command loaded")
         }
 
+        val teamMarkerCommand = this.getCommand("teammarker")
+        if (teamMarkerCommand != null) {
+            teamMarkerCommand.setExecutor(TeamMarkerCommand(this, clientManager, manager.teamOwnerManager))
+            logger.info("Team marker command loaded")
+        }
 
         loadHomeCommands()
     }
