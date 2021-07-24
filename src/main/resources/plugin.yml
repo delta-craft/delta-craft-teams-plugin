@@ -31,6 +31,9 @@ commands:
   ping:
     description: Get ping
     usage: /ping
+  setteammarker:
+    description: Set team marker
+    usage: /setteammarker
 permissions:
   delta.*:
     default: op
@@ -38,15 +41,12 @@ permissions:
       delta.home:
         description: Use home command
         default: true
+      delta.teammarker:
+        description: Use set team marker command
+        default: true
       delta.main:
         description: Main command
         default: op
       delta.pvp:
+        description: Manage PVP zones
         default: op
-        children:
-          delta.pvp.create:
-            description: Create PVP zone
-            default: op
-          delta.pvp.remove:
-            description: Remove PVP zone
-            default: op
