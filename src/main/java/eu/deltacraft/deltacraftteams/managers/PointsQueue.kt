@@ -127,6 +127,7 @@ class PointsQueue(private val plugin: DeltaCraftTeams, private val clientManager
             initiator.sendMessage(
                 TextHelper.attentionText("Error sending points. $resString", NamedTextColor.RED)
             )
+            this.add(toSend)
         }
 
         lastSend = System.currentTimeMillis()
