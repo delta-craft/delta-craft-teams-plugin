@@ -55,6 +55,10 @@ class ClientManager(plugin: DeltaCraftTeams) {
 
         val status = httpRes.status
 
+        if (status == HttpStatusCode.GatewayTimeout) {
+            return PointsResult(true, null, "Timout but backend should take it")
+        }
+
         if (status != HttpStatusCode.OK && status != HttpStatusCode.BadRequest) {
             return PointsResult(false, PointsError.Unknown.value, "HTTP status: $status")
         }
