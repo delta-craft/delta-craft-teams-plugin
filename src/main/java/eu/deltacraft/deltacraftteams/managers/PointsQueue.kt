@@ -12,7 +12,7 @@ import java.util.*
 
 class PointsQueue(private val plugin: DeltaCraftTeams, private val clientManager: ClientManager) {
 
-    private val timeStep = Constants.POINTS_SEND_TIME * 60 * 60 * 1000 //ms - 1h*60min*60s*1000ms
+    private val timeStep = Constants.POINTS_SEND_TIME * 60 * 1000 //ms - x min*60s*1000ms
     private val points = LinkedList<Point>()
     private val logger = plugin.logger
 
