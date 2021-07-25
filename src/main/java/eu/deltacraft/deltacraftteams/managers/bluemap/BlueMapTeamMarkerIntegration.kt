@@ -1,45 +1,56 @@
 package eu.deltacraft.deltacraftteams.managers.bluemap
 
-import org.bukkit.Location
-import org.bukkit.entity.Player
+import eu.deltacraft.deltacraftteams.types.Team
+import eu.deltacraft.deltacraftteams.types.TeamMarker
+import eu.deltacraft.deltacraftteams.types.toVector3d
 
 class BlueMapTeamMarkerIntegration : BlueMapIntegrationBase() {
     companion object {
 
         private const val MARKERS_KEY: String = "Team markers"
 
-        fun addHome(player: Player, location: Location, name: String): Boolean {
-            val mapApi = getApi() ?: return false
+        fun addMarker(team: Team, teamMarker: TeamMarker): Boolean {
+            val location = teamMarker.location
 
-            val markerApi = mapApi.markerAPI
+            val (markerApi, map) = getMarkerWithMap(location) ?: return false
 
-            val optionalWorld = mapApi.getWorld(location.world.uid)
-            if (optionalWorld.isEmpty) {
-                return false
-            }
-            val world = optionalWorld.get()
+            val markers = markerApi.createMarkerSet(getMarkerSetId(team))
+            markers.label = getMarkerSetLabel(team.name)
 
-            val map = world.maps.first()
-            val id = getMarkerName(player, name)
+            val marker = markers.createPOIMarker(teamMarker.name, map, location.toVector3d())
+            marker.label = teamMarker.name
 
-            markerApi.load()
+            // marker.setIcon("${Constants.FULL_URL}/api/embed/teammarker/${teamMarker.id}", 16, 16)
 
-            val markers = markerApi.createMarkerSet(MARKERS_KEY)
-
-/*
-            val marker = markers.createPOIMarker(player.name, map, location.toVector3d())
-            marker.label = homeName
-            marker.setIcon("${Constants.FULL_URL}/api/embed/home/${player.name}", 16, 16)
-            if (marker is DistanceRangedMarker) {
-                (marker as DistanceRangedMarker).maxDistance = 200.0
-            }
-*/
             markerApi.save()
             return true
         }
 
-        private fun getMarkerName(player: Player, name: String): String {
-            return "${player.name}'s home"
+        fun removeMarker(team: Team, teamMarker: TeamMarker) {
+            removeMarker(team.id, teamMarker.name)
         }
+
+        fun removeMarker(teamId: Int, teamName: String) {
+            val markerApi = getMarkerApi() ?: return
+
+            val markers = markerApi.createMarkerSet(getMarkerSetId(teamId))
+
+            markers.removeMarker(teamName)
+
+            markerApi.save()
+        }
+
+        private fun getMarkerSetLabel(name: String): String {
+            return "Team markers: $name"
+        }
+
+        private fun getMarkerSetId(team: Team): String {
+            return getMarkerSetId(team.id)
+        }
+
+        private fun getMarkerSetId(teamId: Int): String {
+            return "Team_$teamId"
+        }
+
     }
 }

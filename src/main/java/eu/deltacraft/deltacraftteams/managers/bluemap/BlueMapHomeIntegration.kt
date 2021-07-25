@@ -11,26 +11,18 @@ class BlueMapHomeIntegration : BlueMapIntegrationBase() {
         private const val MARKERS_KEY: String = "Homes"
 
         fun addHome(player: Player, location: Location) {
-            val mapApi = getApi() ?: return
 
-            val markerApi = mapApi.markerAPI
+            val (markerApi, map) = getMarkerWithMap(location) ?: return
 
-            val optionalWorld = mapApi.getWorld(location.world.uid)
-            if (optionalWorld.isEmpty) {
-                return
-            }
-            val world = optionalWorld.get()
-
-            val map = world.maps.first()
             val homeName = getPlayerHomeName(player)
 
-            markerApi.load()
-
             val markers = markerApi.createMarkerSet(MARKERS_KEY)
+            markers.label = "Homes"
 
             val marker = markers.createPOIMarker(player.name, map, location.toVector3d())
             marker.label = homeName
             marker.setIcon("${Constants.FULL_URL}/api/embed/home/${player.name}", 16, 16)
+
             if (marker is DistanceRangedMarker) {
                 (marker as DistanceRangedMarker).maxDistance = 200.0
             }

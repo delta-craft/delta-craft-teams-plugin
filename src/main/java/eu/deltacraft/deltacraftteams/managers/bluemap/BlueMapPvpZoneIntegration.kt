@@ -52,20 +52,7 @@ class BlueMapPvpZoneIntegration : BlueMapIntegrationBase() {
             worldUid: UUID,
             name: String,
         ): Boolean {
-            val mapApi = getApi() ?: return false
-
-            val optionalWorld = mapApi.getWorld(worldUid)
-            if (optionalWorld.isEmpty) {
-                return false
-            }
-
-            val world = optionalWorld.get()
-
-            val map = world.maps.first()
-
-            val markerApi = mapApi.markerAPI
-
-            markerApi.load()
+            val (markerApi, map) = getMarkerWithMap(worldUid) ?: return false
 
             val markers = markerApi.createMarkerSet(MARKERS_KEY)
 
