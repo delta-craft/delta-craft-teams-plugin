@@ -70,12 +70,6 @@ class TeamMarkerCommand(
             return true
         }
 
-        if (cmd.equals("description", true) || cmd.equals("desc", true)) {
-            val description = args.drop(2).joinToString(" ")
-            teamMarkerManager.setDescription(p, id, description)
-            return true
-        }
-
         return true
     }
 
@@ -94,16 +88,7 @@ class TeamMarkerCommand(
             )
 
             for (marker in markes) {
-                text = text.append(
-                    Component.text(marker.name)
-                ).append(
-                    Component.text("Description: '${marker.description}'")
-                ).append(
-                    Component.text(" [DELETE] ", NamedTextColor.RED)
-                        .clickEvent(
-                            ClickEvent.suggestCommand("/teammarker remove ${marker.id}")
-                        )
-                ).append(Component.newline())
+                text = text.append(marker.getInfo())
             }
 
             text = text
@@ -123,21 +108,7 @@ class TeamMarkerCommand(
             .append(TextHelper.getDivider())
 
         for (marker in allMarkers) {
-            text = text.append(
-                Component.text(marker.name)
-            ).append(
-                Component.text("Description: '${marker.description}'")
-            ).append(
-                Component.text(" [SET DESCRIPTION] ", NamedTextColor.YELLOW)
-                    .clickEvent(
-                        ClickEvent.suggestCommand("/teammarker description ${marker.id} ")
-                    )
-            ).append(
-                Component.text(" [DELETE] ", NamedTextColor.RED)
-                    .clickEvent(
-                        ClickEvent.suggestCommand("/teammarker remove ${marker.id}")
-                    )
-            ).append(Component.newline())
+            text = text.append(marker.getInfo())
         }
 
         text = text.append(TextHelper.getDivider())
@@ -203,7 +174,7 @@ class TeamMarkerCommand(
             if (args.size == 1) {
                 typedIn = args[0].lowercase()
             }
-            val cmds = mutableListOf("set", "remove, list", "description")
+            val cmds = mutableListOf("set", "remove, list")
             if (sender.hasPermission(Permissions.TEAMMARKERADMIN)) {
                 cmds.add("list-all")
             }

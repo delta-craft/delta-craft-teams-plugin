@@ -1,5 +1,10 @@
 package eu.deltacraft.deltacraftteams.types
 
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.TextComponent
+import net.kyori.adventure.text.event.ClickEvent
+import net.kyori.adventure.text.event.HoverEvent
+import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Location
 import org.bukkit.configuration.serialization.ConfigurationSerializable
 import java.util.*
@@ -9,15 +14,9 @@ data class TeamMarker(
     val name: String,
     val teamId: Int,
     val location: Location,
-    val description: String = "",
 ) : ConfigurationSerializable {
-    constructor(name: String, teamId: Int, location: Location, description: String = "") :
-            this(UUID.randomUUID(), name, teamId, location, description)
-
-
-    fun setDescription(newDescription: String): TeamMarker {
-        return TeamMarker(id, name, teamId, location, newDescription)
-    }
+    constructor(name: String, teamId: Int, location: Location) :
+            this(UUID.randomUUID(), name, teamId, location)
 
     override fun serialize(): MutableMap<String, Any> {
         val res = mutableMapOf<String, Any>()
@@ -26,9 +25,25 @@ data class TeamMarker(
         res["name"] = name
         res["teamId"] = teamId.toString()
         res["location"] = location.serialize()
-        res["description"] = description
 
         return res
+    }
+
+    fun getInfo(): TextComponent {
+        return Component.empty()
+            .append(
+                Component.text(name)
+                    .hoverEvent(
+                        HoverEvent.showText(
+                            Component.text("ID: $id")
+                        )
+                    )
+            ).append(
+                Component.text(" [DELETE] ", NamedTextColor.RED)
+                    .clickEvent(
+                        ClickEvent.suggestCommand("/teammarker remove $id")
+                    )
+            ).append(Component.newline())
     }
 
     companion object {
@@ -57,9 +72,7 @@ data class TeamMarker(
 
             val location = Location.deserialize(locMap)
 
-            val description = data["description"]?.toString() ?: ""
-
-            return TeamMarker(id, name, teamId, location, description)
+            return TeamMarker(id, name, teamId, location)
         }
     }
 

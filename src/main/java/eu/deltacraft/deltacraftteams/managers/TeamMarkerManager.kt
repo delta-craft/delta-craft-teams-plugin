@@ -169,43 +169,4 @@ class TeamMarkerManager(
         return teamOwnerManager.set(uuid, res.content).isOwner
     }
 
-    fun setDescription(p: Player, id: String, description: String) {
-        if (p.hasPermission(Permissions.TEAMMARKERADMIN)) {
-            setDescriptionInternal(p, id, description)
-            return
-        }
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
-            runBlocking {
-                setDescriptionAsync(p, id, description)
-            }
-        })
-        p.sendMessage(TextHelper.infoText("Checking if you are a owner..."))
-    }
-
-    private suspend fun setDescriptionAsync(p: Player, id: String, description: String) {
-        val isOwner = checkIfIsOwnerAsync(p.uniqueId)
-        if (!isOwner) {
-            p.sendMessage(TextHelper.attentionText("You are not a team owner", NamedTextColor.RED))
-            return
-        }
-        setDescriptionInternal(p, id, description)
-    }
-
-    private fun setDescriptionInternal(p: Player, id: String, description: String) {
-        val marker = cacheManager[id]
-        if (marker == null) {
-            p.sendMessage(TextHelper.attentionText("Marker not found"))
-            return
-        }
-
-        val newMarker = marker.setDescription(description)
-
-        config.set(id, newMarker)
-        saveConfig()
-
-        cacheManager[id] = newMarker
-
-        // BlueMapIntegration
-    }
-
 }
