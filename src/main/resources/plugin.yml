@@ -31,6 +31,10 @@ commands:
   ping:
     description: Get ping
     usage: /ping
+  links:
+    description: Get useful links
+    usage: /links
+    aliases: [ link ]
 permissions:
   delta.*:
     default: op

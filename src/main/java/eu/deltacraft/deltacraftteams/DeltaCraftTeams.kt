@@ -1,9 +1,6 @@
 package eu.deltacraft.deltacraftteams
 
-import eu.deltacraft.deltacraftteams.commands.DonationCommand
-import eu.deltacraft.deltacraftteams.commands.MainCommand
-import eu.deltacraft.deltacraftteams.commands.PingCommand
-import eu.deltacraft.deltacraftteams.commands.PvpZoneCommand
+import eu.deltacraft.deltacraftteams.commands.*
 import eu.deltacraft.deltacraftteams.commands.home.DelHomeCommand
 import eu.deltacraft.deltacraftteams.commands.home.HomeCommand
 import eu.deltacraft.deltacraftteams.commands.home.SetHomeCommand
@@ -88,6 +85,13 @@ class DeltaCraftTeams : JavaPlugin() {
         if (pingCommand != null) {
             pingCommand.setExecutor(PingCommand())
             logger.info("Ping command loaded")
+        }
+
+        val linksCommand = this.getCommand("links")
+        if (linksCommand != null) {
+            linksCommand.aliases = listOf("link")
+            linksCommand.setExecutor(LinksCommand())
+            logger.info("Links command loaded")
         }
 
 
