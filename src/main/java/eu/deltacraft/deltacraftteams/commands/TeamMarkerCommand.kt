@@ -5,6 +5,7 @@ import eu.deltacraft.deltacraftteams.types.hasPermission
 import eu.deltacraft.deltacraftteams.utils.TextHelper
 import eu.deltacraft.deltacraftteams.utils.enums.Permissions
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.ChatColor
 import org.bukkit.command.Command
@@ -81,13 +82,67 @@ class TeamMarkerCommand(
     private fun listAll(p: Player) {
         val allMarkers = teamMarkerManager.getAllMarkers()
 
-        TODO("Not yet implemented")
+        var text = Component.empty()
+            .append(TextHelper.getDivider())
+
+        val query = allMarkers.groupBy { x -> x.teamId }
+        for (group in query) {
+            val markes = group.value
+
+            text = text.append(
+                Component.text("Markers for team ${group.key}:")
+            )
+
+            for (marker in markes) {
+                text = text.append(
+                    Component.text(marker.name)
+                ).append(
+                    Component.text("Description: '${marker.description}'")
+                ).append(
+                    Component.text(" [DELETE] ", NamedTextColor.RED)
+                        .clickEvent(
+                            ClickEvent.suggestCommand("/teammarker remove ${marker.id}")
+                        )
+                ).append(Component.newline())
+            }
+
+            text = text
+                .append(Component.newline())
+                .append(Component.newline())
+        }
+
+        text = text.append(TextHelper.getDivider())
+
+        p.sendMessage(text)
     }
 
     private fun listForTeam(p: Player) {
         val allMarkers = teamMarkerManager.getTeamMarkers(p)
 
-        TODO("Not yet implemented")
+        var text = Component.empty()
+            .append(TextHelper.getDivider())
+
+        for (marker in allMarkers) {
+            text = text.append(
+                Component.text(marker.name)
+            ).append(
+                Component.text("Description: '${marker.description}'")
+            ).append(
+                Component.text(" [SET DESCRIPTION] ", NamedTextColor.YELLOW)
+                    .clickEvent(
+                        ClickEvent.suggestCommand("/teammarker description ${marker.id} ")
+                    )
+            ).append(
+                Component.text(" [DELETE] ", NamedTextColor.RED)
+                    .clickEvent(
+                        ClickEvent.suggestCommand("/teammarker remove ${marker.id}")
+                    )
+            ).append(Component.newline())
+        }
+
+        text = text.append(TextHelper.getDivider())
+
+        p.sendMessage(text)
     }
 
     private fun sendHelp(p: Player) {
@@ -95,13 +150,19 @@ class TeamMarkerCommand(
             .append(Component.newline())
             .append(
                 Component.text("/teammarker set <name>", NamedTextColor.YELLOW)
+                    .clickEvent(
+                        ClickEvent.suggestCommand("/teammarker set ")
+                    )
             )
             .append(
                 Component.text(" Set team marker", NamedTextColor.GREEN)
             )
             .append(Component.newline())
             .append(
-                Component.text("/teammarker remove <name>", NamedTextColor.YELLOW)
+                Component.text("/teammarker remove <id>", NamedTextColor.YELLOW)
+                    .clickEvent(
+                        ClickEvent.suggestCommand("/teammarker remove ")
+                    )
             )
             .append(
                 Component.text(" Remove team marker", NamedTextColor.GREEN)
@@ -109,6 +170,9 @@ class TeamMarkerCommand(
             .append(Component.newline())
             .append(
                 Component.text("/teammarker list", NamedTextColor.YELLOW)
+                    .clickEvent(
+                        ClickEvent.suggestCommand("/teammarker list ")
+                    )
             )
             .append(
                 Component.text(" Show your team markers", NamedTextColor.GREEN)

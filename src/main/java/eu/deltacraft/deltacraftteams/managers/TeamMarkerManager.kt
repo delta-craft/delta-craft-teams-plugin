@@ -7,7 +7,9 @@ import eu.deltacraft.deltacraftteams.managers.cache.TeamOwnerManager
 import eu.deltacraft.deltacraftteams.managers.templates.CacheConfigManager
 import eu.deltacraft.deltacraftteams.types.IsTeamOwnerResponse
 import eu.deltacraft.deltacraftteams.types.TeamMarker
+import eu.deltacraft.deltacraftteams.types.hasPermission
 import eu.deltacraft.deltacraftteams.utils.TextHelper
+import eu.deltacraft.deltacraftteams.utils.enums.Permissions
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
@@ -113,6 +115,10 @@ class TeamMarkerManager(
     }
 
     fun deleteMarker(p: Player, id: String) {
+        if (p.hasPermission(Permissions.TEAMMARKERADMIN)) {
+            removeMarker(id)
+            return
+        }
         Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
             runBlocking {
                 deleteMarkerAsync(p, id)
@@ -164,6 +170,42 @@ class TeamMarkerManager(
     }
 
     fun setDescription(p: Player, id: String, description: String) {
-
+        if (p.hasPermission(Permissions.TEAMMARKERADMIN)) {
+            setDescriptionInternal(p, id, description)
+            return
+        }
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
+            runBlocking {
+                setDescriptionAsync(p, id, description)
+            }
+        })
+        p.sendMessage(TextHelper.infoText("Checking if you are a owner..."))
     }
+
+    private suspend fun setDescriptionAsync(p: Player, id: String, description: String) {
+        val isOwner = checkIfIsOwnerAsync(p.uniqueId)
+        if (!isOwner) {
+            p.sendMessage(TextHelper.attentionText("You are not a team owner", NamedTextColor.RED))
+            return
+        }
+        setDescriptionInternal(p, id, description)
+    }
+
+    private fun setDescriptionInternal(p: Player, id: String, description: String) {
+        val marker = cacheManager[id]
+        if (marker == null) {
+            p.sendMessage(TextHelper.attentionText("Marker not found"))
+            return
+        }
+
+        val newMarker = marker.setDescription(description)
+
+        config.set(id, newMarker)
+        saveConfig()
+
+        cacheManager[id] = newMarker
+
+        // BlueMapIntegration
+    }
+
 }
