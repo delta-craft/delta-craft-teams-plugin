@@ -46,7 +46,7 @@ class TeamMarkerCommand(
             return true
         }
 
-        if (p.isOp && cmd.equals("list-all", true)) {
+        if (cmd.equals("list-all", true) && p.hasPermission(Permissions.TEAMMARKERADMIN)) {
             this.listAll(p)
             return true
         }
@@ -63,10 +63,15 @@ class TeamMarkerCommand(
             return true
         }
 
-        val arg = args.drop(1).joinToString(" ")
-
         if (cmd.equals("create", true) || cmd.equals("set", true)) {
-            teamMarkerManager.setMarker(p, arg)
+            val name = args.drop(1).joinToString(" ")
+            teamMarkerManager.setMarker(p, name)
+            return true
+        }
+
+        if (cmd.equals("description", true) || cmd.equals("desc", true)) {
+            val description = args.drop(2).joinToString(" ")
+            teamMarkerManager.setDescription(p, id, description)
             return true
         }
 
@@ -134,8 +139,8 @@ class TeamMarkerCommand(
             if (args.size == 1) {
                 typedIn = args[0].lowercase()
             }
-            val cmds = mutableListOf("set", "remove, list")
-            if (sender.isOp) {
+            val cmds = mutableListOf("set", "remove, list", "description")
+            if (sender.hasPermission(Permissions.TEAMMARKERADMIN)) {
                 cmds.add("list-all")
             }
             for (cmd in cmds) {

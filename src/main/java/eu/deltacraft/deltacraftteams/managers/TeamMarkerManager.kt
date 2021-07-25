@@ -61,11 +61,15 @@ class TeamMarkerManager(
     }
 
     fun getTeamMarkers(player: Player): List<TeamMarker> {
-        val team = teamsCache[player] ?: return listOf()
+        val team = teamsCache[player]
+        if (team == null) {
+            player.sendMessage(TextHelper.attentionText("You have no team"))
+            return listOf()
+        }
         return getTeamMarkers(team.id)
     }
 
-    fun getTeamMarkers(teamId: Int): List<TeamMarker> {
+    private fun getTeamMarkers(teamId: Int): List<TeamMarker> {
         return cacheManager.values.filter { x -> x.teamId == teamId }
     }
 
@@ -104,6 +108,8 @@ class TeamMarkerManager(
         cacheManager[id] = marker
 
         // BlueMapIntegration
+
+        p.sendMessage(TextHelper.infoText("Marker created", NamedTextColor.GREEN))
     }
 
     fun deleteMarker(p: Player, id: String) {
@@ -124,7 +130,7 @@ class TeamMarkerManager(
         removeMarker(id)
     }
 
-    fun removeMarker(id: String) {
+    private fun removeMarker(id: String) {
         config[id] = null
         saveConfig()
 
@@ -155,5 +161,9 @@ class TeamMarkerManager(
         val res = httpRes.receive<IsTeamOwnerResponse>()
 
         return teamOwnerManager.set(uuid, res.content).isOwner
+    }
+
+    fun setDescription(p: Player, id: String, description: String) {
+
     }
 }

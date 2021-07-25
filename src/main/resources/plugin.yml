@@ -48,6 +48,9 @@ permissions:
       delta.teammarker:
         description: Use set team marker command
         default: true
+        delta.teammarker.admin:
+          description: Use set team marker command
+          default: op
       delta.main:
         description: Main command
         default: op
