@@ -19,6 +19,7 @@ class DeltaCraftTeams : JavaPlugin() {
     private lateinit var clientManager: ClientManager
     private lateinit var homesManager: HomesManager
     private lateinit var pointsQueue: PointsQueue
+    private lateinit var teamMarkerManager: TeamMarkerManager
 
     override fun onEnable() {
         // Plugin startup logic
@@ -58,6 +59,7 @@ class DeltaCraftTeams : JavaPlugin() {
         pvpZoneManager = PvpZoneManager(this, manager.pvpZoneCacheManager)
         homesManager = HomesManager(this)
         pointsQueue = PointsQueue(this, clientManager)
+        teamMarkerManager = TeamMarkerManager(this, clientManager, manager)
     }
 
     private fun loadCommands() {
@@ -89,7 +91,7 @@ class DeltaCraftTeams : JavaPlugin() {
 
         val teamMarkerCommand = this.getCommand("teammarker")
         if (teamMarkerCommand != null) {
-            teamMarkerCommand.setExecutor(TeamMarkerCommand(this, clientManager, manager.teamOwnerManager))
+            teamMarkerCommand.setExecutor(TeamMarkerCommand(teamMarkerManager))
             logger.info("Team marker command loaded")
         }
 

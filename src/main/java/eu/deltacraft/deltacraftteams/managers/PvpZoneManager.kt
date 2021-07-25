@@ -34,7 +34,7 @@ class PvpZoneManager(plugin: DeltaCraftTeams, cacheManager: PvpZoneCacheManager)
     private fun getZones(): HashMap<String, PvpZone> {
         val section = config.getConfigurationSection(PvpZonesPrefix) ?: return HashMap()
         val keys = section.getKeys(false)
-        if (keys.size < 1) {
+        if (keys.isEmpty()) {
             return HashMap()
         }
         val zones = HashMap<String, PvpZone>()
