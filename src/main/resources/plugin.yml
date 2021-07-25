@@ -31,10 +31,13 @@ commands:
   ping:
     description: Get ping
     usage: /ping
+  links:
+    description: Get useful links
+    usage: /links
+    aliases: [ link ]
   teammarker:
     description: Team marker set or delete
     usage: /teammarker
-    aliases: [ teammarker ]
 permissions:
   delta.*:
     default: op

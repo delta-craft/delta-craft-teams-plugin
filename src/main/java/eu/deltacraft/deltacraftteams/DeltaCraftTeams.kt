@@ -89,11 +89,19 @@ class DeltaCraftTeams : JavaPlugin() {
             logger.info("Ping command loaded")
         }
 
+        val linksCommand = this.getCommand("links")
+        if (linksCommand != null) {
+            linksCommand.aliases = listOf("link")
+            linksCommand.setExecutor(LinksCommand())
+            logger.info("Links command loaded")
+        }
+        
         val teamMarkerCommand = this.getCommand("teammarker")
         if (teamMarkerCommand != null) {
             teamMarkerCommand.setExecutor(TeamMarkerCommand(teamMarkerManager))
             logger.info("Team marker command loaded")
         }
+
 
         loadHomeCommands()
     }
