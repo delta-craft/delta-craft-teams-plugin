@@ -116,7 +116,7 @@ class TeamMarkerManager(
 
     fun deleteMarker(p: Player, id: String) {
         if (p.hasPermission(Permissions.TEAMMARKERADMIN)) {
-            removeMarker(id)
+            removeMarker(p, id)
             return
         }
         Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
@@ -133,16 +133,18 @@ class TeamMarkerManager(
             p.sendMessage(TextHelper.attentionText("You are not a team owner", NamedTextColor.RED))
             return
         }
-        removeMarker(id)
+        removeMarker(p, id)
     }
 
-    private fun removeMarker(id: String) {
+    private fun removeMarker(p: Player, id: String) {
         config[id] = null
         saveConfig()
 
         cacheManager.remove(id)
 
         // BlueMapIntegration
+
+        p.sendMessage(TextHelper.infoText("Marker deleted", NamedTextColor.GREEN))
     }
 
     private suspend fun checkIfIsOwnerAsync(uuid: UUID): Boolean {

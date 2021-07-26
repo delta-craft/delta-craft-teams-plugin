@@ -43,7 +43,12 @@ data class TeamMarker(
                     .clickEvent(
                         ClickEvent.suggestCommand("/teammarker remove $id")
                     )
-            ).append(Component.newline())
+                    .hoverEvent(
+                        HoverEvent.showText(
+                            Component.text("Click to suggest command")
+                        )
+                    )
+            )
     }
 
     companion object {

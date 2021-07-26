@@ -27,7 +27,11 @@ class ClientManager(plugin: DeltaCraftTeams) {
         return HttpClient(Java) {
             install(JsonFeature) {
                 accept(ContentType.Application.Json)
-                serializer = KotlinxSerializer()
+                serializer = KotlinxSerializer(
+                    kotlinx.serialization.json.Json {
+                        ignoreUnknownKeys = true
+                    }
+                )
             }
             install(UserAgent) {
                 agent = "DeltaCraftTeams plugin"
