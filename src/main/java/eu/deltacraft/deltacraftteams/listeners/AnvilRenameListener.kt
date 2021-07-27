@@ -36,7 +36,7 @@ class AnvilRenameListener(private val plugin: DeltaCraftTeams, private val clien
 //
 //    }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler
     fun onItemRenamed(event: InventoryClickEvent) {
         val inventory = event.inventory
 
