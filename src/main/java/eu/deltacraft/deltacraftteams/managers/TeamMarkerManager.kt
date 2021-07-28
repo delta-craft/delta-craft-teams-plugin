@@ -1,6 +1,7 @@
 package eu.deltacraft.deltacraftteams.managers
 
 import eu.deltacraft.deltacraftteams.DeltaCraftTeams
+import eu.deltacraft.deltacraftteams.managers.bluemap.BlueMapTeamMarkerIntegration
 import eu.deltacraft.deltacraftteams.managers.cache.TeamCacheManager
 import eu.deltacraft.deltacraftteams.managers.cache.TeamMarkerCache
 import eu.deltacraft.deltacraftteams.managers.cache.TeamOwnerManager
@@ -104,12 +105,16 @@ class TeamMarkerManager(
         val marker = TeamMarker(name, team.id, location)
         val id = marker.id.toString()
 
+        val res = BlueMapTeamMarkerIntegration.addMarker(team, marker)
+        if (!res) {
+            p.sendMessage(TextHelper.attentionText("Error while adding marker to BlueMap"))
+            return
+        }
+
         config.set(id, marker)
         saveConfig()
 
         cacheManager[id] = marker
-
-        // BlueMapIntegration
 
         p.sendMessage(TextHelper.infoText("Marker created", NamedTextColor.GREEN))
     }
@@ -137,12 +142,22 @@ class TeamMarkerManager(
     }
 
     private fun removeMarker(p: Player, id: String) {
+        val marker = cacheManager[id]
+        if (marker == null) {
+            p.sendMessage(TextHelper.attentionText("Marker with given id not found"))
+            return
+        }
+
+        val res = BlueMapTeamMarkerIntegration.removeMarker(marker)
+        if (!res) {
+            p.sendMessage(TextHelper.attentionText("Error while deleting marker from BlueMap"))
+            return
+        }
+
         config[id] = null
         saveConfig()
 
         cacheManager.remove(id)
-
-        // BlueMapIntegration
 
         p.sendMessage(TextHelper.infoText("Marker deleted", NamedTextColor.GREEN))
     }
