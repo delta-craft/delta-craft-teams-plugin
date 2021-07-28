@@ -16,7 +16,33 @@ class CraftItemListener(private val pointsQueue: PointsQueue) : Listener {
 
     companion object {
         val map = hashMapOf<Material, Int>(
-            // Material.BEACON to 5, // TODO: Fill from excel
+            // BLOCKS
+            // -------
+            Material.BEACON to 35,
+            Material.ENCHANTING_TABLE to 10,
+            Material.END_CRYSTAL to 20,
+            Material.ENDER_CHEST to 20,
+            // -------
+            // ITEMS
+            // -------
+            Material.GOLDEN_APPLE to 10,
+
+            // -------
+            // TOOLS
+            // -------
+            // Swords
+            Material.STONE_SWORD to 2,
+            Material.GOLDEN_SWORD to 4,
+            Material.IRON_SWORD to 4,
+            Material.DIAMOND_SWORD to 15,
+            Material.NETHERITE_SWORD to 20,
+            // Hoes
+            Material.DIAMOND_HOE to 15,
+            Material.NETHERITE_HOE to 20,
+            // Pickaxes
+            Material.DIAMOND_PICKAXE to 15,
+            Material.NETHERITE_PICKAXE to 20,
+            // -------
         )
     }
 
@@ -35,7 +61,7 @@ class CraftItemListener(private val pointsQueue: PointsQueue) : Listener {
 
         val realPoints = points * amount
 
-        val point = Point(realPoints, player.uniqueId, PointType.Crafting, "Vyrobeno ${amount}x ${type.name}")
+        val point = Point(realPoints, player.uniqueId, PointType.Crafting, "Vyrobeno ${amount}× ${type.name}")
         point.addTag("Type", "Craft")
         point.addTag("Amount", amount)
         point.addTag("Item", type.name)

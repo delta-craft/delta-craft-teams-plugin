@@ -19,6 +19,7 @@ class PlayerBlockListener(private val pointsQueue: PointsQueue) : Listener {
             DestroyedBlock(Material.COAL_ORE, 1, Material.WOODEN_PICKAXE),
             DestroyedBlock(Material.NETHER_GOLD_ORE, 3, Material.WOODEN_PICKAXE),
             DestroyedBlock(Material.NETHER_QUARTZ_ORE, 4, Material.WOODEN_PICKAXE),
+            DestroyedBlock(Material.SPAWNER, 15, Material.WOODEN_PICKAXE),
 
             // STONE PICKAXE
             DestroyedBlock(Material.COPPER_ORE, 5, Material.STONE_PICKAXE),

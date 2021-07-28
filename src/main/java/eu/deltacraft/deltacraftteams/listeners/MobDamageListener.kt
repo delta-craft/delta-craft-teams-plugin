@@ -17,7 +17,18 @@ class MobDamageListener(
     companion object {
         val map = hashMapOf(
             EntityType.ENDER_DRAGON to 1000,
-            EntityType.WITHER to 1000
+            EntityType.WITHER to 1000,
+            EntityType.GHAST to 50,
+            EntityType.ENDERMAN to 10,
+            EntityType.WITHER_SKELETON to 5,
+            EntityType.PHANTOM to 15,
+            EntityType.RAVAGER to 30,
+            EntityType.EVOKER to 5,
+            EntityType.VINDICATOR to 5,
+            EntityType.PILLAGER to 5,
+            EntityType.WITCH to 5,
+            EntityType.ELDER_GUARDIAN to 50,
+            EntityType.SHULKER to 10,
         )
     }
 
