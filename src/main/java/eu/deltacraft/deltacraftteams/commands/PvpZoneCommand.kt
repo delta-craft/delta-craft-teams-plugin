@@ -16,7 +16,7 @@ import org.bukkit.entity.Player
 
 class PvpZoneCommand(
     private val plugin: DeltaCraftTeams,
-    private val manager: PvpZoneManager
+    private val manager: PvpZoneManager,
 ) : CommandExecutor, TabCompleter {
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         if (sender !is Player) {
@@ -25,8 +25,8 @@ class PvpZoneCommand(
         }
         val p: Player = sender
 
-        if (!p.hasPermission(Permissions.PVPCREATE)) {
-            p.sendMessage(TextHelper.insufficientPermissions(Permissions.PVPCREATE))
+        if (!p.hasPermission(Permissions.PVPMANAGE)) {
+            p.sendMessage(TextHelper.insufficientPermissions(Permissions.PVPMANAGE))
             return true
         }
 
@@ -67,19 +67,11 @@ class PvpZoneCommand(
         }
 
         if (cmd.equals("create", true)) {
-            if (!p.hasPermission(Permissions.PVPCREATE)) {
-                p.sendMessage(TextHelper.insufficientPermissions(Permissions.PVPCREATE))
-                return true
-            }
             this.createPvpZone(p, arg)
             return true
         }
 
         if (cmd.equals("delete", true) || cmd.equals("remove", true)) {
-            if (!p.hasPermission(Permissions.PVPREMOVE)) {
-                p.sendMessage(TextHelper.insufficientPermissions(Permissions.PVPREMOVE))
-                return true
-            }
             this.deletePvpZone(p, arg)
             return true
         }
@@ -193,14 +185,18 @@ class PvpZoneCommand(
         sender: CommandSender,
         command: Command,
         alias: String,
-        args: Array<out String>
+        args: Array<out String>,
     ): MutableList<String> {
-        val list: MutableList<String> = ArrayList()
+        val list = mutableListOf<String>()
         if (sender !is Player) {
             return list
         }
 
         if (!command.name.equals("pvp", true)) {
+            return list
+        }
+
+        if (!sender.hasPermission(Permissions.PVPMANAGE)) {
             return list
         }
 

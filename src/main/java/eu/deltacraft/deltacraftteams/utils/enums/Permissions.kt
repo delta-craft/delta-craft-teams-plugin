@@ -2,9 +2,9 @@ package eu.deltacraft.deltacraftteams.utils.enums
 
 enum class Permissions(var path: String) {
     USEMAIN("main"),
-    PVPCREATE("pvp.create"),
-    PVPREMOVE("pvp.remove"),
-
+    PVPMANAGE("pvp"),
+    TEAMMARKER("teammarker"),
+    TEAMMARKERADMIN("teammarker.admin"),
     HOME("home");
 
     override fun toString(): String {
@@ -12,6 +12,6 @@ enum class Permissions(var path: String) {
     }
 
     init {
-        path = "deltateams.$path"
+        path = "delta.$path"
     }
 }

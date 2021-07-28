@@ -1,6 +1,7 @@
 package eu.deltacraft.deltacraftteams.managers
 
 import eu.deltacraft.deltacraftteams.DeltaCraftTeams
+import eu.deltacraft.deltacraftteams.managers.bluemap.BlueMapHomeIntegration
 import eu.deltacraft.deltacraftteams.managers.cache.PlayerHomeCache
 import eu.deltacraft.deltacraftteams.managers.templates.ConfigManager
 import eu.deltacraft.deltacraftteams.types.KeyHelper
@@ -13,12 +14,11 @@ import org.bukkit.Material
 import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
 import org.bukkit.entity.Player
-import java.util.UUID
+import java.util.*
 import kotlin.math.floor
 
 class HomesManager(plugin: DeltaCraftTeams) : ConfigManager(plugin, "home.yml") {
     val homesCache = PlayerHomeCache()
-    private val mapManager = BlueMapManager()
 
     companion object {
         const val HomesPrefix = "homes"
@@ -46,7 +46,7 @@ class HomesManager(plugin: DeltaCraftTeams) : ConfigManager(plugin, "home.yml") 
 
     fun setHome(p: Player) {
         this.setHome(p.uniqueId, p.location)
-        mapManager.addHome(p, p.location)
+        BlueMapHomeIntegration.addHome(p, p.location)
     }
 
     private fun setHome(playerId: UUID, location: Location) {
@@ -72,7 +72,7 @@ class HomesManager(plugin: DeltaCraftTeams) : ConfigManager(plugin, "home.yml") 
         config[kh.key] = null
         saveConfig()
 
-        mapManager.removeHome(p)
+        BlueMapHomeIntegration.removeHome(p)
         return Pair(true, location)
     }
 

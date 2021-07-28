@@ -3,3 +3,5 @@ system:
 settings:
   home:
     delay: 5
+  teammarkers:
+    max: 5

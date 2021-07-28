@@ -1,19 +1,18 @@
 package eu.deltacraft.deltacraftteams.managers
 
 import eu.deltacraft.deltacraftteams.DeltaCraftTeams
+import eu.deltacraft.deltacraftteams.managers.bluemap.BlueMapPvpZoneIntegration
 import eu.deltacraft.deltacraftteams.managers.cache.PvpZoneCacheManager
 import eu.deltacraft.deltacraftteams.managers.templates.CacheConfigManager
 import eu.deltacraft.deltacraftteams.types.KeyHelper
 import eu.deltacraft.deltacraftteams.types.PvpZone
 import eu.deltacraft.deltacraftteams.types.TempZone
 import org.bukkit.Location
-import java.util.UUID
+import java.util.*
 
 
 class PvpZoneManager(plugin: DeltaCraftTeams, cacheManager: PvpZoneCacheManager) :
     CacheConfigManager<PvpZoneCacheManager>(plugin, "pvp.yml", cacheManager) {
-
-    private val mapManager = BlueMapManager()
 
     companion object {
         const val PvpZonesPrefix = "zones"
@@ -35,7 +34,7 @@ class PvpZoneManager(plugin: DeltaCraftTeams, cacheManager: PvpZoneCacheManager)
     private fun getZones(): HashMap<String, PvpZone> {
         val section = config.getConfigurationSection(PvpZonesPrefix) ?: return HashMap()
         val keys = section.getKeys(false)
-        if (keys.size < 1) {
+        if (keys.isEmpty()) {
             return HashMap()
         }
         val zones = HashMap<String, PvpZone>()
@@ -65,7 +64,7 @@ class PvpZoneManager(plugin: DeltaCraftTeams, cacheManager: PvpZoneCacheManager)
 
         cacheManager.addItem(zone)
 
-        mapManager.addZoneToMap(zone)
+        BlueMapPvpZoneIntegration.addZoneToMap(zone)
     }
 
     fun removeZone(name: String) {
@@ -79,7 +78,7 @@ class PvpZoneManager(plugin: DeltaCraftTeams, cacheManager: PvpZoneCacheManager)
             config[PvpZonesPrefix] = null
         }
 
-        mapManager.removeZoneFromMap(name)
+        BlueMapPvpZoneIntegration.removeZoneFromMap(name)
     }
 
     fun getTempZone(playerId: UUID): TempZone {
