@@ -165,6 +165,9 @@ class DeltaCraftTeams : JavaPlugin() {
 
         pluginManager.registerEvents(AnvilRenameListener(this, clientManager), this)
         logger.info("AnvilListener loaded")
+
+        pluginManager.registerEvents(SmithItemListener(pointsQueue), this)
+        logger.info("SmithItemListener loaded")
     }
 
     private fun loadConfig() {
