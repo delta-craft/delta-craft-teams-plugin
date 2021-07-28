@@ -23,7 +23,7 @@ data class TeamMarker(
 
         res["id"] = id.toString()
         res["name"] = name
-        res["teamId"] = teamId.toString()
+        res["teamId"] = teamId
         res["location"] = location.serialize()
 
         return res

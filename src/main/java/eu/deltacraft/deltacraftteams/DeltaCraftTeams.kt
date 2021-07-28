@@ -6,10 +6,12 @@ import eu.deltacraft.deltacraftteams.commands.home.HomeCommand
 import eu.deltacraft.deltacraftteams.commands.home.SetHomeCommand
 import eu.deltacraft.deltacraftteams.listeners.*
 import eu.deltacraft.deltacraftteams.managers.*
+import eu.deltacraft.deltacraftteams.types.TeamMarker
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import kotlinx.coroutines.runBlocking
+import org.bukkit.configuration.serialization.ConfigurationSerialization
 import org.bukkit.plugin.java.JavaPlugin
 
 class DeltaCraftTeams : JavaPlugin() {
@@ -23,6 +25,9 @@ class DeltaCraftTeams : JavaPlugin() {
 
     override fun onEnable() {
         // Plugin startup logic
+
+        // Config serialization classes
+        this.registerConfigClasses()
 
         // Config
         this.loadConfig()
@@ -50,6 +55,10 @@ class DeltaCraftTeams : JavaPlugin() {
         sendAllPoints()
 
         logger.info("Disabled!")
+    }
+
+    private fun registerConfigClasses() {
+        ConfigurationSerialization.registerClass(TeamMarker::class.java, "TeamMarker")
     }
 
     private fun loadManagers() {
@@ -95,7 +104,7 @@ class DeltaCraftTeams : JavaPlugin() {
             linksCommand.setExecutor(LinksCommand())
             logger.info("Links command loaded")
         }
-        
+
         val teamMarkerCommand = this.getCommand("teammarker")
         if (teamMarkerCommand != null) {
             teamMarkerCommand.setExecutor(TeamMarkerCommand(teamMarkerManager))

@@ -182,7 +182,7 @@ class TeamMarkerCommand(
             if (args.size == 1) {
                 typedIn = args[0].lowercase()
             }
-            val cmds = mutableListOf("set", "remove, list")
+            val cmds = mutableListOf("set", "remove", "list", "help")
             if (sender.hasPermission(Permissions.TEAMMARKERADMIN)) {
                 cmds.add("list-all")
             }
