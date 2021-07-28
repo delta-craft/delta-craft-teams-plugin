@@ -8,9 +8,11 @@ import eu.deltacraft.deltacraftteams.managers.cache.TeamOwnerManager
 import eu.deltacraft.deltacraftteams.managers.templates.CacheConfigManager
 import eu.deltacraft.deltacraftteams.types.IsTeamOwnerResponse
 import eu.deltacraft.deltacraftteams.types.TeamMarker
+import eu.deltacraft.deltacraftteams.types.getInt
 import eu.deltacraft.deltacraftteams.types.hasPermission
 import eu.deltacraft.deltacraftteams.utils.TextHelper
 import eu.deltacraft.deltacraftteams.utils.enums.Permissions
+import eu.deltacraft.deltacraftteams.utils.enums.Settings
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
@@ -76,6 +78,10 @@ class TeamMarkerManager(
         return cacheManager.values.filter { x -> x.teamId == teamId }
     }
 
+    private fun getTeamMarkersCount(teamId: Int): Int {
+        return getTeamMarkers(teamId).size
+    }
+
     fun getAllMarkers(): Collection<TeamMarker> {
         return cacheManager.values
     }
@@ -101,6 +107,13 @@ class TeamMarkerManager(
 
     private fun createMarker(p: Player, location: Location, name: String) {
         val team = teamsCache[p] ?: return
+
+        val max = getMaxTeamMarkersCount()
+        val currentCount = getTeamMarkersCount(team.id)
+        if (currentCount >= max) {
+            p.sendMessage(TextHelper.attentionText("Max team markers count reached"))
+            return
+        }
 
         val marker = TeamMarker(name, team.id, location)
         val id = marker.id.toString()
@@ -186,4 +199,7 @@ class TeamMarkerManager(
         return teamOwnerManager.set(uuid, res.content).isOwner
     }
 
+    private fun getMaxTeamMarkersCount(): Int {
+        return plugin.config.getInt(Settings.MAXTEAMMARKERS)
+    }
 }
