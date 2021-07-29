@@ -1,5 +1,6 @@
 system:
   apikey: ""
+  payloadSize: 10
 settings:
   home:
     delay: 5

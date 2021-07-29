@@ -12,6 +12,12 @@ enum class Settings(
         false,
         "STRING"
     ),
+    PAYLOADSIZE(
+        "system.payloadSize",
+        "Playload size",
+        true,
+        "INT"
+    ),
     HOMEDELAY(
         "settings.home.delay",
         "Home teleport delay in seconds",
