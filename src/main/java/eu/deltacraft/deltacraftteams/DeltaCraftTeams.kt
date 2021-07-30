@@ -204,7 +204,7 @@ class DeltaCraftTeams : JavaPlugin() {
         val client = clientManager.getClient()
 
         runBlocking {
-            val res = client.post<HttpResponse>(path = "api/plugin/logout-all")
+            val res = client.post<HttpResponse>(path = "login/logout")
 
             val status = res.status
 

@@ -81,7 +81,7 @@ class AnvilRenameListener(private val plugin: DeltaCraftTeams, private val clien
         val client = clientManager.getClient()
 
 
-        val httpRes = client.get<HttpResponse>(path = "api/plugin/check-chat") {
+        val httpRes = client.get<HttpResponse>(path = "chat/check") {
             parameter("message", itemName)
             parameter("uuid", player.uniqueId.toString())
         }

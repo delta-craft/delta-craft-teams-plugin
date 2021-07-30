@@ -38,7 +38,7 @@ class ChatListener(private val plugin: DeltaCraftTeams, private val clientManage
 
         runBlocking {
 
-            val httpRes = client.get<HttpResponse>(path = "api/plugin/check-chat") {
+            val httpRes = client.get<HttpResponse>(path = "chat/check") {
                 parameter("message", msg)
                 parameter("uuid", p.uniqueId.toString())
             }

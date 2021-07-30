@@ -182,7 +182,7 @@ class TeamMarkerManager(
         }
         val client = clientManager.getClient()
 
-        val httpRes = client.get<HttpResponse>(path = "api/plugin/is-team-owner") {
+        val httpRes = client.get<HttpResponse>(path = "team/is-owner") {
             parameter("uuid", uuid.toString())
         }
 

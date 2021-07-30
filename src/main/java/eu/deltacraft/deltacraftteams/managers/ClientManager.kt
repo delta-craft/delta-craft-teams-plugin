@@ -37,7 +37,7 @@ class ClientManager(plugin: DeltaCraftTeams) {
                 agent = "DeltaCraftTeams plugin"
             }
             defaultRequest {
-                host = Constants.BASE_URL
+                host = Constants.API_URL
                 url {
                     protocol = URLProtocol.HTTPS
                 }
@@ -50,7 +50,7 @@ class ClientManager(plugin: DeltaCraftTeams) {
     suspend fun uploadPoints(points: Collection<Point>): PointsResult {
         val client = this.getClient()
 
-        val httpRes = client.post<HttpResponse>(path = "api/plugin/addpoints") {
+        val httpRes = client.post<HttpResponse>(path = "points/add") {
             contentType(ContentType.Application.Json)
             body = points
         }

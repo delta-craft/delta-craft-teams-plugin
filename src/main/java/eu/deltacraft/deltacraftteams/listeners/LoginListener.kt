@@ -44,7 +44,7 @@ class LoginListener(
 
         runBlocking {
 
-            val validateResult = client.get<HttpResponse>(path = "api/plugin/validate-session") {
+            val validateResult = client.get<HttpResponse>(path = "session/validate") {
                 parameter("ip", ip)
                 parameter("uuid", uuid.toString())
             }
@@ -80,7 +80,7 @@ class LoginListener(
 
             // Request login attempt
             val loginResult =
-                client.post<HttpResponse>(path = "api/plugin/login") {
+                client.post<HttpResponse>(path = "login") {
                     body = NewLoginData(uuid.toString(), ip)
                     contentType(ContentType.Application.Json)
                 }
@@ -130,7 +130,7 @@ class LoginListener(
 
             runBlocking {
 
-                val httpRes = client.post<HttpResponse>(path = "api/plugin/update-session") {
+                val httpRes = client.post<HttpResponse>(path = "session/update") {
                     body = NewLoginData(uuid.toString(), ip)
                     contentType(ContentType.Application.Json)
                 }

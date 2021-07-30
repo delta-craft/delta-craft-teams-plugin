@@ -28,7 +28,7 @@ class PlayerJoinAttemptListener(
             val client = clientManager.getClient()
 
             val httpRes =
-                client.get<HttpResponse>(path = "api/plugin/validate") {
+                client.get<HttpResponse>(path = "login/validate") {
                     parameter("nick", playerJoinEvent.name)
                     parameter("uuid", playerJoinEvent.uniqueId)
                 }
