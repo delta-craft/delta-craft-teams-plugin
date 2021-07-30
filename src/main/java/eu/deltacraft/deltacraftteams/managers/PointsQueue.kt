@@ -3,6 +3,7 @@ package eu.deltacraft.deltacraftteams.managers
 import eu.deltacraft.deltacraftteams.DeltaCraftTeams
 import eu.deltacraft.deltacraftteams.types.Constants
 import eu.deltacraft.deltacraftteams.types.Point
+import eu.deltacraft.deltacraftteams.types.PointsList
 import eu.deltacraft.deltacraftteams.types.getInt
 import eu.deltacraft.deltacraftteams.utils.TextHelper
 import eu.deltacraft.deltacraftteams.utils.enums.Settings
@@ -10,7 +11,6 @@ import kotlinx.coroutines.runBlocking
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Bukkit
-import java.util.*
 
 class PointsQueue(private val plugin: DeltaCraftTeams, private val clientManager: ClientManager) {
 
@@ -19,7 +19,7 @@ class PointsQueue(private val plugin: DeltaCraftTeams, private val clientManager
     private val payloadSize = if (configPayloadSize > 2) configPayloadSize else 10
 
     private val timeStep = Constants.POINTS_SEND_TIME * 60 * 1000 //ms - x min*60s*1000ms
-    private val points = LinkedList<Point>()
+    private val points = PointsList()
     private val logger = plugin.logger
 
     private var taskId = 0
