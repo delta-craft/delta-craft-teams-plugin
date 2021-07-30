@@ -19,7 +19,7 @@ class MobDamageListener(
             EntityType.ENDER_DRAGON to 1000,
             EntityType.WITHER to 1000,
             EntityType.GHAST to 50,
-            EntityType.ENDERMAN to 10,
+            // EntityType.ENDERMAN to 10,
             EntityType.WITHER_SKELETON to 5,
             EntityType.PHANTOM to 15,
             EntityType.RAVAGER to 30,
