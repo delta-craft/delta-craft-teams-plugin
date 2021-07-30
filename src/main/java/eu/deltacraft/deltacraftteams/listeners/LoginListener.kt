@@ -68,7 +68,7 @@ class LoginListener(
                 if (team == null) {
                     playerJoinEvent.disallow(
                         AsyncPlayerPreLoginEvent.Result.KICK_WHITELIST,
-                        Component.text("Nebyl vrácen tým. :-(")
+                        Component.text("Nebyl vracen tym. :-(")
                     )
                     logger.warning("Player ${playerJoinEvent.name} joined but no team was returned")
                     return@runBlocking
