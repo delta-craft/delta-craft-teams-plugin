@@ -2,6 +2,8 @@ package eu.deltacraft.deltacraftteams.listeners
 
 import eu.deltacraft.deltacraftteams.managers.PointsQueue
 import eu.deltacraft.deltacraftteams.managers.cache.MobDamageCache
+import eu.deltacraft.deltacraftteams.types.Point
+import eu.deltacraft.deltacraftteams.utils.enums.PointType
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -15,9 +17,7 @@ class MobDamageListener(
 ) : Listener {
 
     companion object {
-        val map = hashMapOf(
-            EntityType.ENDER_DRAGON to 1000,
-            EntityType.WITHER to 1000,
+        val normalMobs = hashMapOf(
             EntityType.GHAST to 50,
             // EntityType.ENDERMAN to 10,
             EntityType.WITHER_SKELETON to 5,
@@ -30,11 +30,16 @@ class MobDamageListener(
             EntityType.ELDER_GUARDIAN to 50,
             EntityType.SHULKER to 10,
         )
+
+        val largeMobs = hashMapOf(
+            EntityType.ENDER_DRAGON to 1000,
+            EntityType.WITHER to 1000,
+        )
     }
 
     @EventHandler(ignoreCancelled = true)
     fun onDamage(event: EntityDamageByEntityEvent) {
-        if (!map.containsKey(event.entityType)) return
+        if (!largeMobs.containsKey(event.entityType)) return
 
         val damager = event.damager
         if (damager !is Player) return
@@ -48,17 +53,38 @@ class MobDamageListener(
     }
 
     @EventHandler(ignoreCancelled = true)
-    fun onKill(event: EntityDeathEvent) {
-        if (!map.containsKey(event.entityType)) return
+    fun onLargeEntityKill(event: EntityDeathEvent) {
+        if (!largeMobs.containsKey(event.entityType)) return
 
         val entity = event.entity
 
-        val maxPoints = map[event.entityType] ?: 0
+        val maxPoints = largeMobs[event.entityType] ?: return
 
         val points = mobDamageCache.getPoints(entity, maxPoints)
 
         if (points.isEmpty()) return
 
         pointsQueue.add(points)
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    fun onNormalMobKill(event: EntityDeathEvent) {
+        val entityType = event.entityType
+        if (!normalMobs.containsKey(entityType)) return
+
+        val normalMobPoints = normalMobs[entityType] ?: return
+
+        val entity = event.entity
+
+        val killer = entity.killer ?: return
+
+        val location = entity.location
+
+        val point = Point(normalMobPoints, killer.uniqueId, PointType.Warfare, "Zabití ${entityType.name}")
+        point.addTag("Type", "Mob")
+        point.addTag("Entity", entityType.name)
+        point.addTag(location)
+
+        pointsQueue.add(point)
     }
 }
