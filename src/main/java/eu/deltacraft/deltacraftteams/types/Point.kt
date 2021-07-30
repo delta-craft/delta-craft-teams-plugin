@@ -10,7 +10,7 @@ import org.bukkit.Location
 import java.util.*
 
 @Serializable
-data class Point(
+open class Point(
     val points: Int,
     @Serializable(with = UuidSerializer::class)
     @SerialName("uuid")

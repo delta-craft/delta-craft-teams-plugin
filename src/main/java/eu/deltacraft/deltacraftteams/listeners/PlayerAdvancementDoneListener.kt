@@ -30,6 +30,6 @@ class PlayerAdvancementDoneListener(
 
         point.addTag("AdvancementKey", event.advancement.key.value())
 
-        pointsQueue.registerPoint(point)
+        pointsQueue.add(point)
     }
 }

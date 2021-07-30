@@ -38,7 +38,7 @@ class PointsQueue(private val plugin: DeltaCraftTeams, private val clientManager
     private val shouldSend: Boolean
         get() = !isSending && (dateReached || sizeReached)
 
-    fun registerPoint(point: Point) {
+    private fun registerPoint(point: Point) {
         points.add(point)
         if (shouldSend) {
             trySendDefaultPoints()
