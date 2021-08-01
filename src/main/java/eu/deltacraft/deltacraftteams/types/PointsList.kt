@@ -24,6 +24,9 @@ class PointsList : LinkedList<Point>(), List<Point> {
             same.start
         )
 
+        for (drop in element.drops) {
+            newPoint.drops.add(drop)
+        }
         for (drop in same.drops) {
             newPoint.drops.add(drop)
         }
