@@ -7,9 +7,7 @@ class PointsList : LinkedList<Point>(), List<Point> {
 
     fun add(element: MiningPoint): Boolean {
         val same = this.filterIsInstance<MiningPoint>().lastOrNull { x ->
-            x.playerUid == element.playerUid &&
-                    x.material.name == element.material.name &&
-                    x.tool == element.tool
+            x.isSimilar(element)
         } ?: return super.add(element)
 
         val newPoints = element.points + same.points

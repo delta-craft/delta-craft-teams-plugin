@@ -17,5 +17,13 @@ class MiningPoint(
     val start: Date = Date(),
     val end: Date = Date(),
     val drops: MutableList<Int> = mutableListOf(),
-) : Point(points, playerUid, PointType.Mining, "Vykopán blok ${material} (${count}x)") {
+) : Point(points, playerUid, PointType.Mining, "Vykopán blok $material (${count}x)") {
+
+    fun isSimilar(other: MiningPoint): Boolean {
+        return playerUid == other.playerUid &&
+                material == other.material &&
+                tool == other.tool
+    }
+
+
 }
