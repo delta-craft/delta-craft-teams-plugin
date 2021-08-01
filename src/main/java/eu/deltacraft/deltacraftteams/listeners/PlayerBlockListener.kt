@@ -2,9 +2,7 @@ package eu.deltacraft.deltacraftteams.listeners
 
 import eu.deltacraft.deltacraftteams.managers.PointsQueue
 import eu.deltacraft.deltacraftteams.types.DestroyedBlock
-import eu.deltacraft.deltacraftteams.types.Point
 import eu.deltacraft.deltacraftteams.types.points.MiningPoint
-import eu.deltacraft.deltacraftteams.utils.enums.PointType
 import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
@@ -87,7 +85,7 @@ class PlayerBlockListener(private val pointsQueue: PointsQueue) : Listener {
         // Player met criteria to receive points
         val dropSize = event.items.size
 
-        val point = MiningPoint(db.points, player.uniqueId, material, tool.type.name, dropSize)
+        val point = MiningPoint(db.points, player.uniqueId, material.name, tool.type.name, dropSize)
         point.drops.add(dropSize)
 
         pointsQueue.add(point)
