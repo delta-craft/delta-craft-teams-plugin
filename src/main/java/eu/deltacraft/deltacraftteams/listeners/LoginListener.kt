@@ -106,7 +106,7 @@ class LoginListener(
                 return@runBlocking
             }
 
-            logger.info("Player ${playerJoinEvent.name} tried to join, but does not have an active session")
+            logger.info("Player ${playerJoinEvent.name} tried to join, but does not have an active session (Message: ${sessionResponse.message})")
 
             playerJoinEvent.disallow(
                 AsyncPlayerPreLoginEvent.Result.KICK_WHITELIST,
