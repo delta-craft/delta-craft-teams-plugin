@@ -16,8 +16,15 @@ class PointsList : LinkedList<Point>(), List<Point> {
         val newTotalDrops = element.totalDrops + same.totalDrops
         val newCount = element.count + same.count
 
-        val newPoint =
-            MiningPoint(newPoints, element.playerUid, element.material, element.tool, newTotalDrops, newCount)
+        val newPoint = MiningPoint(
+            newPoints,
+            element.playerUid,
+            element.material,
+            element.tool,
+            newTotalDrops,
+            newCount,
+            same.start
+        )
 
         for (drop in same.drops) {
             newPoint.drops.add(drop)

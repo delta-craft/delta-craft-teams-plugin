@@ -12,6 +12,8 @@ class MiningPoint(
     val tool: String,
     val totalDrops: Int,
     val count: Int = 1,
+    val start: Date = Date(),
+    val end: Date = Date(),
     val drops: MutableList<Int> = mutableListOf(),
 ) : Point(points, playerUid, PointType.Mining, "Vykopán blok ${material.name} (${count}x)") {
 }

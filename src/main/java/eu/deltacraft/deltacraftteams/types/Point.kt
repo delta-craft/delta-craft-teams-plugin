@@ -29,6 +29,10 @@ open class Point(
         addTag(PointTag(key, value))
     }
 
+    fun addTag(key: String, value: Long) {
+        return addTag(key, value.toString())
+    }
+
     fun addTag(key: String, value: Int) {
         return addTag(key, value.toString())
     }
