@@ -2,8 +2,7 @@ package eu.deltacraft.deltacraftteams.listeners
 
 import eu.deltacraft.deltacraftteams.managers.PointsQueue
 import eu.deltacraft.deltacraftteams.types.DestroyedBlock
-import eu.deltacraft.deltacraftteams.types.Point
-import eu.deltacraft.deltacraftteams.utils.enums.PointType
+import eu.deltacraft.deltacraftteams.types.points.MiningPoint
 import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
@@ -66,9 +65,6 @@ class PlayerBlockListener(private val pointsQueue: PointsQueue) : Listener {
     @EventHandler
     fun onBlockDrop(event: BlockDropItemEvent) {
         val player = event.player
-        val playerId = player.uniqueId
-        val droppedItems = event.items
-        val material = event.blockState.type
 
         if (player.gameMode != GameMode.SURVIVAL) return
 
@@ -78,6 +74,8 @@ class PlayerBlockListener(private val pointsQueue: PointsQueue) : Listener {
 
         if (tool.containsEnchantment(Enchantment.SILK_TOUCH)) return
 
+        val material = event.blockState.type
+
         val db = list.singleOrNull { it.material == material && it.minTool == tool.type }
             ?: list.lastOrNull { it.material == material }
             ?: return
@@ -85,12 +83,10 @@ class PlayerBlockListener(private val pointsQueue: PointsQueue) : Listener {
         if (!pickaxeMeetsCriteria(tool.type, db.minTool)) return
 
         // Player met criteria to receive points
+        val dropSize = if (event.items.any()) event.items.first().itemStack.amount else 1
 
-        val point = Point(db.points, playerId, PointType.Mining, "Vykopán blok: ${material.name}")
-
-        point.addTag("Block", material.name)
-        point.addTag("DropSize", droppedItems.size)
-        point.addTag("Tool", tool.type.name)
+        val point = MiningPoint(db.points, player.uniqueId, material.name, tool.type.name, dropSize)
+        point.drops.add(dropSize)
 
         pointsQueue.add(point)
     }

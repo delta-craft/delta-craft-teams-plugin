@@ -10,7 +10,7 @@ import org.bukkit.Location
 import java.util.*
 
 @Serializable
-data class Point(
+open class Point(
     val points: Int,
     @Serializable(with = UuidSerializer::class)
     @SerialName("uuid")
@@ -27,6 +27,10 @@ data class Point(
 
     fun addTag(key: String, value: String) {
         addTag(PointTag(key, value))
+    }
+
+    fun addTag(key: String, value: Long) {
+        return addTag(key, value.toString())
     }
 
     fun addTag(key: String, value: Int) {
