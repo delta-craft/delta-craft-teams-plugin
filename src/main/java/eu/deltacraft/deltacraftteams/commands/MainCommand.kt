@@ -42,6 +42,11 @@ class MainCommand(
             pointsQueue.trySendAllPoints(sender)
             return true
         }
+        if (cmd.equals("cancel", ignoreCase = true)) {
+            pointsQueue.cancel(sender)
+            return true
+        }
+
         if (cmd.equals("version", ignoreCase = true)) {
             versionCommand(sender)
             return true
@@ -73,7 +78,7 @@ class MainCommand(
             sender.sendMessage(TextHelper.insufficientPermissions(Permissions.USEMAIN))
             return list
         }
-        val cmds = arrayOf("version", "send")
+        val cmds = arrayOf("version", "send", "cancel")
         val typedIn: String = if (args.size == 1) {
             args[0].lowercase()
         } else {

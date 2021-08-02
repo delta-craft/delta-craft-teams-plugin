@@ -11,6 +11,7 @@ import kotlinx.coroutines.runBlocking
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Bukkit
+import org.bukkit.command.CommandSender
 
 class PointsQueue(private val plugin: DeltaCraftTeams, private val clientManager: ClientManager) {
 
@@ -152,6 +153,22 @@ class PointsQueue(private val plugin: DeltaCraftTeams, private val clientManager
             Constants.POINTS_SEND_TIME * 60 * 60 * 20L
         )
         timerId = task.taskId
+    }
+
+    fun cancel(sender: CommandSender) {
+        if (!isSending) {
+            sender.sendMessage(TextHelper.infoText("No send is pending"))
+            return
+        }
+        
+        try {
+            Bukkit.getScheduler().cancelTask(taskId)
+            sender.sendMessage(TextHelper.infoText("Cancelled"))
+        } catch (e: Exception) {
+            sender.sendMessage(TextHelper.infoText(e.toString()))
+        } finally {
+            taskId = 0
+        }
     }
 
 }
