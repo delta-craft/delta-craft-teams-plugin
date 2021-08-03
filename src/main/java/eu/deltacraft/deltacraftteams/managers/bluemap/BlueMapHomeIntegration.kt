@@ -21,7 +21,7 @@ class BlueMapHomeIntegration : BlueMapIntegrationBase() {
 
             val marker = markers.createPOIMarker(player.name, map, location.toVector3d())
             marker.label = homeName
-            marker.setIcon("${Constants.FULL_URL}/api/embed/home/${player.name}", 16, 16)
+            marker.setIcon("${Constants.API_FULL_URL}/embed/player-home/${player.name}", 16, 16)
 
             if (marker is DistanceRangedMarker) {
                 (marker as DistanceRangedMarker).maxDistance = 200.0

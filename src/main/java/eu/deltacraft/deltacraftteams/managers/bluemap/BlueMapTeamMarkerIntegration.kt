@@ -21,7 +21,7 @@ class BlueMapTeamMarkerIntegration : BlueMapIntegrationBase() {
             val marker = markers.createPOIMarker(teamMarker.id.toString(), map, location.toVector3d())
             marker.label = teamMarker.name
 
-            marker.setIcon("${Constants.FULL_URL}/api/embed/teammarker/${teamMarker.id}", 16, 16)
+            marker.setIcon("${Constants.API_FULL_URL}/embed/teammarker/${teamMarker.id}", 16, 16)
 
             markerApi.save()
             return true
