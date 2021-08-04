@@ -20,7 +20,7 @@ class MobDamageListener(
         val normalMobs = hashMapOf(
             EntityType.GHAST to 50,
             // EntityType.ENDERMAN to 10,
-            EntityType.WITHER_SKELETON to 5,
+            // EntityType.WITHER_SKELETON to 5,
             EntityType.PHANTOM to 15,
             EntityType.RAVAGER to 30,
             EntityType.EVOKER to 5,
