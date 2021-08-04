@@ -31,14 +31,17 @@ class CraftItemListener(private val pointsQueue: PointsQueue) : Listener {
             // TOOLS
             // -------
             // Swords
-            Material.DIAMOND_SWORD to 15,
-            Material.NETHERITE_SWORD to 20,
+            Material.DIAMOND_SWORD to 10,
+            Material.NETHERITE_SWORD to 15,
             // Hoes
-            Material.DIAMOND_HOE to 15,
-            Material.NETHERITE_HOE to 20,
+            Material.DIAMOND_HOE to 10,
+            Material.NETHERITE_HOE to 15,
             // Pickaxes
             Material.DIAMOND_PICKAXE to 15,
             Material.NETHERITE_PICKAXE to 20,
+            // Shovels
+            Material.DIAMOND_SHOVEL to 8,
+            Material.NETHERITE_SHOVEL to 16,
             // -------
             // ARMOUR
             // -------
