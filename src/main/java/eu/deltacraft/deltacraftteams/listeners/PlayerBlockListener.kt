@@ -87,7 +87,6 @@ class PlayerBlockListener(private val pointsQueue: PointsQueue) : Listener {
         val dropSize = if (event.items.any()) event.items.first().itemStack.amount else 1
 
         val point = MiningPoint(db.points, player.uniqueId, material.name, tool.type.name, dropSize)
-        point.drops.add(dropSize)
 
         pointsQueue.add(point)
     }

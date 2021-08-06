@@ -12,8 +12,7 @@ class MiningPoint(
     val totalDrops: Int,
     val count: Int = 1,
     val start: Date = Date(),
-    val end: Date = Date(),
-    val drops: MutableList<Int> = mutableListOf(),
+    private val end: Date = Date(),
 ) : Point(points, playerUid, PointType.Mining, "Vykopán blok $material (${count}x)") {
 
     fun isSimilar(other: MiningPoint): Boolean {
@@ -32,9 +31,6 @@ class MiningPoint(
         point.addTag("ToTimestamp ", this.end.time)
         point.addTag("Block", this.material)
         point.addTag("Tool", this.tool)
-
-        val drops = this.drops.joinToString("|")
-        point.addTag("Drops", drops)
 
         return point
     }
