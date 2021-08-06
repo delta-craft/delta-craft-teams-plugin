@@ -1,12 +1,9 @@
 package eu.deltacraft.deltacraftteams.types.points
 
 import eu.deltacraft.deltacraftteams.types.Point
-import eu.deltacraft.deltacraftteams.types.serializers.MiningPointSerializer
 import eu.deltacraft.deltacraftteams.utils.enums.PointType
-import kotlinx.serialization.Serializable
 import java.util.*
 
-@Serializable(with = MiningPointSerializer::class)
 class MiningPoint(
     points: Int,
     playerUid: UUID,
@@ -23,6 +20,23 @@ class MiningPoint(
         return playerUid == other.playerUid &&
                 material == other.material &&
                 tool == other.tool
+    }
+
+    fun toPoint(): Point {
+        val point = Point(this.points, this.playerUid, this.type, this.description)
+
+        point.addTag("TotalDrops", this.totalDrops)
+        point.addTag("From", this.start.toString())
+        point.addTag("FromTimestamp", this.start.time)
+        point.addTag("To", this.end.toString())
+        point.addTag("ToTimestamp ", this.end.time)
+        point.addTag("Block", this.material)
+        point.addTag("Tool", this.tool)
+
+        val drops = this.drops.joinToString("|")
+        point.addTag("Drops", drops)
+
+        return point
     }
 
 

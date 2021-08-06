@@ -4,6 +4,7 @@ import eu.deltacraft.deltacraftteams.DeltaCraftTeams
 import eu.deltacraft.deltacraftteams.types.Constants
 import eu.deltacraft.deltacraftteams.types.Point
 import eu.deltacraft.deltacraftteams.types.getString
+import eu.deltacraft.deltacraftteams.types.points.MiningPoint
 import eu.deltacraft.deltacraftteams.types.responses.PointsResult
 import eu.deltacraft.deltacraftteams.utils.enums.PointsError
 import eu.deltacraft.deltacraftteams.utils.enums.Settings
@@ -50,9 +51,11 @@ class ClientManager(plugin: DeltaCraftTeams) {
     suspend fun uploadPoints(points: Collection<Point>): PointsResult {
         val client = this.getClient()
 
+        val finalPoints = points.toFinalPoints()
+
         val httpRes = client.post<HttpResponse>(path = "points/add") {
             contentType(ContentType.Application.Json)
-            body = points
+            body = finalPoints
         }
 
         client.close()
@@ -71,3 +74,21 @@ class ClientManager(plugin: DeltaCraftTeams) {
     }
 
 }
+
+private fun Collection<Point>.toFinalPoints(): Collection<Point> {
+    val res = mutableListOf<Point>()
+
+    for (point in this) {
+        if (point !is MiningPoint) {
+            res.add(point)
+            continue
+        }
+        val mining: MiningPoint = point
+        val actualPoint = mining.toPoint()
+        res.add(actualPoint)
+    }
+
+    return res
+}
+
+
