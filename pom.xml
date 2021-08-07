@@ -47,7 +47,17 @@
                 </executions>
                 <configuration>
                     <jvmTarget>1.8</jvmTarget>
+                    <compilerPlugins>
+                        <plugin>kotlinx-serialization</plugin>
+                    </compilerPlugins>
                 </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.jetbrains.kotlin</groupId>
+                        <artifactId>kotlin-maven-serialization</artifactId>
+                        <version>${kotlin.version}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -78,8 +88,8 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <source>8</source>
-                    <target>8</target>
+                    <source>16</source>
+                    <target>16</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -101,7 +111,8 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <kotlin.version>1.3.72</kotlin.version>
+        <kotlin.version>1.5.21</kotlin.version>
+        <ktor.version>1.6.1</ktor.version>
     </properties>
 
     <repositories>
@@ -117,25 +128,66 @@
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
+        <repository>
+            <id>mavenCentral</id>
+            <name>mavenCentral</name>
+            <url>https://repo1.maven.org/maven2/</url>
+        </repository>
+        <repository>
+            <id>jcenter</id>
+            <name>jcenter</name>
+            <url>https://jcenter.bintray.com</url>
+        </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <name>jitpack</name>
+            <url>https://jitpack.io</url>
+        </repository>
     </repositories>
 
     <dependencies>
-        <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <version>1.16.1-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib</artifactId>
             <version>${kotlin.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-test</artifactId>
-            <version>${kotlin.version}</version>
-            <scope>test</scope>
+            <groupId>org.jetbrains.kotlinx</groupId>
+            <artifactId>kotlinx-serialization-json</artifactId>
+            <version>1.2.2</version>
         </dependency>
+
+        <dependency>
+            <groupId>io.papermc.paper</groupId>
+            <artifactId>paper-api</artifactId>
+            <version>1.17.1-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.BlueMap-Minecraft</groupId>
+            <artifactId>BlueMapAPI</artifactId>
+            <version>v1.6.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- KTOR -->
+        <dependency>
+            <groupId>io.ktor</groupId>
+            <artifactId>ktor-client-core</artifactId>
+            <version>${ktor.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.ktor</groupId>
+            <artifactId>ktor-client-serialization-jvm</artifactId>
+            <version>${ktor.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.ktor</groupId>
+            <artifactId>ktor-client-java</artifactId>
+            <version>${ktor.version}</version>
+        </dependency>
+        <!-- /KTOR -->
+
     </dependencies>
 </project>

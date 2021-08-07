@@ -1,0 +1,8 @@
+system:
+  apikey: ""
+  payloadSize: 10
+settings:
+  home:
+    delay: 5
+  teammarkers:
+    max: 5

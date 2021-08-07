@@ -1,6 +1,59 @@
 name: DeltaCraftTeams
-version: ${project.version}
+version: 1.0.0
 main: eu.deltacraft.deltacraftteams.DeltaCraftTeams
-api-version: 1.16
-authors: [ kkoudelka ]
+api-version: 1.17
+authors: [ koudy008, Fjarik, Kubas445 ]
 website: https://deltacraft.eu
+description: DeltaCraft Teams plugin
+depend: [ BlueMap ]
+commands:
+  deltacraftteams:
+    description: Main command for DeltaCraftTeams plugins
+    usage: /deltacraftteams
+    aliases: [ delta, deltacraft ]
+  pvp:
+    description: Set PVP zones
+    usage: /pvp
+    aliases: [ pvpzone, pvpzones ]
+  sethome:
+    description: Set new home
+    usage: /sethome
+  home:
+    description: Teleport home
+    usage: /home
+  delhome:
+    description: Delete home
+    usage: /delhome
+  donate:
+    description: Get link to donations
+    usage: /donate
+    aliases: [ donation ]
+  ping:
+    description: Get ping
+    usage: /ping
+  links:
+    description: Get useful links
+    usage: /links
+    aliases: [ link ]
+  teammarker:
+    description: Team marker set or delete
+    usage: /teammarker
+permissions:
+  delta.*:
+    default: op
+    children:
+      delta.home:
+        description: Use home command
+        default: true
+      delta.teammarker:
+        description: Use set team marker command
+        default: true
+        delta.teammarker.admin:
+          description: Use set team marker command
+          default: op
+      delta.main:
+        description: Main command
+        default: op
+      delta.pvp:
+        description: Manage PVP zones
+        default: op
