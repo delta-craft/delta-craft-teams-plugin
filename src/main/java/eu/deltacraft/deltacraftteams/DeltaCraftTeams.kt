@@ -111,6 +111,11 @@ class DeltaCraftTeams : JavaPlugin() {
             logger.info("Team marker command loaded")
         }
 
+        val statsCommand = this.getCommand("stats")
+        if (statsCommand != null) {
+            statsCommand.setExecutor(StatsCommand(this, clientManager, manager.teamCacheManager))
+            logger.info("Stats command loaded")
+        }
 
         loadHomeCommands()
     }
