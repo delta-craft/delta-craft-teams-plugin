@@ -6,7 +6,7 @@
 
     <groupId>eu.deltacraft</groupId>
     <artifactId>DeltaCraftTeams</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <packaging>jar</packaging>
 
     <name>DeltaCraftTeams</name>
@@ -95,7 +95,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.2</version>
+                <version>3.2.4</version>
                 <configuration>
                     <dependencyReducedPomLocation>${project.build.directory}/dependency-reduced-pom.xml
                     </dependencyReducedPomLocation>
@@ -105,6 +105,16 @@
                             <shadedPattern>DeltaCraftTeams.inventoryframework</shadedPattern>
                         </relocation>
                     </relocations>
+                    <filters>
+                        <filter>
+                            <artifact>*</artifact>
+                            <excludes>
+                                <exclude>META-INF/*.MF</exclude>
+                                <exclude>META-INF/*.kotlin_module</exclude>
+                                <exclude>**/module-info.class</exclude>
+                            </excludes>
+                        </filter>
+                    </filters>
                 </configuration>
                 <executions>
                     <execution>
@@ -121,8 +131,8 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <kotlin.version>1.5.10</kotlin.version>
-        <ktor.version>1.6.1</ktor.version>
+        <kotlin.version>1.5.21</kotlin.version>
+        <ktor.version>1.6.2</ktor.version>
     </properties>
 
     <repositories>
