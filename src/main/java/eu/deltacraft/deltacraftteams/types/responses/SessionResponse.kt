@@ -4,7 +4,7 @@ import eu.deltacraft.deltacraftteams.utils.enums.SessionError
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SessionResponse(val content: InnerSessionResponse, val error: String? = null, val message: String?) {
+data class SessionResponse(val content: InnerSessionResponse, val error: String? = null, val message: String? = null) {
 
     fun getErrorEnum(): SessionError? {
         if (error.isNullOrEmpty()) {

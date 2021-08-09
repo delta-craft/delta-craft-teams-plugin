@@ -93,13 +93,13 @@ class TeamMarkerManager(
                 setMarkerAsync(p, location, name)
             }
         })
-        p.sendMessage(TextHelper.infoText("Checking if you are a owner..."))
+        p.sendMessage(TextHelper.infoText("Checking if you are an owner..."))
     }
 
     private suspend fun setMarkerAsync(p: Player, location: Location, name: String) {
         val isOwner = checkIfIsOwnerAsync(p.uniqueId)
         if (!isOwner) {
-            p.sendMessage(TextHelper.attentionText("You are not a team owner", NamedTextColor.RED))
+            p.sendMessage(TextHelper.attentionText("You are not an team owner", NamedTextColor.RED))
             return
         }
         createMarker(p, location, name)
@@ -142,13 +142,13 @@ class TeamMarkerManager(
                 deleteMarkerAsync(p, id)
             }
         })
-        p.sendMessage(TextHelper.infoText("Checking if you are a owner..."))
+        p.sendMessage(TextHelper.infoText("Checking if you are an owner..."))
     }
 
     private suspend fun deleteMarkerAsync(p: Player, id: String) {
         val isOwner = checkIfIsOwnerAsync(p.uniqueId)
         if (!isOwner) {
-            p.sendMessage(TextHelper.attentionText("You are not a team owner", NamedTextColor.RED))
+            p.sendMessage(TextHelper.attentionText("You are not an team owner", NamedTextColor.RED))
             return
         }
         removeMarker(p, id)
