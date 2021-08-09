@@ -3,6 +3,11 @@ system:
   payloadSize: 10
 settings:
   home:
-    delay: 5
+    delay: 5 # Seconds
   teammarkers:
     max: 5
+  playTime:
+    min: 5 # Hours
+  sleep:
+    min: 1 # AM
+    max: 5 # AM
