@@ -12,5 +12,6 @@ class DeltaCraftTeamsManager(private val plugin: DeltaCraftTeams) {
     val mobDamageCache = MobDamageCache()
     val teamOwnerManager = TeamOwnerManager()
     val teamMarkerCache = TeamMarkerCache()
+    val joinTimeCache = JoinTimeCache()
 
 }

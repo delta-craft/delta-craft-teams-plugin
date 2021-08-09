@@ -38,6 +38,9 @@ commands:
   teammarker:
     description: Team marker set or delete
     usage: /teammarker
+  stats:
+    description: Show player point stats
+    usage: /stats [player]
 permissions:
   delta.*:
     default: op
