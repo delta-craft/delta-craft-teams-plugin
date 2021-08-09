@@ -2,6 +2,7 @@ package eu.deltacraft.deltacraftteams.listeners
 
 import eu.deltacraft.deltacraftteams.DeltaCraftTeams
 import eu.deltacraft.deltacraftteams.managers.ClientManager
+import eu.deltacraft.deltacraftteams.managers.DeltaCraftTeamsManager
 import eu.deltacraft.deltacraftteams.managers.cache.LoginCacheManager
 import eu.deltacraft.deltacraftteams.types.NewLoginData
 import eu.deltacraft.deltacraftteams.types.disallow
@@ -14,18 +15,20 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import kotlinx.coroutines.runBlocking
 import net.kyori.adventure.text.Component
-import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent
-import org.bukkit.event.player.PlayerQuitEvent
 
-class LoginListener(
-    private val plugin: DeltaCraftTeams,
+class PlayerLoginListener(
+    plugin: DeltaCraftTeams,
     private val clientManager: ClientManager,
     private val loginCacheManager: LoginCacheManager,
 ) : Listener {
+    constructor(plugin: DeltaCraftTeams, clientManager: ClientManager, manager: DeltaCraftTeamsManager) :
+            this(plugin,
+                clientManager,
+                manager.loginCacheManager)
 
     private val logger = plugin.logger
 
@@ -113,41 +116,5 @@ class LoginListener(
                 TextHelper.visitUrl("confirm your login", "login")
             )
         }
-    }
-
-    @EventHandler
-    fun onPlayerQuit(playerQuitEvent: PlayerQuitEvent) {
-        val player = playerQuitEvent.player
-        val uuid = player.uniqueId
-        val ip = player.address.hostString
-
-        if (!loginCacheManager.isLoggedIn(uuid)) {
-            return
-        }
-
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
-            val client = clientManager.getClient()
-
-            runBlocking {
-
-                val httpRes = client.post<HttpResponse>(path = "session/update") {
-                    body = NewLoginData(uuid.toString(), ip)
-                    contentType(ContentType.Application.Json)
-                }
-
-                val status = httpRes.status
-
-                if (status != HttpStatusCode.OK) {
-                    logger.warning("Update session for user ${player.name} returned HTTP ${status.value}")
-                }
-
-            }
-
-            client.close()
-
-            // Není potřeba logika, prostě se to pokusilo updatnout session :))
-            // val newLoginResponse = httpRes.receive<SessionResponse>()
-        })
-
     }
 }
