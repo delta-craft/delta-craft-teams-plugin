@@ -53,6 +53,7 @@ class StatsCommand(
                 openStats(p, stats)
             }
         })
+        p.sendMessage(TextHelper.infoText("Downloading statistics..."))
         return true
     }
 

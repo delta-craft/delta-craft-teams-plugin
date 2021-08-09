@@ -1,5 +1,6 @@
 package eu.deltacraft.deltacraftteams.types
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -18,24 +19,39 @@ data class Stats(
 
 @Serializable
 data class TotalMaterialStats(
-    val data: List<MaterialStats>,
-    val totalPoints: Int,
-)
+    override val data: List<MaterialStats>,
+    override val totalPoints: Int,
+) : ITotalStats<MaterialStats>
 
 @Serializable
 data class MaterialStats(
-    val material: String,
-    val count: Int,
-)
+    @SerialName("material")
+    override val name: String,
+    override val count: Int,
+) : IStats
 
 @Serializable
 data class MobTotalStats(
-    val data: List<MobStats>,
-    val totalPoints: Int,
-)
+    override val data: List<MobStats>,
+    override val totalPoints: Int,
+) : ITotalStats<MobStats>
 
 @Serializable
 data class MobStats(
-    val entity: String,
-    val count: Int,
-)
+    @SerialName("entity")
+    override val name: String,
+    override val count: Int,
+) : IStats
+
+interface IStats {
+    val name: String
+    val count: Int
+}
+
+interface ITotalStats<T : IStats> : ITotalStatsBase {
+    val data: List<T>
+}
+
+interface ITotalStatsBase {
+    val totalPoints: Int
+}
