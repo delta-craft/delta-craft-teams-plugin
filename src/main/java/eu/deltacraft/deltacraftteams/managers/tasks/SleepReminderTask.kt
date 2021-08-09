@@ -29,7 +29,7 @@ class SleepReminderTask(private val plugin: JavaPlugin) : Runnable {
         val czCalendar = GregorianCalendar(TimeZone.getTimeZone("Europe/Prague"))
         czCalendar.timeInMillis = serverCalendar.timeInMillis
 
-        val hour = czCalendar.get(Calendar.HOUR)
+        val hour = czCalendar.get(Calendar.HOUR_OF_DAY)
 
         if (hour in minHours..maxHours) {
             plugin.server.broadcast(TextHelper.attentionText("It's ${hour}AM, maybe you should sleep"))
