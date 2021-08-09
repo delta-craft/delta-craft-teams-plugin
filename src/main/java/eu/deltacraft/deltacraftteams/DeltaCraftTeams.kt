@@ -6,6 +6,8 @@ import eu.deltacraft.deltacraftteams.commands.home.HomeCommand
 import eu.deltacraft.deltacraftteams.commands.home.SetHomeCommand
 import eu.deltacraft.deltacraftteams.listeners.*
 import eu.deltacraft.deltacraftteams.managers.*
+import eu.deltacraft.deltacraftteams.managers.tasks.PlayTimeReminderTask
+import eu.deltacraft.deltacraftteams.managers.tasks.SleepReminderTask
 import eu.deltacraft.deltacraftteams.types.TeamMarker
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
@@ -41,7 +43,8 @@ class DeltaCraftTeams : JavaPlugin() {
         // Listeners
         this.loadListeners()
 
-        pointsQueue.startTimer()
+        // Tasks
+        this.scheduleTasks()
 
         logger.info("Loaded!")
     }
@@ -145,8 +148,11 @@ class DeltaCraftTeams : JavaPlugin() {
         pluginManager.registerEvents(PvpZoneKillListener(pointsQueue), this)
         logger.info("PvpZoneKillListener loaded")
 
-        pluginManager.registerEvents(LoginListener(this, clientManager, manager.loginCacheManager), this)
-        logger.info("LoginListener loaded")
+        pluginManager.registerEvents(PlayerLoginListener(this, clientManager, manager), this)
+        logger.info("PlayerLoginListener loaded")
+
+        pluginManager.registerEvents(PlayerQuitListener(this, clientManager, manager), this)
+        logger.info("PlayerQuitListener loaded")
 
         pluginManager.registerEvents(PlayerHomeMoveListener(homesManager.homesCache), this)
         logger.info("PlayerHomeMoveListener loaded")
@@ -160,7 +166,7 @@ class DeltaCraftTeams : JavaPlugin() {
         pluginManager.registerEvents(PvpZoneEnterLeaveListener(manager), this)
         logger.info("PvpZoneEnterLeaveListener loaded")
 
-        pluginManager.registerEvents(PlayerSuccessJoinListener(manager.teamCacheManager), this)
+        pluginManager.registerEvents(PlayerSuccessJoinListener(manager), this)
         logger.info("PlayerSuccessJoinListener loaded")
 
         pluginManager.registerEvents(MobDamageListener(manager.mobDamageCache, pointsQueue), this)
@@ -185,6 +191,15 @@ class DeltaCraftTeams : JavaPlugin() {
         config.options().header(getHeader())
         saveConfig()
     }
+
+    private fun scheduleTasks() {
+        pointsQueue.startTimer()
+
+        SleepReminderTask.scheduleTask(this)
+
+        PlayTimeReminderTask.scheduleTask(this, manager.joinTimeCache)
+    }
+
 
     private fun getHeader(): String {
         val sep = System.getProperty("line.separator")
