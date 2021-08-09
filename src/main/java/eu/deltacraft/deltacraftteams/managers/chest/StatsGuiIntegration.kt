@@ -139,7 +139,7 @@ class StatsGuiIntegration(private val plugin: JavaPlugin) {
         //page selection
         val back = StaticPane(0, rows - 1, 1, 1)
         val forward = StaticPane(8, rows - 1, 1, 1)
-        val menu = StaticPane(4, rows - 1, 2, 1)
+        val menu = StaticPane(4, rows - 1, 1, 1)
 
         back.addItem(GuiItem(getItemStack(Material.ARROW, "Previous page")) {
             pane.page = pane.page - 1
@@ -170,7 +170,6 @@ class StatsGuiIntegration(private val plugin: JavaPlugin) {
         }
 
         menu.addItem(item, 0, 0)
-        menu.addItem(item, 1, 0)
 
         gui.addPane(back)
         gui.addPane(forward)
