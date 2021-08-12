@@ -24,6 +24,10 @@ class ChatListener(private val plugin: DeltaCraftTeams, private val clientManage
 
     @EventHandler
     fun onPlayerChat(event: AsyncChatEvent) {
+        if (!event.isAsynchronous) {
+            plugin.logger.info("Chat event fired but was not async :(")
+            return
+        }
 
         val p = event.player
 
