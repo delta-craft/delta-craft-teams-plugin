@@ -83,6 +83,8 @@ class TeamMarkerCommand(
             .append(TextHelper.getDivider())
 
         val query = allMarkers.groupBy { x -> x.teamId }
+        val groupCount = query.size
+        var i = 1
         for (group in query) {
             val markes = group.value
 
@@ -90,12 +92,18 @@ class TeamMarkerCommand(
                 Component.text("Markers for team with ID '${group.key}':")
             ).append(Component.newline())
 
+            val lastMarkerId = markes.last().id
             for (marker in markes) {
                 text = text.append(marker.getInfo())
-                if (marker.id != markes.last().id) {
+                if (marker.id != lastMarkerId) {
                     text = text.append(Component.newline())
                 }
             }
+
+            if (i != groupCount) {
+                text = text.append(Component.newline())
+            }
+            i++
         }
 
         text = text.append(TextHelper.getDivider())
