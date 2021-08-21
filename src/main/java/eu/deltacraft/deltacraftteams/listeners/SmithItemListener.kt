@@ -1,6 +1,5 @@
 package eu.deltacraft.deltacraftteams.listeners
 
-import eu.deltacraft.deltacraftteams.DeltaCraftTeams
 import eu.deltacraft.deltacraftteams.managers.PointsQueue
 import eu.deltacraft.deltacraftteams.types.Point
 import eu.deltacraft.deltacraftteams.utils.enums.PointType
@@ -12,17 +11,19 @@ import org.bukkit.event.inventory.SmithItemEvent
 
 
 class SmithItemListener(
-    private val pointsQueue: PointsQueue
+    private val pointsQueue: PointsQueue,
 ) : Listener {
 
     companion object {
         val upgradeables = hashMapOf<Material, Int>(
-            // Swords
-            Material.NETHERITE_SWORD to 20,
-            // Hoes
-            Material.NETHERITE_HOE to 20,
-            // Pickaxes
+            Material.NETHERITE_SWORD to 15,
+            Material.NETHERITE_HOE to 15,
             Material.NETHERITE_PICKAXE to 20,
+            Material.NETHERITE_SHOVEL to 16,
+            Material.NETHERITE_HELMET to 25,
+            Material.NETHERITE_CHESTPLATE to 38,
+            Material.NETHERITE_LEGGINGS to 35,
+            Material.NETHERITE_BOOTS to 22,
         )
     }
 
@@ -39,7 +40,7 @@ class SmithItemListener(
          * 2 - Result slot
          */
 
-        val item = event.inventory.getItem(2) ?: return
+        val item = event.inventory.recipe?.result ?: event.inventory.getItem(2) ?: return
 
         // V tuhle chvíli, protože to našlo bodíky...
         // Ah! That's hot, that's hot!
