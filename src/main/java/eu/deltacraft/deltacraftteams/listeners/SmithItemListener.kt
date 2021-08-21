@@ -1,6 +1,5 @@
 package eu.deltacraft.deltacraftteams.listeners
 
-import eu.deltacraft.deltacraftteams.DeltaCraftTeams
 import eu.deltacraft.deltacraftteams.managers.PointsQueue
 import eu.deltacraft.deltacraftteams.types.Point
 import eu.deltacraft.deltacraftteams.utils.enums.PointType
@@ -12,7 +11,7 @@ import org.bukkit.event.inventory.SmithItemEvent
 
 
 class SmithItemListener(
-    private val pointsQueue: PointsQueue
+    private val pointsQueue: PointsQueue,
 ) : Listener {
 
     companion object {
@@ -41,7 +40,7 @@ class SmithItemListener(
          * 2 - Result slot
          */
 
-        val item = event.inventory.getItem(2) ?: return
+        val item = event.inventory.recipe?.result ?: event.inventory.getItem(2) ?: return
 
         // V tuhle chvíli, protože to našlo bodíky...
         // Ah! That's hot, that's hot!
