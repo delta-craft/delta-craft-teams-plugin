@@ -131,8 +131,8 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <kotlin.version>1.5.21</kotlin.version>
-        <ktor.version>1.6.2</ktor.version>
+        <kotlin.version>1.6.10</kotlin.version>
+        <ktor.version>1.6.7</ktor.version>
     </properties>
 
     <repositories>
@@ -180,21 +180,21 @@
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.17.1-R0.1-SNAPSHOT</version>
+            <version>1.18.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>com.github.BlueMap-Minecraft</groupId>
             <artifactId>BlueMapAPI</artifactId>
-            <version>v1.6.0</version>
+            <version>v1.7.0</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>com.github.stefvanschie.inventoryframework</groupId>
             <artifactId>IF</artifactId>
-            <version>0.10.0</version>
+            <version>0.10.3</version>
         </dependency>
 
         <!-- KTOR -->
