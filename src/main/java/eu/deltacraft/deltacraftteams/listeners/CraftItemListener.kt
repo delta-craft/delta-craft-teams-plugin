@@ -86,10 +86,16 @@ class CraftItemListener(private val pointsQueue: PointsQueue) : Listener {
         // Set lower at recipe result max stack size + 1000 (or just higher max stack size of recipe item)
         var lowerAmount = craftedItem.maxStackSize + 1000
 
+        val items = inventory.contents ?: return 1
+
         // Info: Nemám tušení, jak to funguje, ale funguje to :D
 
-        for (actualItem in inventory.contents) {
-            //if slot is not air &&
+        for (actualItem in items) {
+
+            if (actualItem?.type == null)
+                continue
+
+            // if slot is not air &&
             // lowerAmount is higher than this slot amount &&
             // it's not the recipe amount
             if (!actualItem.type.isAir &&

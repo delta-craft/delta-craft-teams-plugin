@@ -93,7 +93,6 @@ class AnvilRenameListener(private val plugin: DeltaCraftTeams, private val clien
 
         val res = httpRes.receive<CheckChatResponse>()
 
-
         if (res.content) return
 
         val inv = player.inventory
@@ -105,7 +104,7 @@ class AnvilRenameListener(private val plugin: DeltaCraftTeams, private val clien
         metadata.displayName(Component.text("Ses hloupej"))
         item.itemMeta = metadata
 
-        val i = inv.contents.firstOrNull { it?.itemMeta?.displayName() == metadataLegacy.displayName() }
+        val i = inv.contents?.firstOrNull { it?.itemMeta?.displayName() == metadataLegacy.displayName() }
         if (i != null) {
             i.itemMeta = metadata
         }
